@@ -1,10 +1,9 @@
 package com.springboot.connectmate.services.impl;
 
-import com.springboot.connectmate.dtos.SupervisorDTO;
+import com.springboot.connectmate.dtos.supervisor.SupervisorDTO;
 import com.springboot.connectmate.models.Supervisor;
 import com.springboot.connectmate.services.SupervisorService;
 import com.springboot.connectmate.repositories.SupervisorRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

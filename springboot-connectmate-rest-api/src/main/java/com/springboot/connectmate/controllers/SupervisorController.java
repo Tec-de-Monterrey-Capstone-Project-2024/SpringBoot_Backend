@@ -1,6 +1,6 @@
 package com.springboot.connectmate.controllers;
 
-import com.springboot.connectmate.dtos.SupervisorDTO;
+import com.springboot.connectmate.dtos.supervisor.SupervisorDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.springboot.connectmate.services.SupervisorService;

@@ -1,4 +1,4 @@
-package com.springboot.connectmate.dtos;
+package com.springboot.connectmate.dtos.supervisor;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
