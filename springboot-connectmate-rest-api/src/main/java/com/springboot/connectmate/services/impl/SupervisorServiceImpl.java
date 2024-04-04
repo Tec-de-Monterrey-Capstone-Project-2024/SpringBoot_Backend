@@ -1,6 +1,7 @@
 package com.springboot.connectmate.services.impl;
 
 import com.springboot.connectmate.dtos.supervisor.SupervisorDTO;
+import com.springboot.connectmate.exceptions.ResourceNotFoundException;
 import com.springboot.connectmate.models.Supervisor;
 import com.springboot.connectmate.services.SupervisorService;
 import com.springboot.connectmate.repositories.SupervisorRepository;
@@ -62,11 +63,47 @@ public class SupervisorServiceImpl implements SupervisorService{
 
     @Override
     public List<SupervisorDTO> getAllSupervisors() {
-
+        // Get all Supervisors
         List<Supervisor> supervisors = supervisorRepository.findAll();
         return supervisors.stream().map(supervisor -> mapToDTO(supervisor)).collect(Collectors.toList());
     }
 
+    @Override
+    public SupervisorDTO getSupervisorById(long id) {
+        // Get Supervisor by Id
+        Supervisor supervisor = supervisorRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Supervisor", "id", id));
+        return mapToDTO(supervisor);
+    }
 
+    @Override
+    public SupervisorDTO updateSupervisor(long id, SupervisorDTO supervisorDTO) {
+        // Get Supervisor by Id
+        Supervisor supervisor = supervisorRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Supervisor", "id", id));
+
+        // Update Supervisor
+        supervisor.setName(supervisorDTO.getName());
+        supervisor.setEmail(supervisorDTO.getEmail());
+        supervisor.setPassword(supervisorDTO.getPassword());
+        supervisor.setPhone(supervisorDTO.getPhone());
+        supervisor.setAddress(supervisorDTO.getAddress());
+        supervisor.setInstanceId(supervisorDTO.getInstanceId());
+
+        // Save Supervisor
+        Supervisor updatedSupervisor = supervisorRepository.save(supervisor);
+
+        // Convert Model To DTO
+        return mapToDTO(updatedSupervisor);
+
+    }
+
+    @Override
+    public void deleteSupervisor(long id) {
+        // Get Supervisor by Id
+        Supervisor supervisor = supervisorRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Supervisor", "id", id));
+
+        // Delete Supervisor
+        supervisorRepository.delete(supervisor);
+
+    }
 
 }

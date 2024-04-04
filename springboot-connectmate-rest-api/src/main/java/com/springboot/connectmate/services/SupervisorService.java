@@ -7,4 +7,7 @@ import java.util.List;
 public interface SupervisorService {
     SupervisorDTO createSupervisor(SupervisorDTO supervisorDTO);
     List<SupervisorDTO> getAllSupervisors();
+    SupervisorDTO getSupervisorById(long id);
+    SupervisorDTO updateSupervisor(long id, SupervisorDTO supervisorDTO);
+    void deleteSupervisor(long id);
 }
