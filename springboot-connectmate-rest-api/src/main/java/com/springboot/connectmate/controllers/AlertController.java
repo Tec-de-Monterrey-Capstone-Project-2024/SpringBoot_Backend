@@ -3,18 +3,16 @@ package com.springboot.connectmate.controllers;
 @RestController
 @RequestMapping ("/alerts")
 public class AlertController {
-    @GetMapping("/")
-    public ResponseEntity<List<AlertDTO>> getAlerts(){
-        return ResponseEntity.ok(alerts)
+    @GetMapping
+    //public String getAlerts()
     }
-    @PostMapping("/")
-    public ResponseEntity<AlertAddDTO> addAlert(@RequestBody AlertAddDTo newalerts) {
-        return ResponseEntity.ok (newalerts)
+    @GetMapping("/{id}")
+    //public ResponseEntity<List<AlertDTO>> getAlert(){
+        //return ResponseEntity.ok(alerts)
     }
-
-    @PutMapping("/")
-    public ResponseEntity<AlertModifyDTO> modifyAlert
-
-
+    @PostMapping
+    //public ResponseEntity<AlertAddDTO> addAlert(@RequestBody AlertAddDTo newalerts) {
+        //return ResponseEntity.ok (newalerts)
+    }
 
 }
