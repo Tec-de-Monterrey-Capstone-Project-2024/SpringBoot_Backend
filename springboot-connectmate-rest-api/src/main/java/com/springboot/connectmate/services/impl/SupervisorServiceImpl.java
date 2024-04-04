@@ -1,6 +1,6 @@
 package com.springboot.connectmate.services.impl;
 
-import com.springboot.connectmate.dtos.supervisor.SupervisorDTO;
+import com.springboot.connectmate.dtos.SupervisorDTO;
 import com.springboot.connectmate.exceptions.ResourceNotFoundException;
 import com.springboot.connectmate.models.Supervisor;
 import com.springboot.connectmate.services.SupervisorService;

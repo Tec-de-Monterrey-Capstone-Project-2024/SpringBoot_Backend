@@ -1,6 +1,6 @@
 package com.springboot.connectmate.services;
 
-import com.springboot.connectmate.dtos.supervisor.SupervisorDTO;
+import com.springboot.connectmate.dtos.SupervisorDTO;
 
 import java.util.List;
 

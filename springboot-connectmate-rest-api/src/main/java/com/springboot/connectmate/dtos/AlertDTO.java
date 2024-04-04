@@ -1,4 +1,4 @@
-package com.springboot.connectmate.dtos.alerts;
+package com.springboot.connectmate.dtos;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
