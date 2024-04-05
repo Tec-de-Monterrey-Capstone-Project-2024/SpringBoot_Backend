@@ -10,6 +10,7 @@ import com.springboot.connectmate.services.SupervisorService;
 import org.springframework.http.HttpStatus;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/supervisors")
@@ -54,7 +55,7 @@ public class SupervisorController {
         return supervisorService.getAllSupervisors();
     }
 
-    // Get Supervisor by Id Rest API
+    // Get Supervisor by ID Rest API
     @Operation(
             summary = "Get Supervisor by Id",
             description = "Get Supervisor by Id"
@@ -80,6 +81,21 @@ public class SupervisorController {
     @PutMapping("/{id}")
     public ResponseEntity<SupervisorDTO> updateSupervisor(@PathVariable(name = "id") long id, @RequestBody SupervisorDTO supervisorDTO) {
         SupervisorDTO supervisorResponse = supervisorService.updateSupervisor(id, supervisorDTO);
+        return new ResponseEntity<>(supervisorResponse, HttpStatus.OK);
+    }
+
+    // Partial Update Supervisor Rest API
+    @Operation(
+            summary = "Partial Update Supervisor",
+            description = "Partially update Supervisor by Id"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Supervisor updated successfully"
+    )
+    @PatchMapping("/{id}")
+    public ResponseEntity<SupervisorDTO> patchSupervisor(@PathVariable(name = "id") long id, @RequestBody Map<String, Object> fields) {
+        SupervisorDTO supervisorResponse = supervisorService.patchSupervisor(id, fields);
         return new ResponseEntity<>(supervisorResponse, HttpStatus.OK);
     }
 

@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Service
 public class SupervisorServiceImpl implements SupervisorService{
 
-    private SupervisorRepository supervisorRepository;
+    private final SupervisorRepository supervisorRepository;
 
     // No need for @Autowired
     public SupervisorServiceImpl(SupervisorRepository supervisorRepository) {
@@ -57,28 +57,29 @@ public class SupervisorServiceImpl implements SupervisorService{
         Supervisor newSupervisor = supervisorRepository.save(supervisor);
 
         // Convert Model to DTO
-        SupervisorDTO supervisorResponse = mapToDTO(newSupervisor);
-
-        return supervisorResponse;
+        return mapToDTO(newSupervisor);
     }
 
     @Override
     public List<SupervisorDTO> getAllSupervisors() {
         // Get all Supervisors
         List<Supervisor> supervisors = supervisorRepository.findAll();
-        return supervisors.stream().map(supervisor -> mapToDTO(supervisor)).collect(Collectors.toList());
+        // this lambda expression is more readable
+        //return supervisors.stream().map(supervisor -> mapToDTO(supervisor)).collect(Collectors.toList());
+        // this method reference is more concise, both do the same thing
+        return supervisors.stream().map(this::mapToDTO).collect(Collectors.toList());
     }
 
     @Override
     public SupervisorDTO getSupervisorById(long id) {
-        // Get Supervisor by Id
+        // Get Supervisor by ID
         Supervisor supervisor = supervisorRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Supervisor", "id", id));
         return mapToDTO(supervisor);
     }
 
     @Override
     public SupervisorDTO updateSupervisor(long id, SupervisorDTO supervisorDTO) {
-        // Get Supervisor by Id
+        // Get Supervisor by ID
         Supervisor supervisor = supervisorRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Supervisor", "id", id));
 
         // Update Supervisor
@@ -99,17 +100,29 @@ public class SupervisorServiceImpl implements SupervisorService{
 
     @Override
     public SupervisorDTO patchSupervisor(long id, Map<String, Object> fields) {
-        // Get Supervisor by Id
+        // Get Supervisor by ID
         Supervisor supervisor = supervisorRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Supervisor", "id", id));
 
         fields.forEach((key, value) -> {
             // Map fields to properties of Supervisor
             switch (key) {
+                case "name":
+                    supervisor.setName((String) value);
+                    break;
                 case "email":
                     supervisor.setEmail((String) value);
                     break;
                 case "password":
                     supervisor.setPassword((String) value);
+                    break;
+                case "phone":
+                    supervisor.setPhone((String) value);
+                    break;
+                case "address":
+                    supervisor.setAddress((String) value);
+                    break;
+                case "instanceId":
+                    supervisor.setInstanceId((String) value);
                     break;
             }
         });
@@ -122,7 +135,7 @@ public class SupervisorServiceImpl implements SupervisorService{
 
     @Override
     public void deleteSupervisor(long id) {
-        // Get Supervisor by Id
+        // Get Supervisor by ID
         Supervisor supervisor = supervisorRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Supervisor", "id", id));
 
         // Delete Supervisor
