@@ -8,6 +8,7 @@ import com.springboot.connectmate.repositories.SupervisorRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -94,6 +95,29 @@ public class SupervisorServiceImpl implements SupervisorService{
         // Convert Model To DTO
         return mapToDTO(updatedSupervisor);
 
+    }
+
+    @Override
+    public SupervisorDTO patchSupervisor(long id, Map<String, Object> fields) {
+        // Get Supervisor by Id
+        Supervisor supervisor = supervisorRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Supervisor", "id", id));
+
+        fields.forEach((key, value) -> {
+            // Map fields to properties of Supervisor
+            switch (key) {
+                case "email":
+                    supervisor.setEmail((String) value);
+                    break;
+                case "password":
+                    supervisor.setPassword((String) value);
+                    break;
+            }
+        });
+
+        Supervisor updatedSupervisor = supervisorRepository.save(supervisor);
+
+        // Convert to DTO and return (assuming there's a method to convert an entity to DTO)
+        return mapToDTO(updatedSupervisor);
     }
 
     @Override
