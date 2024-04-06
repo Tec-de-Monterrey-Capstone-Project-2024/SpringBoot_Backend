@@ -5,6 +5,8 @@ import com.springboot.connectmate.exceptions.ResourceNotFoundException;
 import com.springboot.connectmate.models.Supervisor;
 import com.springboot.connectmate.services.SupervisorService;
 import com.springboot.connectmate.repositories.SupervisorRepository;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,50 +16,35 @@ import java.util.stream.Collectors;
 @Service
 public class SupervisorServiceImpl implements SupervisorService{
 
+    private final ModelMapper mapper;
     private final SupervisorRepository supervisorRepository;
 
-    // No need for @Autowired
-    public SupervisorServiceImpl(SupervisorRepository supervisorRepository) {
+    @Autowired
+    public SupervisorServiceImpl(SupervisorRepository supervisorRepository, ModelMapper mapper) {
         this.supervisorRepository = supervisorRepository;
+        this.mapper = mapper;
     }
 
     // Convert Entity Model to DTO
-    private SupervisorDTO mapToDTO(Supervisor supervisor) {
-        SupervisorDTO supervisorDTO = new SupervisorDTO();
-        supervisorDTO.setId(supervisor.getId());
-        supervisorDTO.setName(supervisor.getName());
-        supervisorDTO.setEmail(supervisor.getEmail());
-        supervisorDTO.setPassword(supervisor.getPassword());
-        supervisorDTO.setPhone(supervisor.getPhone());
-        supervisorDTO.setAddress(supervisor.getAddress());
-        supervisorDTO.setInstanceId(supervisor.getInstanceId());
-        return supervisorDTO;
+    private SupervisorDTO convertEntityModelToDTO(Supervisor supervisor) {
+        return mapper.map(supervisor, SupervisorDTO.class);
     }
 
     // Convert DTO to Entity Model
-    private Supervisor mapToEntity(SupervisorDTO supervisorDTO) {
-        Supervisor supervisor = new Supervisor();
-        supervisor.setId(supervisorDTO.getId());
-        supervisor.setName(supervisorDTO.getName());
-        supervisor.setEmail(supervisorDTO.getEmail());
-        supervisor.setPassword(supervisorDTO.getPassword());
-        supervisor.setPhone(supervisorDTO.getPhone());
-        supervisor.setAddress(supervisorDTO.getAddress());
-        supervisor.setInstanceId(supervisorDTO.getInstanceId());
-
-        return supervisor;
+    private Supervisor convertDTOtoEntityModel(SupervisorDTO supervisorDTO) {
+        return mapper.map(supervisorDTO, Supervisor.class);
     }
 
     @Override
     public SupervisorDTO createSupervisor(SupervisorDTO supervisorDTO) {
         // Convert DTO to Model
-        Supervisor supervisor = mapToEntity(supervisorDTO);
+        Supervisor supervisor = convertDTOtoEntityModel(supervisorDTO);
 
         // Save Model to DB
         Supervisor newSupervisor = supervisorRepository.save(supervisor);
 
         // Convert Model to DTO
-        return mapToDTO(newSupervisor);
+        return convertEntityModelToDTO(newSupervisor);
     }
 
     @Override
@@ -67,14 +54,14 @@ public class SupervisorServiceImpl implements SupervisorService{
         // this lambda expression is more readable
         //return supervisors.stream().map(supervisor -> mapToDTO(supervisor)).collect(Collectors.toList());
         // this method reference is more concise, both do the same thing
-        return supervisors.stream().map(this::mapToDTO).collect(Collectors.toList());
+        return supervisors.stream().map(this::convertEntityModelToDTO).collect(Collectors.toList());
     }
 
     @Override
     public SupervisorDTO getSupervisorById(long id) {
         // Get Supervisor by ID
         Supervisor supervisor = supervisorRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Supervisor", "id", id));
-        return mapToDTO(supervisor);
+        return convertEntityModelToDTO(supervisor);
     }
 
     @Override
@@ -94,7 +81,7 @@ public class SupervisorServiceImpl implements SupervisorService{
         Supervisor updatedSupervisor = supervisorRepository.save(supervisor);
 
         // Convert Model To DTO
-        return mapToDTO(updatedSupervisor);
+        return convertEntityModelToDTO(updatedSupervisor);
 
     }
 
@@ -130,7 +117,7 @@ public class SupervisorServiceImpl implements SupervisorService{
         Supervisor updatedSupervisor = supervisorRepository.save(supervisor);
 
         // Convert to DTO and return (assuming there's a method to convert an entity to DTO)
-        return mapToDTO(updatedSupervisor);
+        return convertEntityModelToDTO(updatedSupervisor);
     }
 
     @Override
