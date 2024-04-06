@@ -35,6 +35,6 @@ public class Supervisor {
     @Column(name = "address", nullable = true)
     private String address;
     // Amazon Connect Data
-    @Column(name = "instance_id", nullable = true)
+    @Column(name = "instance_id", nullable = false)
     private String instanceId;
 }

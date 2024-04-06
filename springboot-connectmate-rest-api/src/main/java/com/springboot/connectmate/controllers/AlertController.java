@@ -6,10 +6,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/alerts")
@@ -22,7 +21,7 @@ public class AlertController {
     // Create Alert Rest API
     @Operation(
             summary = "Create Alert",
-            description = "Creates a new Alert"
+            description = "Creates a New Alert"
     )
     @ApiResponse(
             responseCode = "201",
@@ -31,5 +30,19 @@ public class AlertController {
     @PostMapping
     public ResponseEntity<AlertDTO> createSupervisor(@RequestBody AlertDTO alertDTO) {
         return new ResponseEntity<>(alertDTO, HttpStatus.CREATED);
+    }
+
+    // Get All Alerts Rest API
+    @Operation(
+            summary = "Get All Alerts",
+            description = "Gets All Alerts"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Alerts fetched successfully"
+    )
+    @GetMapping
+    public List<AlertDTO> getAllAlerts() {
+        return List.of(new AlertDTO());
     }
 }

@@ -20,7 +20,7 @@ import java.util.Map;
 )
 public class SupervisorController {
 
-    private SupervisorService supervisorService;
+    private final SupervisorService supervisorService;
 
     //No need for @Autowired
     public SupervisorController(SupervisorService supervisorService) {
@@ -43,12 +43,12 @@ public class SupervisorController {
 
     // Get all Supervisors Rest API
     @Operation(
-            summary = "Get all Supervisors",
-            description = "Get all Supervisors"
+            summary = "Get All Supervisors",
+            description = "Get All Supervisors"
     )
     @ApiResponse(
             responseCode = "200",
-            description = "List of all Supervisors"
+            description = "Supervisors fetched successfully"
     )
     @GetMapping
     public List<SupervisorDTO> getAllSupervisors() {
@@ -62,7 +62,7 @@ public class SupervisorController {
     )
     @ApiResponse(
             responseCode = "200",
-            description = "Supervisor found"
+            description = "Supervisor fetched successfully"
     )
     @GetMapping("/{id}")
     public ResponseEntity<SupervisorDTO> getSupervisorById(@PathVariable(name = "id") long id) {
@@ -87,11 +87,11 @@ public class SupervisorController {
     // Partial Update Supervisor Rest API
     @Operation(
             summary = "Partial Update Supervisor",
-            description = "Partially update Supervisor by Id"
+            description = "Partially Update Supervisor by Id"
     )
     @ApiResponse(
             responseCode = "200",
-            description = "Supervisor updated successfully"
+            description = "Supervisor partially updated successfully"
     )
     @PatchMapping("/{id}")
     public ResponseEntity<SupervisorDTO> patchSupervisor(@PathVariable(name = "id") long id, @RequestBody Map<String, Object> fields) {
