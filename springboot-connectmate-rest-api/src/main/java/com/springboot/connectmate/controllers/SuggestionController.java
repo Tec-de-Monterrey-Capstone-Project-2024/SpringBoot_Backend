@@ -6,10 +6,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -27,7 +26,16 @@ public class SuggestionController {
     @Operation(summary = "Get all suggestions for the Call Center")
     @GetMapping
     public ResponseEntity<List<SuggestionDTO>> getSuggestions(){
+        List<SuggestionDTO> response = new ArrayList<>();
+        response.add(new SuggestionDTO());
+        return ResponseEntity.ok(response);
+    }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<SuggestionDTO> updateSuggestion(@PathVariable Long id){
+        SuggestionDTO suggestion = new SuggestionDTO();
+        suggestion.setId(id);
+        return ResponseEntity.ok(suggestion);
     }
 
 }
