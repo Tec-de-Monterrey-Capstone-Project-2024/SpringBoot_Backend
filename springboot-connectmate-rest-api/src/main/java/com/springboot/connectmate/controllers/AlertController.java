@@ -56,7 +56,7 @@ public class AlertController {
             description = "Alert fetched successfully"
     )
     @GetMapping("/{alertId}")
-    public List<AlertDTO> getAlertById(@PathVariable Long alertId) {
-        return List.of(new AlertDTO());
+    public AlertDTO getAlertById(@PathVariable Long alertId) {
+        return new AlertDTO();
     }
 }
