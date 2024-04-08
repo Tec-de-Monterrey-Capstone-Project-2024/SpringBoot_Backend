@@ -34,7 +34,7 @@ public class AgentController {
         return List.of(new AgentDTO());
     }
 
-    // Get Supervisor by ID Rest API
+    // Get Agent by ID Rest API
     @Operation(
             summary = "Get Agent by Id",
             description = "Get Agent by Id"
