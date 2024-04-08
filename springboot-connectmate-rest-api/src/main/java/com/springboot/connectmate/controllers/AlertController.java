@@ -45,4 +45,18 @@ public class AlertController {
     public List<AlertDTO> getAllAlerts() {
         return List.of(new AlertDTO());
     }
+
+    // Get Alert by ID API
+    @Operation(
+            summary = "Get Alert by ID",
+            description = "Gets a specific alert by its ID"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Alert fetched successfully"
+    )
+    @GetMapping("/{alertId}")
+    public List<AlertDTO> getAlertById(@PathVariable Long alertId) {
+        return List.of(new AlertDTO());
+    }
 }
