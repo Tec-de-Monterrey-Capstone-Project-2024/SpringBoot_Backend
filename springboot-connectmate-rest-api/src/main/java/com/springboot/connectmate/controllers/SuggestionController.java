@@ -31,10 +31,10 @@ public class SuggestionController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<SuggestionDTO> updateSuggestion(@PathVariable Long id){
+    @PutMapping("/{taskId}")
+    public ResponseEntity<SuggestionDTO> updateSuggestion(@PathVariable Long taskId){
         SuggestionDTO suggestion = new SuggestionDTO();
-        suggestion.setId(id);
+        suggestion.setId(taskId);
         return ResponseEntity.ok(suggestion);
     }
 
