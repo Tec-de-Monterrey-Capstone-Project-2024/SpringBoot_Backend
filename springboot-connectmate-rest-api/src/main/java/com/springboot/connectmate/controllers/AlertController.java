@@ -1,5 +1,6 @@
 package com.springboot.connectmate.controllers;
 
+import com.springboot.connectmate.dtos.AgentMetricsDTO;
 import com.springboot.connectmate.dtos.AlertDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -18,7 +19,7 @@ import java.util.List;
 )
 public class AlertController {
 
-    // Create Alert Rest API
+    // Create Alert
     @Operation(
             summary = "Create Alert",
             description = "Creates a New Alert"
@@ -28,8 +29,8 @@ public class AlertController {
             description = "Alert created successfully"
     )
     @PostMapping
-    public ResponseEntity<AlertDTO> createSupervisor(@RequestBody AlertDTO alertDTO) {
-        return new ResponseEntity<>(alertDTO, HttpStatus.CREATED);
+    public ResponseEntity<String> createAlert(@RequestBody AlertDTO alert) {
+        return new ResponseEntity<>("Alert created successfully", HttpStatus.OK);
     }
 
     // Get All Alerts Rest API
