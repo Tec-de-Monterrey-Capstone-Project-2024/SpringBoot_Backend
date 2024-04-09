@@ -59,4 +59,32 @@ public class AlertController {
     public AlertDTO getAlertById(@PathVariable Long alertId) {
         return new AlertDTO();
     }
+
+    @Operation(
+            summary = "Delete Alert by ID",
+            description = "Delete a specific alert by its ID"
+    )
+    @ApiResponse(
+            responseCode = "204",
+            description = "Alert deleted successfully"
+    )
+    @DeleteMapping("/{alertId}")
+    public ResponseEntity<String> deleteAlert(@PathVariable(name = "alertId") long id) {
+        return ResponseEntity.ok("Alert deleted successfully");
+    }
+
+    @Operation(
+            summary = "Modify Alert by ID",
+            description = "Modified a specific alert by its ID"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Alert modified successfully"
+    )
+    @PutMapping("/{alertId}")
+    public ResponseEntity<String> putAlert(@PathVariable(name = "alertId") long id) {
+        return ResponseEntity.ok("Alert modified successfully");
+    }
+
+
 }
