@@ -4,6 +4,7 @@ import com.springboot.connectmate.dtos.SupervisorDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.springboot.connectmate.services.SupervisorService;
@@ -20,9 +21,9 @@ import java.util.Map;
 )
 public class SupervisorController {
 
-    private SupervisorService supervisorService;
+    private final SupervisorService supervisorService;
 
-    //No need for @Autowired
+    @Autowired
     public SupervisorController(SupervisorService supervisorService) {
         this.supervisorService = supervisorService;
     }
@@ -41,14 +42,14 @@ public class SupervisorController {
         return new ResponseEntity<>(supervisorService.createSupervisor(supervisorDTO), HttpStatus.CREATED);
     }
 
-    // Get all Supervisors Rest API
+    // Get All Supervisors Rest API
     @Operation(
-            summary = "Get all Supervisors",
-            description = "Get all Supervisors"
+            summary = "Get All Supervisors",
+            description = "Get All Supervisors"
     )
     @ApiResponse(
             responseCode = "200",
-            description = "List of all Supervisors"
+            description = "Supervisors fetched successfully"
     )
     @GetMapping
     public List<SupervisorDTO> getAllSupervisors() {
@@ -62,7 +63,7 @@ public class SupervisorController {
     )
     @ApiResponse(
             responseCode = "200",
-            description = "Supervisor found"
+            description = "Supervisor fetched successfully"
     )
     @GetMapping("/{id}")
     public ResponseEntity<SupervisorDTO> getSupervisorById(@PathVariable(name = "id") long id) {
@@ -87,11 +88,11 @@ public class SupervisorController {
     // Partial Update Supervisor Rest API
     @Operation(
             summary = "Partial Update Supervisor",
-            description = "Partially update Supervisor by Id"
+            description = "Partially Update Supervisor by Id"
     )
     @ApiResponse(
             responseCode = "200",
-            description = "Supervisor updated successfully"
+            description = "Supervisor partially updated successfully"
     )
     @PatchMapping("/{id}")
     public ResponseEntity<SupervisorDTO> patchSupervisor(@PathVariable(name = "id") long id, @RequestBody Map<String, Object> fields) {

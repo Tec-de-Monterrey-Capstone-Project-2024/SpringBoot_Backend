@@ -5,10 +5,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/queues")
+@RequestMapping("/api/tasks")
 @Tag(
-        name = "Queue REST API",
-        description = "CRUD REST API for Queues"
+        name = "Task REST API",
+        description = "CRUD REST API for Tasks"
 )
-public class QueueController {
+public class TaskController {
 }
