@@ -6,10 +6,6 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
-enum Status{
-    TODO,
-    DONE
-}
 
 @Data
 @Schema(
@@ -24,12 +20,23 @@ public class SuggestionDTO {
     )
     private Long id;
 
+    public enum SuggestionTopic{AGENT, QUEUE, OTHER}
+
+    @Schema(
+            name = "Type",
+            description = "Type of the suggestion",
+            example = "QUEUE"
+    )
+    private SuggestionTopic type;
+
+    public enum SuggestionStatus{TODO, DONE}
+
     @Schema(
             name = "Status",
             description = "Status of the Suggestion (To Do or Done)",
             example = "TODO"
     )
-    private Status status;
+    private SuggestionStatus status;
 
     @Schema(
             name = "Description",
