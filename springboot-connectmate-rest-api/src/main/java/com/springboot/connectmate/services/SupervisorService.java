@@ -12,4 +12,5 @@ public interface SupervisorService {
     SupervisorDTO updateSupervisor(long id, SupervisorDTO supervisorDTO);
     SupervisorDTO patchSupervisor(long id, Map<String, Object> fields);
     void deleteSupervisor(long id);
+    List<SupervisorDTO> getAvailableSupervisors();
 }
