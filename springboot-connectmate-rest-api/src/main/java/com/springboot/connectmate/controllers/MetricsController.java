@@ -5,10 +5,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/queues")
+@RequestMapping("/api/metrics")
 @Tag(
-        name = "Queue REST API",
-        description = "CRUD REST API for Queues"
+        name = "Metric REST API",
+        description = "CRUD REST API for Metrics"
 )
-public class QueueController {
+public class MetricsController {
 }
