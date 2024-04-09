@@ -42,7 +42,7 @@ public class SupervisorController {
         return new ResponseEntity<>(supervisorService.createSupervisor(supervisorDTO), HttpStatus.CREATED);
     }
 
-    // Get all Supervisors Rest API
+    // Get All Supervisors Rest API
     @Operation(
             summary = "Get All Supervisors",
             description = "Get All Supervisors"

@@ -9,4 +9,5 @@ import lombok.Data;
         description = "DTO for General Metrics"
 )
 public class GeneralMetricsDTO {
+
 }

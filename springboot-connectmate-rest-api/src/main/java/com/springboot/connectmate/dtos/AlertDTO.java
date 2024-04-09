@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
         description = "DTO for Alert"
 )
 public class AlertDTO {
+
     @Schema(
             description = "Id of the Alert",
             example = "1"
