@@ -26,5 +26,5 @@ replay_pid*
 
 # Temporary and hidden files
 .*
-.DS_Store
+**/.DS_Store
 
