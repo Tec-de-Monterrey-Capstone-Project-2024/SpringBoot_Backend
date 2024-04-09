@@ -40,7 +40,7 @@ public class SuggestionController {
         List<SuggestionDTO> response = new ArrayList<>();
         SuggestionDTO suggestion1 = new SuggestionDTO();
         suggestion1.setId(1L);
-        suggestion1.setType(SuggestionDTO.SuggestionTopic.QUEUE);
+        suggestion1.setType(SuggestionDTO.SuggestionType.QUEUE);
         suggestion1.setStatus(SuggestionDTO.SuggestionStatus.TODO);
         suggestion1.setDescription("Not enough people on virtual floor.");
         suggestion1.setDetails("http://localhost:8080/api/suggestion/1");
@@ -63,9 +63,11 @@ public class SuggestionController {
             )
     })
     @Operation(summary = "Modify one specific suggestion by its identifier (ID)")
-    @PutMapping("/{taskId}")
-    public ResponseEntity<SuggestionDTO> updateSuggestion(@PathVariable Long taskId, @RequestBody SuggestionDTO suggestion){
-        suggestion.setId(taskId);
+    @PutMapping("/{suggestionId}")
+    public ResponseEntity<SuggestionDTO> updateSuggestion(@PathVariable Long suggestionId, @RequestBody SuggestionDTO suggestion){
+        suggestion.setId(suggestionId);
+        suggestion.setUpdatedAt(LocalDateTime.now());
+
         return ResponseEntity.ok(suggestion);
     }
 
@@ -79,8 +81,8 @@ public class SuggestionController {
             )
     })
     @Operation(summary = "Delete one suggestion by Id in the database")
-    @DeleteMapping("/{taskId}")
-    public ResponseEntity<String> deleteSuggestion(@PathVariable Long taskId){
+    @DeleteMapping("/{suggestionId}")
+    public ResponseEntity<String> deleteSuggestion(@PathVariable Long suggestionId){
         return ResponseEntity.noContent().build();
     }
 

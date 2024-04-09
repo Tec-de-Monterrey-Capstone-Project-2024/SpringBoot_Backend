@@ -20,14 +20,14 @@ public class SuggestionDTO {
     )
     private Long id;
 
-    public enum SuggestionTopic{AGENT, QUEUE, OTHER}
+    public enum SuggestionType{AGENT, QUEUE, OTHER}
 
     @Schema(
             name = "Type",
             description = "Type of the suggestion",
             example = "QUEUE"
     )
-    private SuggestionTopic type;
+    private SuggestionType type;
 
     public enum SuggestionStatus{TODO, DONE}
 
