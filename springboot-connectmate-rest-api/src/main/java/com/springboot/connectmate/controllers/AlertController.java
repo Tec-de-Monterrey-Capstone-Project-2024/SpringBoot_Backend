@@ -4,7 +4,6 @@ import com.springboot.connectmate.dtos.AlertDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -67,7 +66,7 @@ public class AlertController {
         alert.setDescription("Service level is low");
         alert.setType("Service Level");
         alert.setStatus("Open");
-        alert.setSeverity("Low");
+        alert.setSeverity(AlertDTO.severity.LOW);
         alert.setMinThreshold(90L);
         alert.setMaxThreshold(100L);
         alert.setSupervisor("John Doe");
