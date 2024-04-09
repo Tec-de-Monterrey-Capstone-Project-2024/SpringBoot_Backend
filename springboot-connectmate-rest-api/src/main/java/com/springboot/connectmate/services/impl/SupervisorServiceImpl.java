@@ -130,10 +130,4 @@ public class SupervisorServiceImpl implements SupervisorService{
 
     }
 
-    @Override
-    public List<SupervisorDTO> getAvailableSupervisors() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAvailableSupervisors'");
-    }
-
 }

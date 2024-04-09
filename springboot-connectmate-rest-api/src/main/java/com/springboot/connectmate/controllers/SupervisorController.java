@@ -115,21 +115,5 @@ public class SupervisorController {
         supervisorService.deleteSupervisor(id);
         return new ResponseEntity<>("Supervisor deleted successfully", HttpStatus.OK);
     }
-    // Opcional (Get available Supervisors) **(revisar con equipo)**
 
-    // Get Available Supervisors Rest API
-    @Operation(
-            summary = "Get Available Supervisors",
-            description = "Get Supervisors who are currently available"
-    )
-    @ApiResponse(
-            responseCode = "200",
-            description = "Available Supervisors fetched successfully"
-    )
-    @GetMapping("/available")
-    public ResponseEntity<List<SupervisorDTO>> getAvailableSupervisors() {
-        List<SupervisorDTO> availableSupervisors = supervisorService.getAvailableSupervisors();
-        return ResponseEntity.ok(availableSupervisors);
-    }
 }
-
