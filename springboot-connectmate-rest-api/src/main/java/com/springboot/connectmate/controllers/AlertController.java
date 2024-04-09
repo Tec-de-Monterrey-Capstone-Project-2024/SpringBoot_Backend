@@ -1,14 +1,15 @@
 package com.springboot.connectmate.controllers;
 
-import com.springboot.connectmate.dtos.AgentMetricsDTO;
 import com.springboot.connectmate.dtos.AlertDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -58,6 +59,22 @@ public class AlertController {
     )
     @GetMapping("/{alertId}")
     public AlertDTO getAlertById(@PathVariable Long alertId) {
-        return new AlertDTO();
+        AlertDTO alert = new AlertDTO();
+
+        alert.setId(0L);
+        alert.setMetricID(alertId);
+        alert.setName("Low Service Level");
+        alert.setDescription("Service level is low");
+        alert.setType("Service Level");
+        alert.setStatus("Open");
+        alert.setSeverity("Low");
+        alert.setMinThreshold(90L);
+        alert.setMaxThreshold(100L);
+        alert.setSupervisor("John Doe");
+        alert.setAgent("Jane Doe");
+        alert.setCreatedAt(LocalDateTime.parse("2007-12-03T10:15:30"));
+        alert.setUpdatedAt(LocalDateTime.parse("2007-12-03T10:15:31"));
+
+        return alert;
     }
 }
