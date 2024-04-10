@@ -13,11 +13,19 @@ import java.time.LocalDateTime;
 )
 public class AlertDTO {
 
+    private static severity severity;
+
     @Schema(
             description = "Id of the Alert",
             example = "1"
     )
     private Long id;
+
+    @Schema(
+            description = "Id of the Metric associated with the Alert",
+            example = "1"
+    )
+    private Long metricID;
 
     @Schema(
             description = "Name of the Alert",
@@ -45,9 +53,25 @@ public class AlertDTO {
 
     @Schema(
             description = "Severity of the Alert",
-            example = "High"
+            example = "HIGH"
     )
-    private String severity;
+    public enum severity {
+        LOW,
+        MEDIUM,
+        HIGH
+    }
+
+    @Schema(
+            description = "Minimum threshold for the Alert",
+            example = "3"
+    )
+    private Long minThreshold;
+
+    @Schema(
+            description = "Maximum threshold for the Alert",
+            example = "5"
+    )
+    private Long maxThreshold;
 
     @Schema(
             description = "Supervisor of the Alert",
@@ -74,4 +98,9 @@ public class AlertDTO {
     )
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime updatedAt;
+
+    // Setter personalizado para el enum 'severity'
+    public void setSeverity(severity severe) {
+        severity = severe;
+    }
 }
