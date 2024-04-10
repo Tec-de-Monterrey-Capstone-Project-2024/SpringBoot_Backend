@@ -62,6 +62,10 @@ public class QueueController {
     )
     @GetMapping("/{id}")
     public ResponseEntity<QueueDTO>getQueueById(@PathVariable(name = "id") long id){
-        return ResponseEntity.ok(new QueueDTO());
+        QueueDTO queue1 = new QueueDTO();
+        queue1.setId(1L);
+        queue1.setClients(19L);
+        queue1.setAgents(32L);
+        return ResponseEntity.ok(queue1);
     }
 }
