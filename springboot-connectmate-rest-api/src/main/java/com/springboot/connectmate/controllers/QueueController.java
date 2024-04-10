@@ -66,6 +66,7 @@ public class QueueController {
         queue1.setId(1L);
         queue1.setClients(19L);
         queue1.setAgents(32L);
+        queue1.setFullstatus(QueueDTO.status.FULL);
         return ResponseEntity.ok(queue1);
     }
 }
