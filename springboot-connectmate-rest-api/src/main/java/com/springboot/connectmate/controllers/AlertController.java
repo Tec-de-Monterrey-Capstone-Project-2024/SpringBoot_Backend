@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -32,6 +34,7 @@ public class AlertController {
         return new ResponseEntity<>(alertDTO, HttpStatus.CREATED);
     }
 
+
     // Get All Alerts Rest API
     @Operation(
             summary = "Get All Alerts",
@@ -43,7 +46,37 @@ public class AlertController {
     )
     @GetMapping
     public List<AlertDTO> getAllAlerts() {
-        return List.of(new AlertDTO());
+        AlertDTO alert1 = new AlertDTO();
+        alert1.setId(1L);
+        alert1.setName("Reconfigure virtual floor");
+        alert1.setDescription(""); // Assuming empty since not specified
+        alert1.setType("virtual floor");
+        alert1.setStatus("waiting");
+        alert1.setSeverity("low");
+        alert1.setCreatedAt(LocalDateTime.of(2024, 4, 13, 12, 10, 11));
+        alert1.setUpdatedAt(LocalDateTime.of(2024, 4, 13, 12, 10, 11));
+
+        AlertDTO alert2 = new AlertDTO();
+        alert2.setId(2L);
+        alert2.setName("Chat with agent");
+        alert2.setDescription(""); // Assuming empty since not specified
+        alert2.setType("agent");
+        alert2.setStatus("waiting");
+        alert2.setSeverity("moderate");
+        alert2.setCreatedAt(LocalDateTime.of(2024, 4, 13, 12, 12, 11));
+        alert2.setUpdatedAt(LocalDateTime.of(2024, 4, 13, 12, 20, 11));
+
+        AlertDTO alert3 = new AlertDTO();
+        alert3.setId(3L);
+        alert3.setName("Agent call take");
+        alert3.setDescription(""); // Assuming empty since not specified
+        alert3.setType("agent");
+        alert3.setStatus("waiting");
+        alert3.setSeverity("high");
+        alert3.setCreatedAt(LocalDateTime.of(2024, 4, 13, 15, 10, 11));
+        alert3.setUpdatedAt(LocalDateTime.of(2024, 4, 13, 15, 15, 11));
+
+        return Arrays.asList(alert1, alert2, alert3);
     }
 
     // Get Alert by ID API

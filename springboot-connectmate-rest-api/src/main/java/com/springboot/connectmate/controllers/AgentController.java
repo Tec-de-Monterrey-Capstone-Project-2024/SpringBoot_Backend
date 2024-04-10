@@ -1,6 +1,7 @@
 package com.springboot.connectmate.controllers;
 
 import com.springboot.connectmate.dtos.AgentDTO;
+import com.springboot.connectmate.dtos.AgentMetricsDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/agents")
@@ -48,4 +50,30 @@ public class AgentController {
         return ResponseEntity.ok(new AgentDTO());
     }
 
+
+
+    @GetMapping("/metrics/{id}")
+    public ResponseEntity<Object> getAgentMetricsById(@PathVariable(name = "id") long id) {
+        if (id == 1) {
+            AgentMetricsDTO response = new AgentMetricsDTO();
+            response.setDescription("calls answered within");
+            response.setLimitInSeconds(20);
+            response.setTimeToAnswerCalls(List.of(
+                    new AgentMetricsDTO.CallDetailDTO(1, "12 3456 7890", 5),
+                    new AgentMetricsDTO.CallDetailDTO(2, "12 3456 7890", 6),
+                    new AgentMetricsDTO.CallDetailDTO(3, "12 3456 7890", 5)
+            ));
+            return ResponseEntity.ok(response);
+        } else {
+            // Customize this part as needed, e.g., return a custom error message
+            return ResponseEntity.status(404).body(null); // Adjust based on your error handling
+        }
+    }
+
+
+
+
+
 }
+
+
