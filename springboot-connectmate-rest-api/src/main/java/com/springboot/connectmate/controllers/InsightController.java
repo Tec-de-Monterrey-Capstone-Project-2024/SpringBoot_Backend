@@ -45,7 +45,30 @@ public class InsightController {
         insight1.setDescription("Not enough people on virtual floor.");
         insight1.setCreatedAt(LocalDateTime.now());
 
+        InsightDTO insight2 = new InsightDTO();
+        insight2.setId(2L);
+        insight2.setType(InsightDTO.InsightType.QUEUE);
+        insight2.setStatus(InsightDTO.InsightStatus.DONE);
+        insight2.setDescription("Add agents to Queue 2.");
+        insight2.setCreatedAt(LocalDateTime.now());
+
+        InsightDTO insight3 = new InsightDTO();
+        insight3.setId(3L);
+        insight3.setType(InsightDTO.InsightType.QUEUE);
+        insight3.setStatus(InsightDTO.InsightStatus.TODO);
+        insight3.setDescription("Review agents on Queue 2.");
+        insight3.setCreatedAt(LocalDateTime.now());
+
+        InsightDTO insight4 = new InsightDTO();
+        insight4.setId(3L);
+        insight4.setType(InsightDTO.InsightType.QUEUE);
+        insight4.setStatus(InsightDTO.InsightStatus.TODO);
+        insight4.setDescription("Review agents on Queue 2.");
+        insight4.setCreatedAt(LocalDateTime.now());
+
         response.add(insight1);
+        response.add(insight2);
+        response.add(insight3);
         return ResponseEntity.ok(response);
     }
 
