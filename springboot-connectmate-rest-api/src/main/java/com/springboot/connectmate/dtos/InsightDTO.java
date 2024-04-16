@@ -9,59 +9,52 @@ import java.time.LocalDateTime;
 
 @Data
 @Schema(
-        name = "General Task",
-        description = "DTO for general tasks in the Call Center"
+        name = "General Insight",
+        description = "DTO for general insights in the Call Center"
 )
-public class TaskDTO {
+public class InsightDTO {
     @Schema(
             name = "Identifier (ID)",
-            description = "Primary key (PK) for the entity of Tasks",
+            description = "Primary key (PK) for the entity of Insights",
             example = "1"
     )
     private Long id;
 
-    public enum TaskType{AGENT, QUEUE, OTHER}
+    public enum InsightType{AGENT, QUEUE, OTHER}
 
     @Schema(
             name = "Type",
-            description = "Type of the task",
+            description = "Type of the insight",
             example = "QUEUE"
     )
-    private TaskType type;
+    private InsightType type;
 
-    public enum TaskStatus{TODO, DONE}
+    public enum InsightStatus{TODO, DONE}
 
     @Schema(
             name = "Status",
-            description = "Status of the Task (To Do or Done)",
+            description = "Status of the Insight (To Do or Done)",
             example = "TODO"
     )
-    private TaskStatus status;
+    private InsightStatus status;
 
     @Schema(
             name = "Description",
-            description = "Text giving the title of the task",
+            description = "Text giving the title of the insight",
             example = "Not enough people on virtual floor"
     )
     private String description;
 
     @Schema(
-            name = "Details",
-            description = "API's url giving the details for the task",
-            example = "http://localhost:8080/api/task/1"
-    )
-    private String details;
-
-    @Schema(
             name = "Created At",
-            description = "Created At timestamp of the Task",
+            description = "Created At timestamp of the Insight",
             example = "2021-12-31T23:59:59"
     )
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;
 
     @Schema(
-            description = "Updated At timestamp of the Task",
+            description = "Updated At timestamp of the Insight",
             example = "2021-12-31T23:59:59"
     )
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")

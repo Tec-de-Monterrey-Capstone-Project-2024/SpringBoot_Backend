@@ -1,6 +1,6 @@
 package com.springboot.connectmate.controllers;
 
-import com.springboot.connectmate.dtos.TaskDTO;
+import com.springboot.connectmate.dtos.InsightDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,60 +15,59 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/task")
+@RequestMapping("/api/insight")
 @Tag(
-        name = "Task REST API",
-        description = "An API that have the CRUD services for tasks in the Call Center"
+        name = "Insight REST API",
+        description = "An API that have the CRUD services for insights in the Call Center"
 )
-public class TaskController {
+public class InsightController {
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
-                    description = "Get the tasks successfully",
+                    description = "Get the insights successfully",
                     content = {
                         @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = TaskDTO.class))
+                            schema = @Schema(implementation = InsightDTO.class))
             }),
             @ApiResponse(responseCode = "500",
                     description = "Internal Server Error",
                     content = @Content
             )
     })
-    @Operation(summary = "Get all tasks for the Call Center")
+    @Operation(summary = "Get all insights for the Call Center")
     @GetMapping
-    public ResponseEntity<List<TaskDTO>> getAllTasks(){
-        List<TaskDTO> response = new ArrayList<>();
-        TaskDTO task1 = new TaskDTO();
-        task1.setId(1L);
-        task1.setType(TaskDTO.TaskType.QUEUE);
-        task1.setStatus(TaskDTO.TaskStatus.TODO);
-        task1.setDescription("Not enough people on virtual floor.");
-        task1.setDetails("http://localhost:8080/api/task/1");
-        task1.setCreatedAt(LocalDateTime.now());
+    public ResponseEntity<List<InsightDTO>> getAllInsights(){
+        List<InsightDTO> response = new ArrayList<>();
+        InsightDTO insight1 = new InsightDTO();
+        insight1.setId(1L);
+        insight1.setType(InsightDTO.InsightType.QUEUE);
+        insight1.setStatus(InsightDTO.InsightStatus.TODO);
+        insight1.setDescription("Not enough people on virtual floor.");
+        insight1.setCreatedAt(LocalDateTime.now());
 
-        response.add(task1);
+        response.add(insight1);
         return ResponseEntity.ok(response);
     }
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
-                description = "Task updated successfully",
+                description = "Insight updated successfully",
                 content = {
                     @Content(
-                            schema = @Schema(implementation = TaskDTO.class))
+                            schema = @Schema(implementation = InsightDTO.class))
             }),
             @ApiResponse(responseCode = "500",
                 description = "Internal Server Error",
                 content = @Content
             )
     })
-    @Operation(summary = "Modify one specific task by its identifier (ID)")
-    @PutMapping("/{taskId}")
-    public ResponseEntity<TaskDTO> updateTask(@PathVariable Long taskId, @RequestBody TaskDTO task){
-        task.setId(taskId);
-        task.setUpdatedAt(LocalDateTime.now());
+    @Operation(summary = "Modify one specific insight by its identifier (ID)")
+    @PutMapping("/{insightId}")
+    public ResponseEntity<InsightDTO> updateInsight(@PathVariable Long insightId, @RequestBody InsightDTO insight){
+        insight.setId(insightId);
+        insight.setUpdatedAt(LocalDateTime.now());
 
-        return ResponseEntity.ok(task);
+        return ResponseEntity.ok(insight);
     }
 
     @ApiResponses(value = {
@@ -80,9 +79,9 @@ public class TaskController {
                     content = @Content
             )
     })
-    @Operation(summary = "Delete one task by Id in the database")
-    @DeleteMapping("/{taskId}")
-    public ResponseEntity<String> deleteTask(@PathVariable Long taskId){
+    @Operation(summary = "Delete one insight by Id in the database")
+    @DeleteMapping("/{insightId}")
+    public ResponseEntity<String> deleteInsight(@PathVariable Long insightId){
         return ResponseEntity.noContent().build();
     }
 
