@@ -24,7 +24,7 @@ public class InsightController {
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
-                    description = "Got the insights successfully",
+                    description = "Insights fetched successfully.",
                     content = {
                         @Content(mediaType = "application/json",
                             schema = @Schema(implementation = InsightDTO.class))
@@ -83,7 +83,7 @@ public class InsightController {
     })
     @Operation(summary = "Get one specific insight by its identifier (ID)")
     @GetMapping("/{insightId}")
-    public ResponseEntity<InsightDTO> getInsight(@PathVariable Long insightId){
+    public InsightDTO getInsight(@PathVariable Long insightId){
         InsightDTO insight = new InsightDTO();
         
         insight.setId(1L);
@@ -94,7 +94,7 @@ public class InsightController {
         insight.setUpdatedAt(LocalDateTime.parse("2007-12-03T10:15:31"));
 
         
-        return ResponseEntity.ok(insight);
+        return insight;
     }
 
 

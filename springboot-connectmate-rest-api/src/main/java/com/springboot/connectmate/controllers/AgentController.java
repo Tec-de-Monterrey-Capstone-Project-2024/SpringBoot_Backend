@@ -46,6 +46,6 @@ public class AgentController {
     @GetMapping("/{id}")
     public ResponseEntity<AgentDTO> getAgentById(@PathVariable(name = "id") long id) {
         return ResponseEntity.ok(new AgentDTO());
-    }
+    } 
 
 }
