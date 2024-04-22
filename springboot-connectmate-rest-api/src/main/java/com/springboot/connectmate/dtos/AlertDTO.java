@@ -6,7 +6,7 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
-@Data // Lombok annotation to create all the getters, setters, equals, hash, and toString methods based on the fields
+@Data // Lombok's annotation to create all the getters, setters, equals, hash, and toString methods based on the fields
 @Schema(
         name = "Alert",
         description = "DTO for Alert"
