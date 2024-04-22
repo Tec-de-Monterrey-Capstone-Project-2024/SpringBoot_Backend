@@ -73,17 +73,17 @@ public class InsightController {
         return ResponseEntity.ok(response);
     }
 
-    @ApiResponses(value = {
-        @ApiResponse(responseCode =  "200",
-                description = "Insight got successfully",
-                content = {
-                        @Content(
-                                schema = @Schema(implementation = InsightDTO.class))
-                })
-    })
-    @Operation(summary = "Get one specific insight by its identifier (ID)")
+    // Get Insight by ID API
+    @Operation(
+            summary = "Get Insight by ID",
+            description = "Gets a specific insight by its ID."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Insight fetched successfully"
+    )
     @GetMapping("/{insightId}")
-    public InsightDTO getInsight(@PathVariable Long insightId){
+    public InsightDTO getInsightByID(@PathVariable Long insightId){
         InsightDTO insight = new InsightDTO();
         
         insight.setId(1L);
@@ -92,7 +92,6 @@ public class InsightController {
         insight.setDescription("Not enough people on virtual floor.");
         insight.setCreatedAt(LocalDateTime.parse("2007-12-03T10:15:30"));
         insight.setUpdatedAt(LocalDateTime.parse("2007-12-03T10:15:31"));
-
         
         return insight;
     }
