@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -84,6 +85,21 @@ public class InsightController {
                 content = @Content
             )
     })
+
+    @Operation(
+            summary = "Create a new Insight",
+            description = "Creates a new Insight."
+    )
+    @ApiResponse(
+            responseCode = "201",
+            description = "Insight created successfully,"
+    )
+    @PostMapping
+    public ResponseEntity<String> createInsight(@RequestBody InsightDTO insight){
+        
+        return new ResponseEntity<>("Insight created successfully", HttpStatus.OK);
+    }
+    
     @Operation(summary = "Modify one specific insight by its identifier (ID)")
     @PutMapping("/{insightId}")
     public ResponseEntity<InsightDTO> updateInsight(@PathVariable Long insightId, @RequestBody InsightDTO insight){
