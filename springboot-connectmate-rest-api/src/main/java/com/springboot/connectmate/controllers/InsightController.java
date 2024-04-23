@@ -22,17 +22,11 @@ import java.util.List;
 )
 public class InsightController {
 
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
-                    description = "Get the insights successfully",
-                    content = {
-                        @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = InsightDTO.class))
-            }),
-            @ApiResponse(responseCode = "500",
-                    description = "Internal Server Error",
-                    content = @Content
-            )
+    @ApiResponse(responseCode = "200",
+            description = "Insights fetched successfully",
+            content = {
+                @Content(mediaType = "application/json",
+                         schema = @Schema(implementation = InsightDTO.class))
     })
     @Operation(summary = "Get all insights for the Call Center")
     @GetMapping
@@ -72,17 +66,11 @@ public class InsightController {
         return ResponseEntity.ok(response);
     }
 
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
-                description = "Insight updated successfully",
-                content = {
-                    @Content(
-                            schema = @Schema(implementation = InsightDTO.class))
-            }),
-            @ApiResponse(responseCode = "500",
-                description = "Internal Server Error",
-                content = @Content
-            )
+    @ApiResponse(responseCode = "200",
+            description = "Insight updated successfully",
+            content = {
+                @Content(
+                    schema = @Schema(implementation = InsightDTO.class))
     })
     @Operation(summary = "Modify one specific insight by its identifier (ID)")
     @PutMapping("/{insightId}")
@@ -93,15 +81,9 @@ public class InsightController {
         return ResponseEntity.ok(insight);
     }
 
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "204",
-                    description = "No content"
-            ),
-            @ApiResponse(responseCode = "500",
-                    description = "Internal Server Error",
-                    content = @Content
-            )
-    })
+    @ApiResponse(responseCode = "204",
+            description = "No content"
+    )
     @Operation(summary = "Delete one insight by Id in the database")
     @DeleteMapping("/{insightId}")
     public ResponseEntity<String> deleteInsight(@PathVariable Long insightId){
