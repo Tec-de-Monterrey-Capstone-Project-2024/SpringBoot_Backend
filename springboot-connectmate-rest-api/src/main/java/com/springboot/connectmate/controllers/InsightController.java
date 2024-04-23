@@ -86,7 +86,7 @@ public class InsightController {
     public InsightDTO getInsightByID(@PathVariable Long insightId){
         InsightDTO insight = new InsightDTO();
         
-        insight.setId(1L);
+        insight.setId(insightId);
         insight.setType(InsightDTO.InsightType.QUEUE);
         insight.setStatus(InsightDTO.InsightStatus.TODO);
         insight.setDescription("Not enough people on virtual floor.");
