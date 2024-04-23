@@ -1,29 +1,24 @@
-# Usa una imagen
+# Base image with both Java and Maven installed.
 FROM maven:3.8.4-openjdk-17 AS build
-
-# Establece el directorio de trabajo dentro del contenedor
+# Declares the working directory of the container.
 WORKDIR /app
-
-# Copia el archivo pom.xml para descargar las dependencias primero
+# Copies the pom.xml file to download dependencies first.
 COPY pom.xml .
-
-# Descarga las dependencias
+# Downloads the dependencies.
 RUN mvn dependency:go-offline -B
-
-# Copia todos los archivos fuente al contenedor
+# Copies the source code to the container.
 COPY src ./src
-
-# Compila la aplicación omitiendo los tests
+# Builds the application (except for tests).
 RUN mvn package -DskipTests
 
-# Etapa de construcción final para reducir el tamaño de la imagen
-FROM openjdk:18-alpine
-
-# Copia el artefacto construido desde la etapa anterior
-COPY --from=build /app/target/springboot-connectmate-rest-api-0.0.1-SNAPSHOT.jar /app/app.jar
-
-# Expone el puerto en el que la aplicación se ejecutará
+# Final Build Stage to reduce the image size.
+FROM openjdk:17-alpine
+# Copies the built JAR file from the previous stage.
+COPY --from=build /app/target/springboot-connectmate-rest-api-0.0.1-SNAPSHOT.jar /app/springboot-connectmate-rest-api.jar
+# Exposes the port where the application will be running.
 EXPOSE 8080
+# Command to run the application when the container starts.
+CMD ["java", "-jar", "/app/springboot-connectmate-rest-api.jar"]
 
-# Comando para ejecutar la aplicación cuando se inicia el contenedor
-CMD ["java", "-jar", "/app/app.jar"]
+# To build the Docker image, run the following command:
+# docker run -p 8080:8080 [user/image:version]
