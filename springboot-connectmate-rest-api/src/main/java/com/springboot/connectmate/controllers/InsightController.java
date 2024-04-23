@@ -24,7 +24,7 @@ public class InsightController {
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
-                    description = "Get the insights successfully",
+                    description = "Insights fetched successfully.",
                     content = {
                         @Content(mediaType = "application/json",
                             schema = @Schema(implementation = InsightDTO.class))
@@ -69,8 +69,33 @@ public class InsightController {
         response.add(insight1);
         response.add(insight2);
         response.add(insight3);
+        response.add(insight4);
         return ResponseEntity.ok(response);
     }
+
+    // Get Insight by ID API
+    @Operation(
+            summary = "Get Insight by ID",
+            description = "Gets a specific insight by its ID."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Insight fetched successfully"
+    )
+    @GetMapping("/{insightId}")
+    public InsightDTO getInsightByID(@PathVariable Long insightId){
+        InsightDTO insight = new InsightDTO();
+        
+        insight.setId(insightId);
+        insight.setType(InsightDTO.InsightType.QUEUE);
+        insight.setStatus(InsightDTO.InsightStatus.TODO);
+        insight.setDescription("Not enough people on virtual floor.");
+        insight.setCreatedAt(LocalDateTime.parse("2007-12-03T10:15:30"));
+        insight.setUpdatedAt(LocalDateTime.parse("2007-12-03T10:15:31"));
+        
+        return insight;
+    }
+
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
