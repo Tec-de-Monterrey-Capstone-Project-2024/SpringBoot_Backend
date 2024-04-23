@@ -91,17 +91,11 @@ public class InsightController {
     }
 
 
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
-                description = "Insight updated successfully",
-                content = {
-                    @Content(
-                            schema = @Schema(implementation = InsightDTO.class))
-            }),
-            @ApiResponse(responseCode = "500",
-                description = "Internal Server Error",
-                content = @Content
-            )
+    @ApiResponse(responseCode = "200",
+            description = "Insight updated successfully",
+            content = {
+                @Content(
+                        schema = @Schema(implementation = InsightDTO.class))
     })
     @Operation(summary = "Modify one specific insight by its identifier (ID)")
     @PutMapping("/{insightId}")
