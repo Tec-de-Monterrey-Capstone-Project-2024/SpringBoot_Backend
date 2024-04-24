@@ -69,7 +69,7 @@ public class AlertController {
             description = "Alert deleted successfully"
     )
     @DeleteMapping("/{alertId}")
-    public ResponseEntity<String> deleteAlert(@PathVariable(name = "alertId") long id) {
+    public ResponseEntity<String> deleteAlert(@PathVariable(name = "alertId") Long id) {
         return ResponseEntity.noContent().build();
     }
 
