@@ -65,12 +65,12 @@ public class AlertController {
             description = "Delete a specific alert by its ID"
     )
     @ApiResponse(
-            responseCode = "200",
+            responseCode = "204",
             description = "Alert deleted successfully"
     )
     @DeleteMapping("/{alertId}")
     public ResponseEntity<String> deleteAlert(@PathVariable(name = "alertId") long id) {
-        return ResponseEntity.ok("");
+        return ResponseEntity.noContent().build();
     }
 
     @Operation(
@@ -81,9 +81,10 @@ public class AlertController {
             responseCode = "200",
             description = "Alert modified successfully"
     )
+
     @PutMapping("/{alertId}")
-    public ResponseEntity<AlertDTO> putAlert(@RequestBody AlertDTO alertDTO) {
-        return new ResponseEntity<>(alertDTO, HttpStatus.OK);
+    public ResponseEntity<AlertDTO> putAlert(@PathVariable(name = "alertId") Long id, @RequestBody AlertDTO alertDTO) {
+        return new ResponseEntity<>(alertDTO, HttpStatus.OK); //Retornar el mismo Json
     }
 
 
