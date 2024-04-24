@@ -16,10 +16,19 @@ import java.util.List;
 @RequestMapping("/agents")
 public class AgentsMetricsController {
 
+    
+    @Operation(
+            summary = "Get metric agents",
+            description = "Gets all the metrics for a supervisor"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Found the metrics"),
+    })
     public List<MetricAgentsDTO> getAllMetrics(){
         return List.of(new MetricAgentsDTO());
     }
-    @Operation(summary = "Endpoint  5, gets metric agents")
     @GetMapping("/{id}/metrics")
     public MetricAgentsDTO getAgentMetrics(@PathVariable int id) {
         MetricAgentsDTO metrics = new MetricAgentsDTO();
@@ -35,7 +44,17 @@ public class AgentsMetricsController {
 
 
 
-    @Operation(summary = "Endpoint  6, gets KPI's for an agent")
+    
+    @Operation(
+            summary = "Gets KPI's for an agent",
+            description = "Gets the agents info and the KPI's"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Found the agent KPI's"),
+    })
+    
     @GetMapping("/{agentId}/metrics/{metricId}")
     public AgentDetailsDTO getMetricDetail(@PathVariable int agentId, @PathVariable int metricId) {
 
