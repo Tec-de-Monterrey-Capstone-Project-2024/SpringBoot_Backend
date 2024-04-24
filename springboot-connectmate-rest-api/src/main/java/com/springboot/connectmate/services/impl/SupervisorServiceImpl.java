@@ -70,12 +70,9 @@ public class SupervisorServiceImpl implements SupervisorService{
         Supervisor supervisor = supervisorRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Supervisor", "id", id));
 
         // Update Supervisor
-        supervisor.setName(supervisorDTO.getName());
-        supervisor.setEmail(supervisorDTO.getEmail());
+        supervisor.setFirstName(supervisorDTO.getFirstName());
+        supervisor.setLastName(supervisorDTO.getLastName());
         supervisor.setPassword(supervisorDTO.getPassword());
-        supervisor.setPhone(supervisorDTO.getPhone());
-        supervisor.setAddress(supervisorDTO.getAddress());
-        supervisor.setInstanceId(supervisorDTO.getInstanceId());
 
         // Save Supervisor
         Supervisor updatedSupervisor = supervisorRepository.save(supervisor);
@@ -93,8 +90,11 @@ public class SupervisorServiceImpl implements SupervisorService{
         fields.forEach((key, value) -> {
             // Map fields to properties of Supervisor
             switch (key) {
-                case "name":
-                    supervisor.setName((String) value);
+                case "first_name":
+                    supervisor.setFirstName((String) value);
+                    break;
+                case "last_name":
+                    supervisor.setLastName((String) value);
                     break;
                 case "email":
                     supervisor.setEmail((String) value);
@@ -102,15 +102,7 @@ public class SupervisorServiceImpl implements SupervisorService{
                 case "password":
                     supervisor.setPassword((String) value);
                     break;
-                case "phone":
-                    supervisor.setPhone((String) value);
-                    break;
-                case "address":
-                    supervisor.setAddress((String) value);
-                    break;
-                case "instanceId":
-                    supervisor.setInstanceId((String) value);
-                    break;
+
             }
         });
 
