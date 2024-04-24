@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,17 +21,11 @@ import java.util.List;
 )
 public class InsightController {
 
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
-                    description = "Insights fetched successfully.",
-                    content = {
-                        @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = InsightDTO.class))
-            }),
-            @ApiResponse(responseCode = "500",
-                    description = "Internal Server Error",
-                    content = @Content
-            )
+    @ApiResponse(responseCode = "200",
+            description = "Insights fetched successfully",
+            content = {
+                @Content(mediaType = "application/json",
+                         schema = @Schema(implementation = InsightDTO.class))
     })
     @Operation(summary = "Get all insights for the Call Center")
     @GetMapping
@@ -74,13 +67,13 @@ public class InsightController {
     }
 
     // Get Insight by ID API
-    @Operation(
-            summary = "Get Insight by ID",
-            description = "Gets a specific insight by its ID."
-    )
     @ApiResponse(
             responseCode = "200",
             description = "Insight fetched successfully"
+    )
+    @Operation(
+            summary = "Get Insight by ID",
+            description = "Gets a specific insight by its ID."
     )
     @GetMapping("/{insightId}")
     public InsightDTO getInsightByID(@PathVariable Long insightId){
@@ -97,17 +90,11 @@ public class InsightController {
     }
 
 
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
-                description = "Insight updated successfully",
-                content = {
-                    @Content(
-                            schema = @Schema(implementation = InsightDTO.class))
-            }),
-            @ApiResponse(responseCode = "500",
-                description = "Internal Server Error",
-                content = @Content
-            )
+    @ApiResponse(responseCode = "200",
+            description = "Insight updated successfully",
+            content = {
+                @Content(
+                        schema = @Schema(implementation = InsightDTO.class))
     })
     @Operation(summary = "Modify one specific insight by its identifier (ID)")
     @PutMapping("/{insightId}")
@@ -118,15 +105,9 @@ public class InsightController {
         return ResponseEntity.ok(insight);
     }
 
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "204",
-                    description = "No content"
-            ),
-            @ApiResponse(responseCode = "500",
-                    description = "Internal Server Error",
-                    content = @Content
-            )
-    })
+    @ApiResponse(responseCode = "204",
+            description = "No content"
+    )
     @Operation(summary = "Delete one insight by Id in the database")
     @DeleteMapping("/{insightId}")
     public ResponseEntity<String> deleteInsight(@PathVariable Long insightId){
