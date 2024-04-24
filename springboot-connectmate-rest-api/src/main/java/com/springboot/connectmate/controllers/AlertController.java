@@ -50,9 +50,9 @@ public class AlertController {
         alert1.setId(1L);
         alert1.setName("Reconfigure virtual floor");
         alert1.setDescription(""); // Assuming empty since not specified
-        alert1.setType("virtual floor");
-        alert1.setStatus("waiting");
-        alert1.setSeverity("low");
+        alert1.setType(AlertDTO.FloorTypes.VIRTUALFLOOR);
+        alert1.setStatus(AlertDTO.StatusType.HOLD);
+        alert1.setSeverity(AlertDTO.AlertSeverity.HIGH);
         alert1.setCreatedAt(LocalDateTime.of(2024, 4, 13, 12, 10, 11));
         alert1.setUpdatedAt(LocalDateTime.of(2024, 4, 13, 12, 10, 11));
 
@@ -60,9 +60,9 @@ public class AlertController {
         alert2.setId(2L);
         alert2.setName("Chat with agent");
         alert2.setDescription(""); // Assuming empty since not specified
-        alert2.setType("agent");
-        alert2.setStatus("waiting");
-        alert2.setSeverity("moderate");
+        alert2.setType(AlertDTO.FloorTypes.VIRTUALFLOOR);
+        alert2.setStatus(AlertDTO.StatusType.WAITING);
+        alert2.setSeverity(AlertDTO.AlertSeverity.LOW);
         alert2.setCreatedAt(LocalDateTime.of(2024, 4, 13, 12, 12, 11));
         alert2.setUpdatedAt(LocalDateTime.of(2024, 4, 13, 12, 20, 11));
 
@@ -70,9 +70,9 @@ public class AlertController {
         alert3.setId(3L);
         alert3.setName("Agent call take");
         alert3.setDescription(""); // Assuming empty since not specified
-        alert3.setType("agent");
-        alert3.setStatus("waiting");
-        alert3.setSeverity("high");
+        alert3.setType(AlertDTO.FloorTypes.ADMIN);
+        alert3.setStatus(AlertDTO.StatusType.WAITING);
+        alert3.setSeverity(AlertDTO.AlertSeverity.HIGH);
         alert3.setCreatedAt(LocalDateTime.of(2024, 4, 13, 15, 10, 11));
         alert3.setUpdatedAt(LocalDateTime.of(2024, 4, 13, 15, 15, 11));
 
@@ -96,9 +96,9 @@ public class AlertController {
         alert.setMetricID(alertId);
         alert.setName("Low Service Level");
         alert.setDescription("Service level is low");
-        alert.setType("Service Level");
-        alert.setStatus("Open");
-        alert.setSeverity(AlertDTO.severity.LOW);
+        alert.setType(AlertDTO.FloorTypes.VIRTUALFLOOR);
+        alert.setStatus(AlertDTO.StatusType.WAITING);
+        alert.setSeverity(AlertDTO.AlertSeverity.LOW);
         alert.setMinThreshold(90L);
         alert.setMaxThreshold(100L);
         alert.setSupervisor("John Doe");

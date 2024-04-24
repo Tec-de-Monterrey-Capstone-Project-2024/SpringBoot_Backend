@@ -57,8 +57,20 @@ public class AlertDTO {
         MEDIUM,
         HIGH
     }
-    private static AlertSeverity severity;
 
+    public enum StatusType{
+        WAITING,
+        HOLD,
+        ONGOING,
+        SOLVED
+    }
+    public enum FloorTypes{
+        WAITINGFLOOR,
+        VIRTUALFLOOR,
+        REALFLOOR,
+        ADMIN
+    }
+    private AlertSeverity severity;
     @Schema(
             description = "Minimum threshold for the Alert",
             example = "3"
@@ -97,8 +109,12 @@ public class AlertDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime updatedAt;
 
-    // Setter personalizado para el enum 'severity'
+
     public void setSeverity(AlertSeverity severe) {
         severity = severe;
     }
+    public void setStatus(StatusType stat){
+        status = String.valueOf(stat);
+    }
+    public void setType(FloorTypes typ){type= String.valueOf(typ);}
 }

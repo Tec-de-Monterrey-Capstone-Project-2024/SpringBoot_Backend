@@ -28,8 +28,11 @@ public class AgentController {
     @Operation(summary = "Get Agent by ID", description = "Retrieve an agent by their ID")
     @ApiResponse(responseCode = "200", description = "Agent fetched successfully")
     public ResponseEntity<AgentDTO> getAgentById(@PathVariable("agentId") Long id) {
-        // Simulated data fetch
-        AgentDTO agent = new AgentDTO(); // Assume this object is fetched and populated
+        AgentDTO agent = new AgentDTO();
+        agent.setId(id);
+        agent.setName("John Doe");
+        agent.setEmail("john.doe@example.com");
+
         return ResponseEntity.ok(agent);
     }
 
