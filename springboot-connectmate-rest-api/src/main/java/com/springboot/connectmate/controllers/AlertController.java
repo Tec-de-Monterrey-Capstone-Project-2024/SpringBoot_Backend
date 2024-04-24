@@ -20,7 +20,7 @@ import java.util.List;
 )
 public class AlertController {
 
-    // Create Alert Rest API
+    // Create Alert
     @Operation(
             summary = "Create Alert",
             description = "Creates a New Alert"
@@ -30,8 +30,8 @@ public class AlertController {
             description = "Alert created successfully"
     )
     @PostMapping
-    public ResponseEntity<AlertDTO> createSupervisor(@RequestBody AlertDTO alertDTO) {
-        return new ResponseEntity<>(alertDTO, HttpStatus.CREATED);
+    public ResponseEntity<String> createAlert(@RequestBody AlertDTO alert) {
+        return new ResponseEntity<>("Alert created successfully", HttpStatus.OK);
     }
 
 
@@ -90,6 +90,22 @@ public class AlertController {
     )
     @GetMapping("/{alertId}")
     public AlertDTO getAlertById(@PathVariable Long alertId) {
-        return new AlertDTO();
+        AlertDTO alert = new AlertDTO();
+
+        alert.setId(0L);
+        alert.setMetricID(alertId);
+        alert.setName("Low Service Level");
+        alert.setDescription("Service level is low");
+        alert.setType("Service Level");
+        alert.setStatus("Open");
+        alert.setSeverity(AlertDTO.severity.LOW);
+        alert.setMinThreshold(90L);
+        alert.setMaxThreshold(100L);
+        alert.setSupervisor("John Doe");
+        alert.setAgent("Jane Doe");
+        alert.setCreatedAt(LocalDateTime.parse("2007-12-03T10:15:30"));
+        alert.setUpdatedAt(LocalDateTime.parse("2007-12-03T10:15:31"));
+
+        return alert;
     }
 }
