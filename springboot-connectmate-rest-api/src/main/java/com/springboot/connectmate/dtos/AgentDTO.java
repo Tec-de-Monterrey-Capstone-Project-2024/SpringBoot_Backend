@@ -28,7 +28,7 @@ public class AgentDTO {
             example = "agent@example.com"
     )
     private String email;
-
+  
     // TO DO: Omit password
     @Schema(
             description = "Password of the Agent",
@@ -68,5 +68,4 @@ public class AgentDTO {
             example = "AVAILABLE"
     )
     private AvailabilityStatus availabilityStatus;
-
 }
