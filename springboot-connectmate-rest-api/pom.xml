@@ -72,6 +72,12 @@
 			<artifactId>modelmapper</artifactId>
 			<version>3.2.0</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-connect -->
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk-connect</artifactId>
+			<version>1.12.696</version>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>
