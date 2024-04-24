@@ -98,7 +98,7 @@ public class AlertDTO {
     private LocalDateTime updatedAt;
 
     // Setter personalizado para el enum 'severity'
-    public void setSeverity(severity severe) {
+    public void setSeverity(AlertSeverity severe) {
         severity = severe;
     }
 }

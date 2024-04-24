@@ -3,7 +3,6 @@ package com.springboot.connectmate.dtos;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import java.util.List;
-import java.util.Map;
 
 @Data
 @Schema(name = "AgentMetrics", description = "DTO for Agent Metrics")

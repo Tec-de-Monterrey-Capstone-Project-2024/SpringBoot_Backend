@@ -24,19 +24,19 @@ public class AgentController {
         return ResponseEntity.ok(agents);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{agentId}")
     @Operation(summary = "Get Agent by ID", description = "Retrieve an agent by their ID")
     @ApiResponse(responseCode = "200", description = "Agent fetched successfully")
-    public ResponseEntity<AgentDTO> getAgentById(@PathVariable("id") Long id) {
+    public ResponseEntity<AgentDTO> getAgentById(@PathVariable("agentId") Long id) {
         // Simulated data fetch
         AgentDTO agent = new AgentDTO(); // Assume this object is fetched and populated
         return ResponseEntity.ok(agent);
     }
 
-    @GetMapping("/metrics/{id}")
+    @GetMapping("/metrics/{metricId}")
     @Operation(summary = "Get Metrics for Agent", description = "Retrieve metrics for a specific agent by their ID")
     @ApiResponse(responseCode = "200", description = "Metrics fetched successfully")
-    public ResponseEntity<Object> getAgentMetricsById(@PathVariable("id") Long id) {
+    public ResponseEntity<Object> getAgentMetricsById(@PathVariable("metricId") Long id) {
         if (id == 1) {
             AgentMetricsDTO metrics = new AgentMetricsDTO();
             metrics.setDescription("calls answered within");
