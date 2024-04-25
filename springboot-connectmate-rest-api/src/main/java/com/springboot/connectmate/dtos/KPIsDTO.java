@@ -1,7 +1,6 @@
-package com.example.demo.dto;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
+package com.springboot.connectmate.dtos;
 import io.swagger.v3.oas.annotations.media.Schema;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 //Este DTO trae todos los KPIs del Agente
