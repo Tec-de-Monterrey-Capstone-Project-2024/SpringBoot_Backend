@@ -19,9 +19,15 @@ public class SupervisorDTO {
 
     @Schema(
             description = "Name of the Supervisor",
+            example = "John"
+    )
+    private String firstName;
+
+    @Schema(
+            description = "Name of the Supervisor",
             example = "John Doe"
     )
-    private String name;
+    private String lastName;
 
     @Schema(
             description = "Email of the Supervisor",
@@ -35,24 +41,4 @@ public class SupervisorDTO {
             example = "password"
     )
     private String password;
-
-    @Schema(
-            description = "Phone number of the Supervisor",
-            example = "+1234567890"
-    )
-    private String phone;
-
-    @Schema(
-            description = "Address of the Supervisor",
-            example = "1234 Main St, City, Country"
-    )
-    private String address;
-
-    // TO DO: Instance Id is intentionally omitted to not expose it through DTO
-    @Schema(
-            description = "Amazon Connect Instance Id",
-            example = "12345678-1234-1234-1234-123456789012"
-    )
-    private String instanceId;
-
 }
