@@ -101,7 +101,7 @@ public class AlertController {
 
     @PutMapping("/{alertId}")
     public ResponseEntity<AlertDTO> putAlert(@PathVariable(name = "alertId") Long id, @RequestBody AlertDTO alertDTO) {
-        return new ResponseEntity<>(alertDTO, HttpStatus.OK); //Retornar el mismo Json
+        return new ResponseEntity<>(alertDTO, HttpStatus.OK); 
     }
 
 
