@@ -41,7 +41,7 @@ jobs:
       env:
         ARTIFACT_REGISTRY_REGION: us-central1 
         REGION: "us-central1" 
-        GAR_LOCATION: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/connectmate
+        GAR_LOCATION: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/springboot-backend
       run: |
         gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
         docker build -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/springboot-backend/connectmate .
