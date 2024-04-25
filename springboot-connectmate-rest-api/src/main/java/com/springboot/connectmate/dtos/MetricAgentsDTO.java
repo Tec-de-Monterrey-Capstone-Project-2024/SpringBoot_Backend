@@ -1,4 +1,5 @@
-package com.example.demo.dto;
+package com.springboot.connectmate.dtos;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
