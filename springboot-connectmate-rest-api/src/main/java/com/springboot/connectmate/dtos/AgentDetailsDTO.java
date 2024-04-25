@@ -1,5 +1,5 @@
-package com.example.demo.dto;
-
+package com.springboot.connectmate.dtos;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 import lombok.Data;
 
@@ -15,7 +15,7 @@ public class AgentDetailsDTO {
     
     @Schema(
             description = "KPI",
-            example = "sl (service level)"
+            example = "Service Level/ Occupancy/ Schedule Adherance"
     )
     private String Description;
 
