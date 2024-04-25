@@ -1,7 +1,8 @@
-package com.example.demo.controller;
-import com.example.demo.dto.MetricAgentsDTO;
-import com.example.demo.dto.AgentDetailsDTO;
-import com.example.demo.dto.KPIsDTO;
+package com.springboot.connectmate.controllers;
+import com.springboot.connectmate.dtos.MetricAgentsDTO;
+import com.springboot.connectmate.dtos.AgentDetailsDTO;
+import com.springboot.connectmate.dtos.KPIsDTO;
+package dtos;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
