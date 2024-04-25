@@ -14,6 +14,9 @@ import lombok.NoArgsConstructor;
         name = "supervisors",
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = {"email"})
+        },
+        indexes = {
+                @Index(columnList = "email")
         }
 )
 public class Supervisor {
@@ -24,17 +27,12 @@ public class Supervisor {
     )
     private Long id;
     // Personal Data
-    @Column(name = "name", nullable = true)
-    private String name;
-    @Column(name = "email", nullable = false)
+    @Column(name = "first_name", nullable = false, length = 100)
+    private String firstName;
+    @Column(name = "last_name", nullable = false, length = 100)
+    private String lastName;
+    @Column(name = "email", nullable = false, length = 255)
     private String email;
-    @Column(name = "password", nullable = false)
+    @Column(name = "password", nullable = false, length = 255)
     private String password;
-    @Column(name = "phone", nullable = true)
-    private String phone;
-    @Column(name = "address", nullable = true)
-    private String address;
-    // Amazon Connect Data
-    @Column(name = "instance_id", nullable = false)
-    private String instanceId;
 }
