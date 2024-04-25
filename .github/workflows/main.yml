@@ -41,20 +41,20 @@ jobs:
       env:
         ARTIFACT_REGISTRY_REGION: us-central1 
         REGION: "us-central1" 
-        GAR_LOCATION: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/merkdo-front
+        GAR_LOCATION: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/connectmate
       run: |
         gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
-        docker build -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/merkdo-front/merkdo-front .
-        docker tag us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/merkdo-front/merkdo-front us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/merkdo-front/merkdo-front:$GITHUB_SHA
-        docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/merkdo-front/merkdo-front:$GITHUB_SHA
-        docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/merkdo-front/merkdo-front:latest
+        docker build -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/springboot-backend/connectmate .
+        docker tag us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/springboot-backend/connectmate us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/springboot-backend/connectmate:$GITHUB_SHA
+        docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/springboot-backend/connectmate:$GITHUB_SHA
+        docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/springboot-backend/connectmate:latest
 
 
 
     - name: Deploy to Cloud Run
       run: |
         gcloud run deploy merkdo-front \
-          --image=us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/merkdo-front/merkdo-front \
+          --image=us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/springboot-backend/connectmate \
           --platform=managed \
           --port=3000 \
           --region=us-central1 \
