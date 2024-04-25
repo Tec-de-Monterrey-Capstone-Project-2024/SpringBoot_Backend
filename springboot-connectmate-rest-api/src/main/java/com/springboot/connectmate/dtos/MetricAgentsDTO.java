@@ -18,7 +18,7 @@ public class MetricAgentsDTO{
     
     @Schema(
             description = "KPI's description",
-            example = "Calls ansered within"
+            example = "Calls answered within"
     )
     private String description;
     
