@@ -10,5 +10,5 @@ import org.springframework.web.bind.annotation.RestController;
         name = "Metric REST API",
         description = "CRUD REST API for Metrics"
 )
-public class MetricsController {
+public class MetricController {
 }

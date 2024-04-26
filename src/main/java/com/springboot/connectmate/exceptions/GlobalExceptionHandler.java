@@ -1,6 +1,6 @@
 package com.springboot.connectmate.exceptions;
 
-import com.springboot.connectmate.dtos.ErrorDetailsDTO;
+import com.springboot.connectmate.dtos.OldDTOS.ErrorDetailsDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
