@@ -1,16 +1,4 @@
 package com.springboot.connectmate.controllers;
-
-import com.springboot.connectmate.dtos.AlertDTO;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/alerts")
 @Tag(
@@ -42,10 +30,7 @@ public class AlertController {
             responseCode = "200",
             description = "Alerts fetched successfully"
     )
-    @GetMapping
-    public List<AlertDTO> getAllAlerts() {
-        return List.of(new AlertDTO());
-    }
+
 
     // Get Alert by ID API
     @Operation(
@@ -76,4 +61,30 @@ public class AlertController {
 
         return alert;
     }
+
+
+// Get All Alerts Rest API
+@Operation(
+        summary = "Get All Alerts",
+        description = "Gets All Alerts"
+)
+@ApiResponse(
+        responseCode = "200",
+        description = "Alerts fetched successfully"
+)
+@GetMapping
+public List<AlertDTO> getAllAlerts() {
+    return List.of(new AlertDTO());
+}
+
+// Second method with a different name
+@GetMapping("/highSeverity")
+public List<AlertDTO> getAllHighSeverityAlerts() {
+    // Implementation here to fetch all alerts
+    // For now, we're just returning a list of alerts with a severity of HIGH
+    return List.of(
+            new AlertDTO(1L, 1L, "High CPU Usage", "CPU usage is above 90%", "CPU", "Open", AlertDTO.severity.HIGH, 80L, 90L, "John Doe", "Jane Doe", LocalDateTime.parse("2021-12-31T23:59:59"), LocalDateTime.parse("2021-12-31T23:59:59")),
+            new AlertDTO(2L, 2L, "High Memory Usage", "Memory usage is above 90%", "Memory", "Open", AlertDTO.severity.HIGH, 80L, 90L, "John Doe", "Jane Doe", LocalDateTime.parse("2021-12-31T23:59:59"), LocalDateTime.parse("2021-12-31T23:59:59"))
+    );
+}
 }

@@ -101,6 +101,7 @@ public class AlertDTO {
 
     // Setter personalizado para el enum 'severity'
     public void setSeverity(severity severe) {
-        severity = severe;
+        AlertDTO.severity = severe;
     }
 }
+
