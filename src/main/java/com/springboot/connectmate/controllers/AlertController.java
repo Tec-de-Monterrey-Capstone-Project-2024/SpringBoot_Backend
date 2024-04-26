@@ -1,6 +1,6 @@
 package com.springboot.connectmate.controllers;
 
-import com.springboot.connectmate.dtos.AlertDTO;
+import com.springboot.connectmate.dtos.OldDTOS.AlertDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;

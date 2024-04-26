@@ -1,4 +1,4 @@
-package com.springboot.connectmate.dtos;
+package com.springboot.connectmate.dtos.OldDTOS;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -74,7 +74,7 @@ public class AlertDTO {
     private Long maxThreshold;
 
     @Schema(
-            description = "Supervisor of the Alert",
+            description = "User of the Alert",
             example = "John Doe"
     )
     private String supervisor;

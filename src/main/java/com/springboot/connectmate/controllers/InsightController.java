@@ -1,6 +1,6 @@
 package com.springboot.connectmate.controllers;
 
-import com.springboot.connectmate.dtos.InsightDTO;
+import com.springboot.connectmate.dtos.OldDTOS.InsightDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
