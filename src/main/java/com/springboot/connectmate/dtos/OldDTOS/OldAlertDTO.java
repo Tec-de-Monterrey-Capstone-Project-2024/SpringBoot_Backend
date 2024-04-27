@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
         name = "Alert",
         description = "DTO for Alert"
 )
-public class AlertDTO {
+public class OldAlertDTO {
 
     private static severity severity;
 

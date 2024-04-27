@@ -1,6 +1,6 @@
 package com.springboot.connectmate.services.impl;
 
-import com.springboot.connectmate.dtos.OldDTOS.UserDTO;
+import com.springboot.connectmate.dtos.User.UserDTO;
 import com.springboot.connectmate.exceptions.ResourceNotFoundException;
 import com.springboot.connectmate.models.User;
 import com.springboot.connectmate.services.UserService;
