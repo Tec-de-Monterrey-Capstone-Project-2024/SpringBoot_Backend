@@ -1,4 +1,4 @@
-package com.springboot.connectmate.dtos;
+package com.springboot.connectmate.dtos.OldDTOS;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
         name = "Alert",
         description = "DTO for Alert"
 )
-public class AlertDTO {
+public class OldAlertDTO {
 
     private static severity severity;
 
@@ -74,7 +74,7 @@ public class AlertDTO {
     private Long maxThreshold;
 
     @Schema(
-            description = "Supervisor of the Alert",
+            description = "User of the Alert",
             example = "John Doe"
     )
     private String supervisor;

@@ -1,4 +1,4 @@
-package com.springboot.connectmate.dtos;
+package com.springboot.connectmate.dtos.OldDTOS;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
         name = "General Insight",
         description = "DTO for general insights in the Call Center"
 )
-public class InsightDTO {
+public class OldInsightDTO {
     @Schema(
             name = "Identifier (ID)",
             description = "Primary key (PK) for the entity of Insights",

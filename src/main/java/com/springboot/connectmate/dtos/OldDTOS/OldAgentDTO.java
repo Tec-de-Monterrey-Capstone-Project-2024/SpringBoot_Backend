@@ -1,4 +1,4 @@
-package com.springboot.connectmate.dtos;
+package com.springboot.connectmate.dtos.OldDTOS;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -8,7 +8,7 @@ import lombok.Data;
         name = "Agent",
         description = "DTO for Agent"
 )
-public class AgentDTO {
+public class OldAgentDTO {
 
     @Schema(
             description = "Id of the Agent",
