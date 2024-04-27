@@ -1,6 +1,6 @@
 package com.springboot.connectmate.services;
 
-import com.springboot.connectmate.dtos.OldDTOS.UserDTO;
+import com.springboot.connectmate.dtos.User.UserDTO;
 
 import java.util.List;
 import java.util.Map;

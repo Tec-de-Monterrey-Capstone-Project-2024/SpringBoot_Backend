@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
         name = "General Insight",
         description = "DTO for general insights in the Call Center"
 )
-public class InsightDTO {
+public class OldInsightDTO {
     @Schema(
             name = "Identifier (ID)",
             description = "Primary key (PK) for the entity of Insights",

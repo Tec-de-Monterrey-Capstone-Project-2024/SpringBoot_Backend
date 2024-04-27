@@ -8,7 +8,7 @@ import lombok.Data;
         name = "Agent",
         description = "DTO for Agent"
 )
-public class AgentDTO {
+public class OldAgentDTO {
 
     @Schema(
             description = "Id of the Agent",

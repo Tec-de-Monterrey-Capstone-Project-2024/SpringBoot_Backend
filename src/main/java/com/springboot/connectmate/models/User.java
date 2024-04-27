@@ -54,7 +54,7 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "queue_id", referencedColumnName = "id")
     )
-    private Set<Queue> queue;
+    private Set<Queue> queues;
 
     // Link to Metrics Table
     // Parent side
