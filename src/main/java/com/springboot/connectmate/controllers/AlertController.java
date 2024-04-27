@@ -1,6 +1,6 @@
 package com.springboot.connectmate.controllers;
 
-import com.springboot.connectmate.dtos.OldDTOS.OldAlertDTO;
+import com.springboot.connectmate.dtos.Alert.AlertDTO;
 import com.springboot.connectmate.services.AlertService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -10,12 +10,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
-
 @RestController
-@RequestMapping("/api/alerts")
+@RequestMapping("/api")
 @Tag(
         name = "Alert REST API",
         description = "CRUD REST API for Alerts"
@@ -29,83 +27,61 @@ public class AlertController {
         this.alertService = alertService;
     }
 
-    // Create Alert
-    @Operation(
-            summary = "Create Alert",
-            description = "Creates a New Alert"
-    )
-    @ApiResponse(
-            responseCode = "201",
-            description = "Alert created successfully"
-    )
-    @PostMapping
-    public ResponseEntity<String> createAlert(@RequestBody OldAlertDTO alert) {
-        return new ResponseEntity<>("Alert created successfully", HttpStatus.OK);
+    @Operation(summary = "Get All Alerts", description = "Gets All Alerts")
+    @ApiResponse(responseCode = "200", description = "Alerts fetched successfully")
+    @GetMapping("/threshold-breaches")
+    public ResponseEntity<List<AlertDTO>> getAllAlerts() {
+        // Get all alerts from the service layer and convert them to AlertDTO
+        List<AlertDTO> alerts = alertService.getAllAlerts().stream().map(alert -> new AlertDTO(alert)).toList();
+        return ResponseEntity.ok(alerts);
     }
 
-    // Get All Alerts Rest API
-    @Operation(
-            summary = "Get All Alerts",
-            description = "Gets All Alerts"
-    )
-    @ApiResponse(
-            responseCode = "200",
-            description = "Alerts fetched successfully"
-    )
-
-    // Get Alert by ID API
-    @Operation(
-            summary = "Get Alert by ID",
-            description = "Gets a specific alert by its ID"
-    )
-    @ApiResponse(
-            responseCode = "200",
-            description = "Alert fetched successfully"
-    )
-    @GetMapping("/{alertId}")
-    public OldAlertDTO getAlertById(@PathVariable Long alertId) {
-        OldAlertDTO alert = new OldAlertDTO();
-
-        alert.setId(0L);
-        alert.setMetricID(alertId);
-        alert.setName("Low Service Level");
-        alert.setDescription("Service level is low");
-        alert.setType("Service Level");
-        alert.setStatus("Open");
-        alert.setSeverity(OldAlertDTO.severity.LOW);
-        alert.setMinThreshold(90L);
-        alert.setMaxThreshold(100L);
-        alert.setSupervisor("John Doe");
-        alert.setAgent("Jane Doe");
-        alert.setCreatedAt(LocalDateTime.parse("2007-12-03T10:15:30"));
-        alert.setUpdatedAt(LocalDateTime.parse("2007-12-03T10:15:31"));
-
-        return alert;
+    @Operation(summary = "Get Alert by ID", description = "Gets a specific alert by its ID")
+    @ApiResponse(responseCode = "200", description = "Alert fetched successfully")
+    @GetMapping("/alerts/{id}")
+    public ResponseEntity<AlertDTO> getAlertById(@PathVariable Long id) {
+        // Get the alert by ID from the service layer and convert it to AlertDTO
+        AlertDTO alert = new AlertDTO(alertService.getAlertById(id));
+        return ResponseEntity.ok(alert);
     }
 
+    @Operation(summary = "Create Alert", description = "Creates a new Alert")
+    @ApiResponse(responseCode = "201", description = "Alert created successfully")
+    @PostMapping("/alerts")
+    public ResponseEntity<AlertDTO> createAlert(@RequestBody AlertDTO alertDTO) {
+        // Create the alert from the AlertDTO and return the created AlertDTO
+        AlertDTO createdAlert = new AlertDTO(alertService.createAlert(alertDTO.mapToAlert()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdAlert);
+    }
 
-// Get All Alerts Rest API
-@Operation(
-        summary = "Get All Alerts",
-        description = "Gets All Alerts"
-)
-@ApiResponse(
-        responseCode = "200",
-        description = "Alerts fetched successfully"
-)
-@GetMapping
-public List<AlertDTO> getAllAlerts() {
-    return List.of(new AlertDTO());
+    @Operation(summary = "Update Alert", description = "Updates an existing Alert")
+    @ApiResponse(responseCode = "200", description = "Alert updated successfully")
+    @PutMapping("/alerts/{id}")
+    public ResponseEntity<AlertDTO> updateAlert(@PathVariable Long id, @RequestBody AlertDTO alertDTO) {
+        // Set the ID of the alertDTO and update the alert in the service layer
+        alertDTO.setId(id);
+        AlertDTO updatedAlert = new AlertDTO(alertService.updateAlert(alertDTO.mapToAlert()));
+        return ResponseEntity.ok(updatedAlert);
+    }
+
+    @Operation(summary = "Delete Alert", description = "Deletes an existing Alert")
+    @ApiResponse(responseCode = "204", description = "Alert deleted successfully")
+    @DeleteMapping("/alerts/{id}")
+    public ResponseEntity<Void> deleteAlert(@PathVariable Long id) {
+        alertService.deleteAlert(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @ExceptionHandler(AlertNotFoundException.class)
+public ResponseEntity<String> handleNotFound(AlertNotFoundException ex) {
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
 }
 
-// Second method with a different name
-@GetMapping("/highSeverity")
-public List<AlertDTO> getAllHighSeverityAlerts() {
-    // Implementation here to fetch all alerts
-    // For now, we're just returning a list of alerts with a severity of HIGH
-    return List.of(
-            new AlertDTO(1L, 1L, "High CPU Usage", "CPU usage is above 90%", "CPU", "Open", AlertDTO.severity.HIGH, 80L, 90L, "John Doe", "Jane Doe", LocalDateTime.parse("2021-12-31T23:59:59"), LocalDateTime.parse("2021-12-31T23:59:59")),
-            new AlertDTO(2L, 2L, "High Memory Usage", "Memory usage is above 90%", "Memory", "Open", AlertDTO.severity.HIGH, 80L, 90L, "John Doe", "Jane Doe", LocalDateTime.parse("2021-12-31T23:59:59"), LocalDateTime.parse("2021-12-31T23:59:59"))
-    );
+@ExceptionHandler(Exception.class)
+public ResponseEntity<String> handleGeneralException(Exception ex) {
+    // Log the exception details for debugging purposes
+    logger.error("An unexpected error occurred", ex);
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
 }
+
 }
