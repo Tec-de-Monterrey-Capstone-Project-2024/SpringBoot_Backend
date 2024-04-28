@@ -1,6 +1,8 @@
 package com.springboot.connectmate.controllers;
 
+import com.springboot.connectmate.dtos.Insight.InsightDTO;
 import com.springboot.connectmate.dtos.OldDTOS.OldQueueDTO;
+import com.springboot.connectmate.dtos.User.UserDTO;
 import com.springboot.connectmate.services.QueueService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -29,8 +31,6 @@ public class QueueController {
     public QueueController(QueueService queueService) {
         this.queueService = queueService;
     }
-
-
 
     @Operation(
             summary = "Get all queues",
@@ -80,5 +80,19 @@ public class QueueController {
         queue1.setAgents(32L);
         queue1.setFullstatus(OldQueueDTO.status.FULL);
         return ResponseEntity.ok(queue1);
+    }
+
+    // Get all agents from a particular queue.
+    @Operation(
+            summary = "Get all queue agents",
+            description = "Get all agents by their queue ID."
+    )
+    @ApiResponse (
+            responseCode = "200",
+            description = "Agents fetched successfully"
+    )
+    @GetMapping("/{id}/agents")
+    public List<UserDTO> getQueueAgents(@PathVariable Long id){
+        return queueService.getQueueAgents(id);
     }
 }

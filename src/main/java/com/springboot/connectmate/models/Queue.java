@@ -15,6 +15,13 @@ import java.util.Set;
 @Table(
         name = "queues"
 )
+@NamedStoredProcedureQuery(
+        name = "SP_getQueueAgents",
+        procedureName = "SP_getQueueAgents",
+        parameters = {
+                @StoredProcedureParameter(mode = ParameterMode.IN, name = "queueId", type = Long.class)
+        }
+)
 public class Queue {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
