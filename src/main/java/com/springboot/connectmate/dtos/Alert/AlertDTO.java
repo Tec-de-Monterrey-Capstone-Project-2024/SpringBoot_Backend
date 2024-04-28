@@ -1,7 +1,7 @@
 package com.springboot.connectmate.dtos.Alert;
-
+import com.springboot.connectmate.dtos.Alert.AlertDTO;
 import java.time.LocalDateTime;
-import com.springboot.connectmate.model.Alert; 
+
 public class AlertDTO {
     private Long id;
     private Long metricID;
@@ -22,15 +22,16 @@ public class AlertDTO {
     }
 
     // Constructor que acepta un objeto Alert
-    public AlertDTO(Alert alert) {
+    public AlertDTO(AlertDTO alert) {
         if (alert != null) {
             this.id = alert.getId();
             this.metricID = alert.getMetricID();
             this.name = alert.getName();
             this.description = alert.getDescription();
+            this.severity = alert.getSeverity();           
             this.type = alert.getType();
             this.status = alert.getStatus();
-            this.severity = alert.getSeverity().name(); // Asumiendo que severity es un Enum
+            this.severity = alert.getSeverity();            
             this.minThreshold = alert.getMinThreshold();
             this.maxThreshold = alert.getMaxThreshold();
             this.supervisor = alert.getSupervisor();
@@ -41,15 +42,16 @@ public class AlertDTO {
     }
 
     // Método para convertir DTO a entidad Alert
-    public Alert mapToAlert() {
-        Alert alert = new Alert();
+    public AlertDTO mapToAlert() {
+        
+        AlertDTO alert = new AlertDTO();
         alert.setId(this.id);
         alert.setMetricID(this.metricID);
         alert.setName(this.name);
         alert.setDescription(this.description);
         alert.setType(this.type);
         alert.setStatus(this.status);
-        alert.setSeverity(Alert.Severity.valueOf(this.severity)); // Asumiendo que Severity es un Enum en Alert
+        alert.setSeverity(String.valueOf(this.severity)); // Asumiendo que Severity es un Enum en Alert
         alert.setMinThreshold(this.minThreshold);
         alert.setMaxThreshold(this.maxThreshold);
         alert.setSupervisor(this.supervisor);

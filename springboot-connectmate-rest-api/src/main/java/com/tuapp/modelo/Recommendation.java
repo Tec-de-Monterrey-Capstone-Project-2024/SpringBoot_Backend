@@ -1,14 +1,17 @@
 package com.tuapp.modelo;
 
 public class Recommendation {
-    private String ID;
-    private String Description;
+    private int ID; // Assuming ID is of type int
 
-    public Recommendation(String ID, String description) {
+    public Recommendation(int ID) {
         this.ID = ID;
-        this.Description = description;
     }
+
+    public int getID() {
+        return this.ID;
+    }
+}
 
     // Getters y setters
     // ...
-}
+
