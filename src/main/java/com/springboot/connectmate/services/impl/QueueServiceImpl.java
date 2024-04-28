@@ -17,5 +17,4 @@ public class QueueServiceImpl implements QueueService {
         this.queueRepository = queueRepository;
         this.mapper = mapper;
     }
-
 }

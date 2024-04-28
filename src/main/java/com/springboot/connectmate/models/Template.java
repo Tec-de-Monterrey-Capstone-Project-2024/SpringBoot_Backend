@@ -34,8 +34,11 @@ public class Template {
     @Column(name = "summary_template", nullable = false, columnDefinition = "TEXT")
     private String summaryTemplate;
 
-    @Column(name = "description_template", nullable = false, columnDefinition = "TEXT")
-    private String descriptionTemplate;
+    @Column(name = "situation_template", nullable = false, columnDefinition = "TEXT")
+    private String situationTemplate;
+
+    @Column(name = "actions_template", nullable = false, columnDefinition = "TEXT")
+    private String actionsTemplate;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "template_type", nullable = false,  columnDefinition = "ENUM('POSITIVE_UPSIDE', 'NEGATIVE_UPSIDE')")
