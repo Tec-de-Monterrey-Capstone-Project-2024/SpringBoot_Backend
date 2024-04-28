@@ -116,8 +116,19 @@ public class InsightController {
         return insightService.getInsightByBreachId(insightId);
     }
 
-
-
+    // Get Queue Insights API
+    @ApiResponse(
+            responseCode = "200",
+            description = "Insights fetched successfully"
+    )
+    @Operation(
+            summary = "Get Insights by QueueID",
+            description = "Gets all Queue insights"
+    )
+    @GetMapping("/queues")
+    public List<InsightDTO> getQueueInsights(){
+        return insightService.getQueueInsights();
+    }
 
     @ApiResponse(responseCode = "200",
             description = "Insight updated successfully",

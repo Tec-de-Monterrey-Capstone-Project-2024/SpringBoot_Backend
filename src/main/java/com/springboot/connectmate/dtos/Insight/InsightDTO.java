@@ -1,11 +1,8 @@
 package com.springboot.connectmate.dtos.Insight;
 
-import com.springboot.connectmate.dtos.Alert.AlertDTO;
 import com.springboot.connectmate.enums.InsightStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-
-import java.util.List;
 
 @Data
 @Schema(
@@ -26,11 +23,30 @@ public class InsightDTO {
     )
     private String constructedDescription;
 
-    private List<AlertDTO> alerts;
+    @Schema(
+            description = "Alert ID associated with the Insight",
+            example = "1"
+    )
+    private Long thresholdBreachId;
 
-    private String nombre;
 
-    private String summary;
+    @Schema(
+            description = "Template summary of the Insight",
+            example = "Consider reconfiguring the virtual floor."
+    )
+    private String summaryTemplate;
+
+    @Schema(
+            description = "Template situation of the Insight",
+            example = "Reconfigure the virtual floor..."
+    )
+    private String situationTemplate;
+
+    @Schema(
+            description = "Template actions of the Insight",
+            example = "1. Give incentives to high-performing agents."
+    )
+    private String actionsTemplate;
 
     @Schema(
             description = "Status of the Insight",
