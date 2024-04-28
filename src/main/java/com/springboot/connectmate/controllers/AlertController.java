@@ -1,9 +1,11 @@
 package com.springboot.connectmate.controllers;
 
-import com.springboot.connectmate.dtos.OldDTOS.AlertDTO;
+import com.springboot.connectmate.dtos.OldDTOS.OldAlertDTO;
+import com.springboot.connectmate.services.AlertService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +21,13 @@ import java.util.List;
 )
 public class AlertController {
 
+    private final AlertService alertService;
+
+    @Autowired
+    public AlertController(AlertService alertService) {
+        this.alertService = alertService;
+    }
+
     // Create Alert
     @Operation(
             summary = "Create Alert",
@@ -29,7 +38,7 @@ public class AlertController {
             description = "Alert created successfully"
     )
     @PostMapping
-    public ResponseEntity<String> createAlert(@RequestBody AlertDTO alert) {
+    public ResponseEntity<String> createAlert(@RequestBody OldAlertDTO alert) {
         return new ResponseEntity<>("Alert created successfully", HttpStatus.OK);
     }
 
@@ -43,8 +52,8 @@ public class AlertController {
             description = "Alerts fetched successfully"
     )
     @GetMapping
-    public List<AlertDTO> getAllAlerts() {
-        return List.of(new AlertDTO());
+    public List<OldAlertDTO> getAllAlerts() {
+        return List.of(new OldAlertDTO());
     }
 
     // Get Alert by ID API
@@ -57,8 +66,8 @@ public class AlertController {
             description = "Alert fetched successfully"
     )
     @GetMapping("/{alertId}")
-    public AlertDTO getAlertById(@PathVariable Long alertId) {
-        AlertDTO alert = new AlertDTO();
+    public OldAlertDTO getAlertById(@PathVariable Long alertId) {
+        OldAlertDTO alert = new OldAlertDTO();
 
         alert.setId(0L);
         alert.setMetricID(alertId);
@@ -66,7 +75,7 @@ public class AlertController {
         alert.setDescription("Service level is low");
         alert.setType("Service Level");
         alert.setStatus("Open");
-        alert.setSeverity(AlertDTO.severity.LOW);
+        alert.setSeverity(OldAlertDTO.severity.LOW);
         alert.setMinThreshold(90L);
         alert.setMaxThreshold(100L);
         alert.setSupervisor("John Doe");

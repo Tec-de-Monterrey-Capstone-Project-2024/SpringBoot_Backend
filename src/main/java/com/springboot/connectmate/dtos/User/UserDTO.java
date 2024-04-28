@@ -1,4 +1,4 @@
-package com.springboot.connectmate.dtos.OldDTOS;
+package com.springboot.connectmate.dtos.User;
 
 import com.springboot.connectmate.enums.UserRole;
 import io.swagger.v3.oas.annotations.media.Schema;

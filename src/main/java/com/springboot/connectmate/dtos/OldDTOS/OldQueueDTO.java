@@ -9,7 +9,7 @@ import lombok.Data;
 )
 
 @Data // Lombok's annotation to create all the getters, setters, equals, hash, and toString methods for us
-public class QueueDTO{
+public class OldQueueDTO {
     @Schema(
             description = "Queue ID",
             example = "1"
