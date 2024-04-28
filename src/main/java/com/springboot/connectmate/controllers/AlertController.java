@@ -1,6 +1,7 @@
 package com.springboot.connectmate.controllers;
 
 import com.springboot.connectmate.dtos.AlertDTO;
+import com.springboot.connectmate.exceptions.AlertNotFoundException;
 import com.springboot.connectmate.services.AlertService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -69,8 +70,10 @@ public class AlertController {
     )
     @GetMapping("/{alertId}")
     public ResponseEntity<AlertDTO> getAlertById(@PathVariable Long alertId) {
-        AlertDTO alertDTO = alertService.getAlertById(alertId);
-        if (alertDTO == null) {
+        AlertDTO alertDTO;
+        try {
+            alertDTO = alertService.getAlertById(alertId);
+        } catch (AlertNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(alertDTO, HttpStatus.OK);
@@ -85,12 +88,9 @@ public class AlertController {
             responseCode = "200",
             description = "Alert updated successfully"
     )
-    @PutMapping("/{alertId}")
+   @PutMapping("/{alertId}")
     public ResponseEntity<AlertDTO> updateAlert(@PathVariable Long alertId, @RequestBody AlertDTO alertDTO) {
         AlertDTO updatedAlertDTO = alertService.updateAlert(alertId, alertDTO);
-        if (updatedAlertDTO == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
         return new ResponseEntity<>(updatedAlertDTO, HttpStatus.OK);
     }
 
@@ -105,10 +105,7 @@ public class AlertController {
     )
     @DeleteMapping("/{alertId}")
     public ResponseEntity<Void> deleteAlert(@PathVariable Long alertId) {
-        boolean isDeleted = alertService.deleteAlert(alertId);
-        if (!isDeleted) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        alertService.deleteAlert(alertId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
