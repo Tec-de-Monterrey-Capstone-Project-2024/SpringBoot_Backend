@@ -2,6 +2,9 @@ package com.springboot.connectmate.services.impl;
 
 import com.springboot.connectmate.dtos.Metric.MetricDTO;
 import com.springboot.connectmate.enums.MetricCategory;
+import com.springboot.connectmate.dtos.Metric.MetricDescriptionDTO;
+import com.springboot.connectmate.exceptions.ResourceNotFoundException;
+import com.springboot.connectmate.models.Metric;
 import com.springboot.connectmate.repositories.MetricRepository;
 import com.springboot.connectmate.services.MetricService;
 import org.modelmapper.ModelMapper;
@@ -26,6 +29,16 @@ public class MetricServiceImpl implements MetricService {
     }
 
     @Override
+    public MetricDescriptionDTO getMetricDescriptionById(Long metricId) {
+        // Get Metric Description by ID
+        Metric metric = metricRepository.findById(metricId).orElseThrow(() -> new ResourceNotFoundException("Metric", "id", metricId));
+        MetricDescriptionDTO metricDescription = mapper.map(metric, MetricDescriptionDTO.class);
+        // description is not part of the entity, therefore
+        metricDescription.setDescription(metric.getCode().getDescription());
+        return metricDescription;
+    }
+
+    @Override
     @Transactional
     public List<MetricDTO> getContactCenterMetrics(){
         /* Get the data from a Store Procedure (SP) form our database server */
@@ -41,5 +54,5 @@ public class MetricServiceImpl implements MetricService {
                     return dto;
                 })
                 .collect(Collectors.toList());
-    }
+    
 }

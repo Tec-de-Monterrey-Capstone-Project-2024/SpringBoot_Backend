@@ -1,5 +1,6 @@
 package com.springboot.connectmate.controllers;
 
+import com.springboot.connectmate.dtos.Alert.AlertDTO;
 import com.springboot.connectmate.dtos.OldDTOS.OldAlertDTO;
 import com.springboot.connectmate.services.AlertService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -56,33 +57,17 @@ public class AlertController {
         return List.of(new OldAlertDTO());
     }
 
-    // Get Alert by ID API
+    // Get Alert by ID API Rest API
     @Operation(
-            summary = "Get Alert by ID",
-            description = "Gets a specific alert by its ID"
+            summary = "Get Alert by Id",
+            description = "Get Alert by Id"
     )
     @ApiResponse(
             responseCode = "200",
             description = "Alert fetched successfully"
     )
-    @GetMapping("/{alertId}")
-    public OldAlertDTO getAlertById(@PathVariable Long alertId) {
-        OldAlertDTO alert = new OldAlertDTO();
-
-        alert.setId(0L);
-        alert.setMetricID(alertId);
-        alert.setName("Low Service Level");
-        alert.setDescription("Service level is low");
-        alert.setType("Service Level");
-        alert.setStatus("Open");
-        alert.setSeverity(OldAlertDTO.severity.LOW);
-        alert.setMinThreshold(90L);
-        alert.setMaxThreshold(100L);
-        alert.setSupervisor("John Doe");
-        alert.setAgent("Jane Doe");
-        alert.setCreatedAt(LocalDateTime.parse("2007-12-03T10:15:30"));
-        alert.setUpdatedAt(LocalDateTime.parse("2007-12-03T10:15:31"));
-
-        return alert;
+    @GetMapping("/{id}")
+    public ResponseEntity<AlertDTO> getAlertById(@PathVariable(name = "id") Long id) {
+        return ResponseEntity.ok(alertService.getAlertById(id));
     }
 }
