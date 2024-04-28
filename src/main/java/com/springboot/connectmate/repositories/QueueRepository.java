@@ -10,6 +10,6 @@ import java.util.List;
 
 public interface QueueRepository extends JpaRepository<Queue, Long> {
 
-    @Procedure(name = "SP_getQueueAgents")
+    @Procedure(name = "sp_get_queue_agents")
     List<Object[]> getQueueAgents(@Param("queueId") Long queueId);
 }

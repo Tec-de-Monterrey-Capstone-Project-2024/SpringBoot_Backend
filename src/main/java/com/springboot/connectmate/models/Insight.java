@@ -18,8 +18,8 @@ import lombok.NoArgsConstructor;
         }
 )
 @NamedStoredProcedureQuery(
-        name = "SP_getQueueInsights",
-        procedureName = "SP_getQueueInsights",
+        name = "sp_get_queue_insights",
+        procedureName = "sp_get_queue_insights",
         parameters = {
         }
 )
