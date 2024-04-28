@@ -16,8 +16,8 @@ import java.util.Set;
         name = "queues"
 )
 @NamedStoredProcedureQuery(
-        name = "SP_getQueueAgents",
-        procedureName = "SP_getQueueAgents",
+        name = "sp_get_queue_agents",
+        procedureName = "sp_get_queue_agents",
         parameters = {
                 @StoredProcedureParameter(mode = ParameterMode.IN, name = "queueId", type = Long.class)
         }
