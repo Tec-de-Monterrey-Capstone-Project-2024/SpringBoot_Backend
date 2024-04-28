@@ -17,6 +17,12 @@ import lombok.NoArgsConstructor;
                 @Index(columnList = "status", name = "idx_insight_status")
         }
 )
+@NamedStoredProcedureQuery(
+        name = "SP_getQueueInsights",
+        procedureName = "SP_getQueueInsights",
+        parameters = {
+        }
+)
 public class Insight {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
