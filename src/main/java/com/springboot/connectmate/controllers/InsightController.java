@@ -65,10 +65,10 @@ public class InsightController {
         insight3.setDescription("Review agents on Queue 2.");
         insight3.setCreatedAt(LocalDateTime.now());
 
-        InsightDTO insight4 = new InsightDTO();
+        OldInsightDTO insight4 = new OldInsightDTO();
         insight4.setId(4L);
-        insight4.setType(InsightDTO.InsightType.OTHER);
-        insight4.setStatus(InsightDTO.InsightStatus.TODO);
+        insight4.setType(OldInsightDTO.InsightType.OTHER);
+        insight4.setStatus(OldInsightDTO.InsightStatus.TODO);
         insight4.setDescription("Review clients on Queue 1.");
         insight4.setCreatedAt(LocalDateTime.now());
 
