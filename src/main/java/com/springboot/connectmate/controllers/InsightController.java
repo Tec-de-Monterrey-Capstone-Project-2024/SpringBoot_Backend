@@ -2,13 +2,16 @@ package com.springboot.connectmate.controllers;
 
 
 import com.springboot.connectmate.dtos.Insight.InsightDTO;
+import com.springboot.connectmate.dtos.Insight.InsightStatusUpdateDTO;
 import com.springboot.connectmate.dtos.OldDTOS.OldInsightDTO;
+import com.springboot.connectmate.enums.InsightStatus;
 import com.springboot.connectmate.services.InsightService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -152,6 +155,15 @@ public class InsightController {
     @DeleteMapping("/{insightId}")
     public ResponseEntity<String> deleteInsight(@PathVariable Long insightId){
         return ResponseEntity.noContent().build();
+    }
+
+
+    @Operation(summary = "Insight status update")
+    @ApiResponse(responseCode = "200", description = "Insight status updated")
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<?> updateInsightStatus(@PathVariable Long id, @RequestBody InsightStatusUpdateDTO statusUpdateDTO) {
+        insightService.updateInsightStatus(id, statusUpdateDTO.getStatus());
+        return ResponseEntity.ok().build();
     }
 
 }

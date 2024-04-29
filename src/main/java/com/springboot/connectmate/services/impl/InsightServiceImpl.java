@@ -5,11 +5,13 @@ import com.springboot.connectmate.enums.InsightStatus;
 import com.springboot.connectmate.models.Insight;
 import com.springboot.connectmate.repositories.InsightRepository;
 import com.springboot.connectmate.services.InsightService;
+import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,5 +47,15 @@ public class InsightServiceImpl implements InsightService {
                     return dto;
                 })
                 .collect(Collectors.toList());
+    }
+
+
+    @Override
+    @Transactional
+    public void updateInsightStatus(Long id, InsightStatus status) {
+        Insight insight = insightRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Insight not found for id: " + id));
+        insight.setStatus(status);
+        insightRepository.save(insight);
     }
 }

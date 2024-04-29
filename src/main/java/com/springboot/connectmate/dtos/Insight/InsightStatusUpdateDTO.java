@@ -1,0 +1,25 @@
+package com.springboot.connectmate.dtos.Insight;
+
+import com.springboot.connectmate.enums.InsightStatus;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+
+
+@Data
+@Schema(
+        name = "Insight",
+        description = "DTO for the insight to change status"
+)
+public class InsightStatusUpdateDTO {
+
+    @Schema(
+            description = "Id of the Insight",
+            example = "1"
+    )
+    private Long id;
+    @Schema(
+            description = "Status of the Insight",
+            example = "TO_DO"
+    )
+    private InsightStatus status;
+}
