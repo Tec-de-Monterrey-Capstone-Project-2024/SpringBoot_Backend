@@ -40,7 +40,7 @@ public class MetricServiceImpl implements MetricService {
 
     @Override
     @Transactional
-    public List<MetricDTO> getContactCenterMetrics(){
+    public List<MetricDTO> getContactCenterMetrics() {
         /* Get the data from a Store Procedure (SP) form our database server */
         List<Object[]> results = metricRepository.getContactCenterMetrics();
 
@@ -54,5 +54,5 @@ public class MetricServiceImpl implements MetricService {
                     return dto;
                 })
                 .collect(Collectors.toList());
-    
+    }
 }
