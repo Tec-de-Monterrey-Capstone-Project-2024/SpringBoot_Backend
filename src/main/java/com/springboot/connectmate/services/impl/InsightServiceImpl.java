@@ -23,6 +23,24 @@ public class InsightServiceImpl implements InsightService {
     }
 
     @Override
+    public List<InsightDTO> getInsightsByAgentId(Long agentId) {
+        return insightRepository.findAllByAgentId(agentId).stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    private InsightDTO convertToDTO(Insight insight) {
+        if (insight == null) return null;
+        InsightDTO dto = new InsightDTO();
+        dto.setId(insight.getId());
+        dto.setConstructedDescription(insight.getConstructedDescription());
+        dto.setStatus(insight.getStatus());
+        dto.setThresholdBreachId(insight.getThresholdBreach().getId());
+
+        return dto;
+    }
+
+    @Override
     public InsightDTO getInsightByBreachId(Long breachId) {
         Insight insight = insightRepository.findByThresholdBreachId(breachId);
         return mapper.map(insight, InsightDTO.class);

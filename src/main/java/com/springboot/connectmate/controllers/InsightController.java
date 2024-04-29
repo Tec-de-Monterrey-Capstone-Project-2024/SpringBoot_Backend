@@ -153,5 +153,8 @@ public class InsightController {
     public ResponseEntity<String> deleteInsight(@PathVariable Long insightId){
         return ResponseEntity.noContent().build();
     }
-
+    @GetMapping("/agents/{id}")
+    public List<InsightDTO> getInsightsByAgentId(@PathVariable("id") Long id) {
+        return insightService.getInsightsByAgentId(id);
+    }
 }
