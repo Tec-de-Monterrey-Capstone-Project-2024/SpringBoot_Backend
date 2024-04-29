@@ -1,6 +1,5 @@
 package com.springboot.connectmate.controllers;
 
-import com.springboot.connectmate.dtos.Insight.InsightDTO;
 import com.springboot.connectmate.dtos.OldDTOS.OldQueueDTO;
 import com.springboot.connectmate.dtos.User.UserDTO;
 import com.springboot.connectmate.services.QueueService;
@@ -91,8 +90,8 @@ public class QueueController {
             responseCode = "200",
             description = "Agents fetched successfully"
     )
-    @GetMapping("/{id}/agents")
-    public List<UserDTO> getQueueAgents(@PathVariable Long id){
-        return queueService.getQueueAgents(id);
+    @GetMapping("/{queueId}/agents")
+    public List<UserDTO> getQueueAgents(@PathVariable Long queueId){
+        return queueService.getQueueAgents(queueId);
     }
 }
