@@ -12,4 +12,5 @@ public interface InsightRepository extends JpaRepository<Insight, Long> {
     @Procedure(name = "GetQueueInsights")
     List<Object[]> getQueueInsights();
 
+    
 }

@@ -8,4 +8,6 @@ public interface InsightService {
     InsightDTO getInsightByBreachId(Long breachId);
 
     List<InsightDTO> getQueueInsights();
+    List<InsightDTO> getAllInsights();  // Add this line to include your new method
+
 }

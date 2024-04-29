@@ -1,8 +1,9 @@
 package com.springboot.connectmate.controllers;
 
-
+import com.springboot.connectmate.repositories.InsightRepository;
 import com.springboot.connectmate.dtos.Insight.InsightDTO;
 import com.springboot.connectmate.dtos.OldDTOS.OldInsightDTO;
+import com.springboot.connectmate.models.Insight;
 import com.springboot.connectmate.services.InsightService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -33,8 +33,6 @@ public class InsightController {
         this.insightService = insightService;
     }
 
-
-
     @ApiResponse(responseCode = "200",
             description = "Insights fetched successfully",
             content = {
@@ -43,10 +41,9 @@ public class InsightController {
     })
     @Operation(summary = "Get all insights for the Call Center")
     @GetMapping
-    public ResponseEntity<Map<Long, InsightDTO>> getAllInsights() {
-        Map<Long, InsightDTO> insightsMap = insightService.getQueueInsights().stream()
-                .collect(Collectors.toMap(InsightDTO::getId, insight -> insight));
-        return ResponseEntity.ok(insightsMap);
+    public ResponseEntity<List<InsightDTO>> getAllInsights() {
+        List<InsightDTO> insights = insightService.getAllInsights();
+        return ResponseEntity.ok(insights);
     }
 
     // Get Insight by ID API
