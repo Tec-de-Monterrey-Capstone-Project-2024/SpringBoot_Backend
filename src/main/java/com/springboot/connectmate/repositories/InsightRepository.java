@@ -10,7 +10,7 @@ public interface InsightRepository extends JpaRepository<Insight, Long> {
     Insight findByThresholdBreachId(Long thresholdBreachId);
 
     @Procedure(name = "GetQueueInsights")
+
     List<Object[]> getQueueInsights();
 
-    
 }

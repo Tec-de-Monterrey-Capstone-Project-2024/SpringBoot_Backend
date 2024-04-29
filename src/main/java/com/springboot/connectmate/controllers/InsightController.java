@@ -1,9 +1,7 @@
 package com.springboot.connectmate.controllers;
 
-import com.springboot.connectmate.repositories.InsightRepository;
 import com.springboot.connectmate.dtos.Insight.InsightDTO;
 import com.springboot.connectmate.dtos.OldDTOS.OldInsightDTO;
-import com.springboot.connectmate.models.Insight;
 import com.springboot.connectmate.services.InsightService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/insights")
