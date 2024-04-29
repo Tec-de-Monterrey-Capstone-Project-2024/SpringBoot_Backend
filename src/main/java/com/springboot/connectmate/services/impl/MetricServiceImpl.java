@@ -41,14 +41,14 @@ public class MetricServiceImpl implements MetricService {
     @Override
     @Transactional
     public List<MetricDTO> getContactCenterMetrics() {
-        /* Get the data from a Store Procedure (SP) form our database server */
+        // Get the data from a Store Procedure (SP) form our database server
         List<Object[]> results = metricRepository.getContactCenterMetrics();
 
-        /* Deserialization */
+        // Deserialization
         return results.stream()
                 .map(result -> {
                     MetricDTO dto = new MetricDTO();
-                    dto.setCode((MetricCategory) result[0]);
+                    dto.setCode(MetricCategory.valueOf((String) result[0]));
                     dto.setName((String) result[1]);
                     dto.setValue((BigDecimal) result[2]);
                     return dto;
