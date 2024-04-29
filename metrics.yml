@@ -1,0 +1,20 @@
+metrics:
+  - name: "SL_Q"
+    description: "Service Level From A Queue"
+    value_type: "float"
+    unit: "percentage"
+    templates:
+      positive:
+        name_template: "Service Level From Queue {{ queue_name }}%"
+        description_template: "The service level from the queue is {{ slq_percentage }}%. Which is greater than the expected {{ expected_slq_percentage }}%."
+        summary_template: "The serv"
+        situation: "When the queue response time is well within the expected limit ({{ response_time }}% seconds), indicating efficient service delivery."
+        actions:
+          - "The current SL_Q value is {{ slq_percentage }}%, meaning {{ slq_percentage }}% of requests are served promptly."
+          - "Efficient resource allocation and streamlined processes contribute to maintaining a high SL_Q."
+      negative:
+        situation: "When the queue response time exceeds the acceptable limit ({{ response_time }} seconds), indicating potential service delays."
+        actions:
+          - "The current SL_Q value is {{ slq_percentage }}%, showing that only {{ slq_percentage }}% of requests are served within the defined time limit."
+          - "Immediate action is required to optimize resource allocation and reduce queue response times to improve SL_Q."
+
