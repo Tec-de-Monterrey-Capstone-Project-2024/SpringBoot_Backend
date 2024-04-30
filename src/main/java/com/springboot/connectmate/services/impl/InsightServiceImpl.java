@@ -37,27 +37,13 @@ public class InsightServiceImpl implements InsightService {
                     InsightDTO dto = new InsightDTO();
                     dto.setId((Long) result[0]);
                     dto.setStatus(InsightStatus.valueOf((String) result[1]));
-                    dto.setSummaryTemplate((String) result[3]);
-                    dto.setSituationTemplate((String) result[4]);
-                    dto.setActionsTemplate((String) result[5]);
-                    dto.setThresholdBreachId((Long) result[6]);
-                    dto.setConstructedDescription((String)result[2] + (String)result[7]);
+                    dto.setSummaryTemplate((String) result[2]);
+                    dto.setSituationTemplate((String) result[3]);
+                    dto.setActionsTemplate((String) result[4]);
+                    dto.setThresholdBreachId((Long) result[5]);
+                    dto.setConstructedDescription((String)result[6]);
                     return dto;
                 })
                 .collect(Collectors.toList());
-    }
-    @Override
-    public List<InsightDTO> getAllInsights() {
-        return insightRepository.findAll().stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-    }
-    private InsightDTO convertToDTO(Insight insight) {
-        InsightDTO dto = new InsightDTO();
-        dto.setId(insight.getId());
-        dto.setConstructedDescription(insight.getConstructedDescription());
-        dto.setThresholdBreachId(insight.getThresholdBreach().getId());
-        dto.setStatus(insight.getStatus());
-        return dto;
     }
 }
