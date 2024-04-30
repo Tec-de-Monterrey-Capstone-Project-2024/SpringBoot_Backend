@@ -14,7 +14,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@Tag(name = "Alert REST API", description = "CRUD REST API for Alerts")
+@RequestMapping("/api/alerts")
+
+@Tag(
+        name = "Alert REST API",
+        description = "CRUD REST API for Alerts"
+)
 public class AlertController {
 
     private final AlertService alertService;
@@ -25,31 +30,48 @@ public class AlertController {
     }
 
     // Create Alert
-    @PostMapping("/api/alerts")
-    @Operation(summary = "Create Alert", description = "Creates a New Alert")
-    @ApiResponse(responseCode = "201", description = "Alert created successfully")
+    @Operation(
+            summary = "Create Alert",
+            description = "Creates a New Alert"
+    )
+    @ApiResponse(
+            responseCode = "201",
+            description = "Alert created successfully"
+    )
+    @PostMapping
     public ResponseEntity<String> createAlert(@RequestBody OldAlertDTO alert) {
         return new ResponseEntity<>("Alert created successfully", HttpStatus.OK);
     }
 
-    // Get All Alerts
-    @GetMapping("/api/alerts")
-    @Operation(summary = "Get All Alerts", description = "Gets All Alerts")
-    @ApiResponse(responseCode = "200", description = "Alerts fetched successfully")
+    // Get All Alerts Rest API
+    @Operation(
+            summary = "Get All Alerts",
+            description = "Gets All Alerts"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Alerts fetched successfully"
+    )
+    @GetMapping
     public List<OldAlertDTO> getAllAlerts() {
         return List.of(new OldAlertDTO());
     }
 
-    // Get Alert by ID
-    @GetMapping("/api/alerts/{id}")
-    @Operation(summary = "Get Alert by Id", description = "Get Alert by Id")
-    @ApiResponse(responseCode = "200", description = "Alert fetched successfully")
+    // Get Alert by ID API Rest API
+    @Operation(
+            summary = "Get Alert by Id",
+            description = "Get Alert by Id"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Alert fetched successfully"
+    )
+    @GetMapping("/{id}")
     public ResponseEntity<AlertDTO> getAlertById(@PathVariable(name = "id") Long id) {
         return ResponseEntity.ok(alertService.getAlertById(id));
     }
-
     // Get All Threshold Breach Alerts
-    @GetMapping("/api/threshold-breaches/alerts")
+    @GetMapping("/threshold-breaches")
     @Operation(summary = "Get All Threshold Breach Alerts", description = "Gets all alerts related to threshold breaches")
     @ApiResponse(responseCode = "200", description = "Alerts fetched successfully")
     public ResponseEntity<List<AlertDTO>> getAllThresholdBreachAlerts() {
