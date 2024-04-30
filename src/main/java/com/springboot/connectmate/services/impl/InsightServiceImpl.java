@@ -46,18 +46,4 @@ public class InsightServiceImpl implements InsightService {
                 })
                 .collect(Collectors.toList());
     }
-    @Override
-    public List<InsightDTO> getAllInsights() {
-        return insightRepository.findAll().stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-    }
-    private InsightDTO convertToDTO(Insight insight) {
-        InsightDTO dto = new InsightDTO();
-        dto.setId(insight.getId());
-        dto.setConstructedDescription(insight.getConstructedDescription());
-        dto.setThresholdBreachId(insight.getThresholdBreach().getId());
-        dto.setStatus(insight.getStatus());
-        return dto;
-    }
 }
