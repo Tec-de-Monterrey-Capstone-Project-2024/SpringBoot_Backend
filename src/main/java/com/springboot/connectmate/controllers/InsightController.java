@@ -106,6 +106,7 @@ public class InsightController {
         return insightService.getInsightByBreachId(alertId);
     }
 
+
     // Get Queue Insights API
     @ApiResponse(
             responseCode = "200",
@@ -118,6 +119,20 @@ public class InsightController {
     @GetMapping("/queues")
     public List<InsightDTO> getQueueInsights(){
         return insightService.getQueueInsights();
+    }
+
+    // Get Insight by Status API
+    @ApiResponse(
+            responseCode = "200",
+            description = "Insight fetched successfully"
+    )
+    @Operation(
+            summary = "Get Insights by Status",
+            description = "Gets all insights order by its status."
+    )
+    @GetMapping("/status/{status}")
+    public List<InsightDTO> getInsightsByStatus(@PathVariable InsightStatus status){
+        return insightService.getInsightsByStatus(status);
     }
 
     @ApiResponse(responseCode = "200",
