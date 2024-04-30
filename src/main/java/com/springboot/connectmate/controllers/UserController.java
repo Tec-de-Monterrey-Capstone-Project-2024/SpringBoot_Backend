@@ -1,7 +1,6 @@
 package com.springboot.connectmate.controllers;
 
 import com.springboot.connectmate.dtos.User.UserDTO;
-import com.springboot.connectmate.dtos.User.UserInfoDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -100,18 +99,23 @@ public class UserController {
         UserDTO userResponse = userService.patchUser(id, fields);
         return new ResponseEntity<>(userResponse, HttpStatus.OK);
     }
+
     @PatchMapping ("/{id}/change relevant info")
     public ResponseEntity<UserInfoDTO> updateUserPartially(@PathVariable(name = "id") long id, @RequestBody UserInfoDTO UserInfoDTO) {
-        UserInfoDTO existingUser = userService.getUserById(id);
+        UserDTO existingUser = userService.getUserById(id);
         if (existingUser == null) {
             throw new ResourceNotFoundException ("User not found");
         }
+
         existingUser.setFirstName(UserInfoDTO.getFirstName());
         existingUser.setLastName(UserInfoDTO.getLastName());
-        UserInfoDTO updatedUser = userService.updateUser(id, existingUser);
+
+        UserDTO updatedUser = userService.updateUser(id, existingUser);
+
         UserInfoDTO userInfoResponse = convertToUserInfoDTO(updatedUser);
         return ResponseEntity.ok(userInfoResponse);
     }
+
     private UserInfoDTO convertToUserInfoDTO(UserDTO userDTO) {
         UserInfoDTO userInfoDTO = new UserInfoDTO();
         userInfoDTO.setFirstName(updatedUser.getFirstName());
