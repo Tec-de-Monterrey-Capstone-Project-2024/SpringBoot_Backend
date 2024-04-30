@@ -1,6 +1,7 @@
 package com.springboot.connectmate.services.impl;
 
 import com.springboot.connectmate.dtos.User.UserDTO;
+import com.springboot.connectmate.dtos.User.UserInfoDTO;
 import com.springboot.connectmate.exceptions.ResourceNotFoundException;
 import com.springboot.connectmate.models.User;
 import com.springboot.connectmate.services.UserService;
@@ -58,20 +59,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO getUserById(long id) {
+    public UserInfoDTO getUserById(long id) {
         // Get User by ID
         User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
         return convertEntityModelToDTO(user);
     }
 
     @Override
-    public UserDTO updateUser(long id, UserDTO userDTO) {
+    public UserInfoDTO updateUser(long id, UserInfoDTO userInfoDTO) {
         // Get User by ID
         User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
 
         // Update User
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
+        user.setFirstName(userInfoDTO.getFirstName());
+        user.setLastName(userInfoDTO.getLastName());
         user.setPassword(userDTO.getPassword());
 
         // Save User
