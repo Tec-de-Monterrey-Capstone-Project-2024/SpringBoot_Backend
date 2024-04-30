@@ -17,5 +17,5 @@ public class InsightStatusUpdateDTO {
             description = "Status of the Insight",
             example = "TO_DO"
     )
-    private InsightStatus NewStatus;
+    private InsightStatus newStatus;
 }
