@@ -1,11 +1,13 @@
 package com.springboot.connectmate.services.impl;
 
 import com.springboot.connectmate.dtos.Insight.InsightDTO;
+import com.springboot.connectmate.dtos.Template.TemplateDTO;
 import com.springboot.connectmate.enums.InsightStatus;
+import com.springboot.connectmate.exceptions.ResourceNotFoundException;
 import com.springboot.connectmate.models.Insight;
 import com.springboot.connectmate.repositories.InsightRepository;
 import com.springboot.connectmate.services.InsightService;
-import jakarta.persistence.EntityNotFoundException;
+import com.springboot.connectmate.services.TemplateService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,15 +21,37 @@ public class InsightServiceImpl implements InsightService {
 
     private final ModelMapper mapper;
     private final InsightRepository insightRepository;
-    public InsightServiceImpl(InsightRepository insightRepository, ModelMapper mapper) {
+    private final TemplateService templateService;
+
+    public InsightServiceImpl(InsightRepository insightRepository, TemplateService templateService, ModelMapper mapper) {
         this.insightRepository = insightRepository;
+        this.templateService = templateService;
         this.mapper = mapper;
     }
 
     @Override
+    public InsightDTO getInsightById(Long insightId) {
+        // Get Insight by ID and Template by Breach ID
+        Insight insight = insightRepository.findById(insightId).orElseThrow(() -> new ResourceNotFoundException("Insight", "id", insightId));
+        TemplateDTO templateInfo = templateService.getRightTemplateByBreachId(insight.getThresholdBreach().getId());
+        // Map Insight to InsightDTO
+        InsightDTO completeInsight = mapper.map(insight, InsightDTO.class);
+        // Inject Template Info into InsightDTO
+        mapper.map(templateInfo, completeInsight);
+        return completeInsight;
+    }
+
+    @Override
     public InsightDTO getInsightByBreachId(Long breachId) {
+        // Get Insight by Breach ID
+        // No need to catch exceptions, a threshold breach is always associated with an insight
         Insight insight = insightRepository.findByThresholdBreachId(breachId);
-        return mapper.map(insight, InsightDTO.class);
+        // Get Template based on Threshold Breach Id
+        TemplateDTO templateInfo = templateService.getRightTemplateByBreachId(breachId);
+        InsightDTO completeInsight = mapper.map(insight, InsightDTO.class);
+        // Inject Template Info into InsightDTO
+        mapper.map(templateInfo, completeInsight);
+        return completeInsight;
     }
 
     @Override
