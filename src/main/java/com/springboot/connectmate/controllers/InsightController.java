@@ -2,6 +2,7 @@ package com.springboot.connectmate.controllers;
 
 import com.springboot.connectmate.dtos.Insight.InsightDTO;
 import com.springboot.connectmate.dtos.OldDTOS.OldInsightDTO;
+import com.springboot.connectmate.enums.InsightStatus;
 import com.springboot.connectmate.services.InsightService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -113,6 +114,7 @@ public class InsightController {
         return insightService.getInsightByBreachId(insightId);
     }
 
+
     // Get Queue Insights API
     @ApiResponse(
             responseCode = "200",
@@ -125,6 +127,20 @@ public class InsightController {
     @GetMapping("/queues")
     public List<InsightDTO> getQueueInsights(){
         return insightService.getQueueInsights();
+    }
+
+    // Get Insight by Status API
+    @ApiResponse(
+            responseCode = "200",
+            description = "Insight fetched successfully"
+    )
+    @Operation(
+            summary = "Get Insights by Status",
+            description = "Gets all insights order by its status."
+    )
+    @GetMapping("/status/{status}")
+    public List<InsightDTO> getInsightsByStatus(@PathVariable InsightStatus status){
+        return insightService.getInsightsByStatus(status);
     }
 
     @ApiResponse(responseCode = "200",

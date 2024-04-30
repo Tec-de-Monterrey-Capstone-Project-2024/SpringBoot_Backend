@@ -46,4 +46,11 @@ public class InsightServiceImpl implements InsightService {
                 })
                 .collect(Collectors.toList());
     }
+    @Override
+    public List<InsightDTO> getInsightsByStatus(InsightStatus status) {
+        List<Insight> insights = insightRepository.findByStatus(status);
+        return insights.stream()
+                .map(insight -> mapper.map(insight, InsightDTO.class))
+                .collect(Collectors.toList());
+    }
 }
