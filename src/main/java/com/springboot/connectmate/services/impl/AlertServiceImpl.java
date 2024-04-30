@@ -32,13 +32,14 @@ public class AlertServiceImpl implements AlertService {
     public AlertDTO getAlertById(Long alertId) {
         // gets the threshold breach by id
         ThresholdBreach thresholdBreach = thresholdBreachRepository.findById(alertId).orElseThrow(() -> new ResourceNotFoundException("Alert", "id", alertId));
-        // get the metric by id
-        MetricDescriptionDTO metricDescription = metricService.getMetricDescriptionById(thresholdBreach.getMetric().getId());
+        // get the metric id
+        Long metric_id = thresholdBreach.getMetric().getId();
+        // Use Service to get the DTO
+        MetricDescriptionDTO metricDescription = metricService.getMetricDescriptionById(metric_id);
         // map the threshold breach to the alert dto
         AlertDTO alert = mapper.map(thresholdBreach, AlertDTO.class);
         // set the metric description
         alert.setMetric(metricDescription);
-
         return alert;
     }
 }
