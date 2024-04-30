@@ -1,6 +1,5 @@
 package com.springboot.connectmate.controllers;
 
-
 import com.springboot.connectmate.dtos.Insight.InsightDTO;
 import com.springboot.connectmate.dtos.OldDTOS.OldInsightDTO;
 import com.springboot.connectmate.services.InsightService;
@@ -31,8 +30,6 @@ public class InsightController {
     public InsightController(InsightService insightService) {
         this.insightService = insightService;
     }
-
-
 
     @ApiResponse(responseCode = "200",
             description = "Insights fetched successfully",
@@ -153,6 +150,7 @@ public class InsightController {
     public ResponseEntity<String> deleteInsight(@PathVariable Long insightId){
         return ResponseEntity.noContent().build();
     }
+
     @GetMapping("/agents/{id}")
     public List<InsightDTO> getInsightsByAgentId(@PathVariable("id") Long id) {
         return insightService.getInsightsByAgentId(id);
