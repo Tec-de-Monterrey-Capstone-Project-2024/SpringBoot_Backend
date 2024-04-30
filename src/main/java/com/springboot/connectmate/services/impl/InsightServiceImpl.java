@@ -9,7 +9,6 @@ import com.springboot.connectmate.repositories.InsightRepository;
 import com.springboot.connectmate.services.InsightService;
 import com.springboot.connectmate.services.TemplateService;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeMap;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

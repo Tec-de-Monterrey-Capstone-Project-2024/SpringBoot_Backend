@@ -3,7 +3,6 @@ package com.springboot.connectmate.services.impl;
 import com.springboot.connectmate.dtos.Alert.AlertDTO;
 import com.springboot.connectmate.dtos.Metric.MetricDescriptionDTO;
 import com.springboot.connectmate.exceptions.ResourceNotFoundException;
-import com.springboot.connectmate.models.Metric;
 import com.springboot.connectmate.models.ThresholdBreach;
 import com.springboot.connectmate.repositories.ThresholdBreachRepository;
 import com.springboot.connectmate.services.AlertService;
