@@ -8,4 +8,6 @@ public interface InsightService {
     InsightDTO getInsightByBreachId(Long breachId);
 
     List<InsightDTO> getQueueInsights();
+    List<InsightDTO> getAllInsights();
+
 }
