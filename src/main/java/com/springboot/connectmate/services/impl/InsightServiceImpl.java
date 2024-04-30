@@ -75,9 +75,9 @@ public class InsightServiceImpl implements InsightService {
 
     @Override
     @Transactional
-    public void updateInsightStatus(Long insightId, InsightStatus NewStatus) {
+    public void updateInsightStatus(Long insightId, InsightStatus newStatus) {
         Insight insight = insightRepository.findById(insightId).orElseThrow(() -> new ResourceNotFoundException("Insight", "id", insightId));
-        insight.setStatus(NewStatus);
+        insight.setStatus(newStatus);
         insightRepository.save(insight);
     }
 }
