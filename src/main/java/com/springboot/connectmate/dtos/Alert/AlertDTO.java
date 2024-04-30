@@ -2,6 +2,8 @@ package com.springboot.connectmate.dtos.Alert;
 
 import com.springboot.connectmate.dtos.Metric.MetricDescriptionDTO;
 import com.springboot.connectmate.enums.ThresholdBreachPerformanceCategory;
+import com.springboot.connectmate.models.Metric;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
