@@ -1,6 +1,5 @@
 package com.springboot.connectmate.controllers;
 
-
 import com.springboot.connectmate.dtos.Insight.InsightDTO;
 import com.springboot.connectmate.dtos.OldDTOS.OldInsightDTO;
 import com.springboot.connectmate.services.InsightService;
