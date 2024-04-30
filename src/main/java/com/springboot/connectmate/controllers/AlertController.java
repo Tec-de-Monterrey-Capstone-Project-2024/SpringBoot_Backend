@@ -11,11 +11,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/alerts")
+
 @Tag(
         name = "Alert REST API",
         description = "CRUD REST API for Alerts"
@@ -69,5 +69,13 @@ public class AlertController {
     @GetMapping("/{id}")
     public ResponseEntity<AlertDTO> getAlertById(@PathVariable(name = "id") Long id) {
         return ResponseEntity.ok(alertService.getAlertById(id));
+    }
+    // Get All Threshold Breach Alerts
+    @GetMapping("/api/threshold-breaches/alerts")
+    @Operation(summary = "Get All Threshold Breach Alerts", description = "Gets all alerts related to threshold breaches")
+    @ApiResponse(responseCode = "200", description = "Alerts fetched successfully")
+    public ResponseEntity<List<AlertDTO>> getAllThresholdBreachAlerts() {
+        List<AlertDTO> alerts = alertService.getAllThresholdBreachAlerts();
+        return ResponseEntity.ok(alerts);
     }
 }
