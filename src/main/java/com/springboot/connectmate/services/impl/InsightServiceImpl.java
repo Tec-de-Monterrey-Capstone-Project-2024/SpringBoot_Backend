@@ -30,14 +30,7 @@ public class InsightServiceImpl implements InsightService {
     }
 
     private InsightDTO convertToDTO(Insight insight) {
-        if (insight == null) return null;
-        InsightDTO dto = new InsightDTO();
-        dto.setId(insight.getId());
-        dto.setConstructedDescription(insight.getConstructedDescription());
-        dto.setStatus(insight.getStatus());
-        dto.setThresholdBreachId(insight.getThresholdBreach().getId());
-
-        return dto;
+        return mapper.map(insight, InsightDTO.class);
     }
 
     @Override
@@ -55,9 +48,6 @@ public class InsightServiceImpl implements InsightService {
                     InsightDTO dto = new InsightDTO();
                     dto.setId((Long) result[0]);
                     dto.setStatus(InsightStatus.valueOf((String) result[1]));
-                    dto.setSummaryTemplate((String) result[3]);
-                    dto.setSituationTemplate((String) result[4]);
-                    dto.setActionsTemplate((String) result[5]);
                     dto.setThresholdBreachId((Long) result[6]);
                     dto.setConstructedDescription((String)result[2] + (String)result[7]);
                     return dto;
