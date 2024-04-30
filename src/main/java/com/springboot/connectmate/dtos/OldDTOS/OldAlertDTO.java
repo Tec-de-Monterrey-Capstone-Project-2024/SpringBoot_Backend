@@ -105,7 +105,7 @@ public class OldAlertDTO {
     // Setter personalizado para el enum 'severity'
     public void setSeverity(severity severe) {
 
-        AlertController.severity = severe;
+        //AlertController.severity = severe;
     }
 }
 

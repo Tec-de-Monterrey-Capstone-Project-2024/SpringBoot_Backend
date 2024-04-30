@@ -1,19 +1,15 @@
 package com.springboot.connectmate.services;
 
-
+import com.springboot.connectmate.dtos.Alert.AlertDTO;
+import org.springframework.stereotype.Service;
 import java.util.List;
 
-import com.springboot.connectmate.dtos.Alert.AlertDTO;
+@Service
 
 public interface AlertService {
-    AlertDTO getAlertById(Long alertId);
-
-    AlertDTO updateAlert(AlertDTO alertDTO);
-
     List<AlertDTO> getAllAlerts();
-
+    AlertDTO getAlertById(Long alertId);
+    AlertDTO updateAlert(AlertDTO alertDTO);
     AlertDTO createAlert(AlertDTO alertDTO);
-
     void deleteAlert(Long alertId);
 }
-

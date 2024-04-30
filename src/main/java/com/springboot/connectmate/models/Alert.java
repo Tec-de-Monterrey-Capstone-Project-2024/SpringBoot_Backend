@@ -18,7 +18,7 @@ import jakarta.persistence.Table;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
+@Entity(name = "AlertModels")
 @Table(name = "alerts")
 public class Alert {
 
