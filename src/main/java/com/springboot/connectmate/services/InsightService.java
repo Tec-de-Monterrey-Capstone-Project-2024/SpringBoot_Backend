@@ -1,7 +1,6 @@
 package com.springboot.connectmate.services;
 
 import com.springboot.connectmate.dtos.Insight.InsightDTO;
-import com.springboot.connectmate.dtos.Insight.InsightStatusUpdateDTO;
 import com.springboot.connectmate.enums.InsightStatus;
 
 import java.util.List;

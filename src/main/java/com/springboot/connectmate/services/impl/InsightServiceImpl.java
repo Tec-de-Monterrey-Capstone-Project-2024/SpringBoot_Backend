@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -76,10 +75,9 @@ public class InsightServiceImpl implements InsightService {
 
     @Override
     @Transactional
-    public void updateInsightStatus(Long id, InsightStatus status) {
-        Insight insight = insightRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Insight not found for id: " + id));
-        insight.setStatus(status);
+    public void updateInsightStatus(Long insightId, InsightStatus NewStatus) {
+        Insight insight = insightRepository.findById(insightId).orElseThrow(() -> new ResourceNotFoundException("Insight", "id", insightId));
+        insight.setStatus(NewStatus);
         insightRepository.save(insight);
     }
 }

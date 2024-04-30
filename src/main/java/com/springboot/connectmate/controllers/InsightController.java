@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -146,16 +145,20 @@ public class InsightController {
     }
 
     @Operation(
-      summary = "Update Insight Status"
+      summary = "Update Insight Status",
       description = "Updates the Insight Status With a New Status"
     )
     @ApiResponse(
       responseCode = "200", 
       description = "Status updated successfully")
     @PatchMapping("/{id}/status")
-    public ResponseEntity<?> updateInsightStatus(@PathVariable Long id, @RequestBody InsightStatusUpdateDTO statusUpdateDTO) {
-        insightService.updateInsightStatus(id, statusUpdateDTO.getStatus());
-        return ResponseEntity.ok().build();
+    public ResponseEntity<String> updateInsightStatus(
+            @PathVariable Long id,
+            @RequestBody InsightStatusUpdateDTO statusUpdateDTO
+    ) {
+        InsightStatus newStatus = statusUpdateDTO.getNewStatus();
+        insightService.updateInsightStatus(id, newStatus);
+        return ResponseEntity.ok("Status updated successfully");
     }
 
 }

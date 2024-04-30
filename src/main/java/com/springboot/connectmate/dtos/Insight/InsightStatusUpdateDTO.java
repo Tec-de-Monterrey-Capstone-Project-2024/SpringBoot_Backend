@@ -12,14 +12,10 @@ import lombok.Data;
 )
 public class InsightStatusUpdateDTO {
 
-    @Schema(
-            description = "Id of the Insight",
-            example = "1"
-    )
-    private Long id;
+
     @Schema(
             description = "Status of the Insight",
             example = "TO_DO"
     )
-    private InsightStatus status;
+    private InsightStatus NewStatus;
 }
