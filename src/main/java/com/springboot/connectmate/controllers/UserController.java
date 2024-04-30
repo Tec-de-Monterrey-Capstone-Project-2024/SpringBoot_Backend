@@ -100,6 +100,29 @@ public class UserController {
         return new ResponseEntity<>(userResponse, HttpStatus.OK);
     }
 
+    @PatchMapping ("/{id}/change relevant info")
+    public ResponseEntity<UserInfoDTO> updateUserPartially(@PathVariable(name = "id") long id, @RequestBody UserInfoDTO UserInfoDTO) {
+        UserDTO existingUser = userService.getUserById(id);
+        if (existingUser == null) {
+            throw new ResourceNotFoundException ("User not found");
+        }
+
+        existingUser.setFirstName(UserInfoDTO.getFirstName());
+        existingUser.setLastName(UserInfoDTO.getLastName());
+
+        UserDTO updatedUser = userService.updateUser(id, existingUser);
+
+        UserInfoDTO userInfoResponse = convertToUserInfoDTO(updatedUser);
+        return ResponseEntity.ok(userInfoResponse);
+    }
+
+    private UserInfoDTO convertToUserInfoDTO(UserDTO userDTO) {
+        UserInfoDTO userInfoDTO = new UserInfoDTO();
+        userInfoDTO.setFirstName(updatedUser.getFirstName());
+        userInfoDTO.setLastName(updatedUser.getLastName());
+        return userInfoDTO;
+    }
+
     // Delete User Rest API
     @Operation(
             summary = "Delete User",
