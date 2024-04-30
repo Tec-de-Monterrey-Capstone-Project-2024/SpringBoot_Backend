@@ -9,4 +9,4 @@ public interface AmazonConnectService {
     List<String> listQueues(String instanceId);
     List<String> listAgents(String instanceId);
 
-    }
+}
