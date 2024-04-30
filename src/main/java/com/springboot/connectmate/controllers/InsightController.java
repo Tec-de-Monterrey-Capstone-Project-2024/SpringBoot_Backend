@@ -20,7 +20,7 @@ import java.util.List;
 @RequestMapping("/api/insights")
 @Tag(
         name = "Insight REST API",
-        description = "An API that have the CRUD services for insights in the Call Center"
+        description = "CRUD REST API for Insights"
 )
 public class InsightController {
 
@@ -63,10 +63,10 @@ public class InsightController {
         insight3.setCreatedAt(LocalDateTime.now());
 
         OldInsightDTO insight4 = new OldInsightDTO();
-        insight4.setId(3L);
-        insight4.setType(OldInsightDTO.InsightType.QUEUE);
+        insight4.setId(4L);
+        insight4.setType(OldInsightDTO.InsightType.OTHER);
         insight4.setStatus(OldInsightDTO.InsightStatus.TODO);
-        insight4.setDescription("Review agents on Queue 2.");
+        insight4.setDescription("Review clients on Queue 1.");
         insight4.setCreatedAt(LocalDateTime.now());
 
         response.add(insight1);
