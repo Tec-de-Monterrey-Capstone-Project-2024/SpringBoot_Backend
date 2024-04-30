@@ -1,6 +1,5 @@
 package com.springboot.connectmate.controllers;
 
-
 import com.springboot.connectmate.dtos.Insight.InsightDTO;
 import com.springboot.connectmate.dtos.Insight.InsightStatusUpdateDTO;
 import com.springboot.connectmate.dtos.OldDTOS.OldInsightDTO;
@@ -24,7 +23,7 @@ import java.util.List;
 @RequestMapping("/api/insights")
 @Tag(
         name = "Insight REST API",
-        description = "An API that have the CRUD services for insights in the Call Center"
+        description = "CRUD REST API for Insights"
 )
 public class InsightController {
 
@@ -34,8 +33,6 @@ public class InsightController {
     public InsightController(InsightService insightService) {
         this.insightService = insightService;
     }
-
-
 
     @ApiResponse(responseCode = "200",
             description = "Insights fetched successfully",
@@ -69,10 +66,10 @@ public class InsightController {
         insight3.setCreatedAt(LocalDateTime.now());
 
         OldInsightDTO insight4 = new OldInsightDTO();
-        insight4.setId(3L);
-        insight4.setType(OldInsightDTO.InsightType.QUEUE);
+        insight4.setId(4L);
+        insight4.setType(OldInsightDTO.InsightType.OTHER);
         insight4.setStatus(OldInsightDTO.InsightStatus.TODO);
-        insight4.setDescription("Review agents on Queue 2.");
+        insight4.setDescription("Review clients on Queue 1.");
         insight4.setCreatedAt(LocalDateTime.now());
 
         response.add(insight1);
@@ -157,9 +154,13 @@ public class InsightController {
         return ResponseEntity.noContent().build();
     }
 
-
-    @Operation(summary = "Insight status update")
-    @ApiResponse(responseCode = "200", description = "Insight status updated")
+    @Operation(
+      summary = "Update Insight Status"
+      description = "Updates the Insight Status With a New Status"
+    )
+    @ApiResponse(
+      responseCode = "200", 
+      description = "Status updated successfully")
     @PatchMapping("/{id}/status")
     public ResponseEntity<?> updateInsightStatus(@PathVariable Long id, @RequestBody InsightStatusUpdateDTO statusUpdateDTO) {
         insightService.updateInsightStatus(id, statusUpdateDTO.getStatus());
