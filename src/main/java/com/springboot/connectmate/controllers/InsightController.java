@@ -31,8 +31,6 @@ public class InsightController {
         this.insightService = insightService;
     }
 
-
-
     @ApiResponse(responseCode = "200",
             description = "Insights fetched successfully",
             content = {
@@ -152,5 +150,4 @@ public class InsightController {
     public ResponseEntity<String> deleteInsight(@PathVariable Long insightId){
         return ResponseEntity.noContent().build();
     }
-
 }
