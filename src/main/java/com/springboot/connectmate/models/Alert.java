@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+import com.springboot.connectmate.enums.ThresholdBreachPerformanceCategory;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -59,4 +61,24 @@ public class Alert {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    public double getValue() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getValue'");
+    }
+
+    public ThresholdBreachPerformanceCategory getBreachCategory() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getBreachCategory'");
+    }
+
+    public LocalDateTime getOccurredAt() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getOccurredAt'");
+    }
+
+    public Object getMetric() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getMetric'");
+    }
 }

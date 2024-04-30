@@ -1,7 +1,10 @@
 package com.springboot.connectmate.dtos.Alert;
 
 import com.springboot.connectmate.dtos.Metric.MetricDescriptionDTO;
+import com.springboot.connectmate.dtos.OldDTOS.OldAlertDTO.severity;
 import com.springboot.connectmate.enums.ThresholdBreachPerformanceCategory;
+import com.springboot.connectmate.models.Metric;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -14,8 +17,10 @@ import java.time.LocalDateTime;
 )
 public class AlertDTO {
 
-    @Schema(
-            description = "Id of the Alert",
+    public static severity severity;
+
+@Schema(
+            description = "Id of the User",
             example = "1"
     )
     private Long id;
@@ -45,6 +50,11 @@ public class AlertDTO {
             example = "2021-07-01T00:00:00"
     )
     private LocalDateTime occurredAt;
+
+    public void setMetric(Metric metric2) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setMetric'");
+    }
 
 }
 

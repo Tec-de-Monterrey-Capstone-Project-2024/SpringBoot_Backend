@@ -1,7 +1,8 @@
 package com.springboot.connectmate.dtos.OldDTOS;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.springboot.connectmate.dtos.Alert.AlertDTO;
+
+import com.springboot.connectmate.controllers.AlertController;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -103,7 +104,8 @@ public class OldAlertDTO {
 
     // Setter personalizado para el enum 'severity'
     public void setSeverity(severity severe) {
-        AlertDTO.severity = severe;
+
+        AlertController.severity = severe;
     }
 }
 

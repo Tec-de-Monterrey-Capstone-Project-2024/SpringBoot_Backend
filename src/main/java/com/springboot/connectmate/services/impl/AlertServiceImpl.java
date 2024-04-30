@@ -1,14 +1,12 @@
 package com.springboot.connectmate.services.impl;
 
 import com.springboot.connectmate.dtos.Alert.AlertDTO;
-import com.springboot.connectmate.dtos.Metric.MetricDescriptionDTO;
-import com.springboot.connectmate.models.Alert;
+import com.springboot.connectmate.model.Alert;
 import com.springboot.connectmate.repositories.AlertRepository;
 import com.springboot.connectmate.services.AlertService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,23 +19,18 @@ public class AlertServiceImpl implements AlertService {
     @Override
     public List<AlertDTO> getAllAlerts() {
         return alertRepository.findAll().stream()
-               .map(this::convertToDTO)
+               .map(this::convertToDTO) // Utiliza el método de conversión definido
                .collect(Collectors.toList());
     }
 
     private AlertDTO convertToDTO(Alert alert) {
         AlertDTO dto = new AlertDTO();
         dto.setId(alert.getId());
-        dto.setMetric(ConversionUtil(alert.getMetric()));        
+        dto.setMetric(alert.getMetric()); // Asume que Metric es adecuadamente manejado
         dto.setValue(alert.getValue());
         dto.setBreachCategory(alert.getBreachCategory());
         dto.setOccurredAt(alert.getOccurredAt());
         return dto;
-    }
-
-    private MetricDescriptionDTO ConversionUtil(Object metric) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'ConversionUtil'");
     }
 
     @Override
