@@ -71,6 +71,7 @@ public class InsightServiceImpl implements InsightService {
                 })
                 .collect(Collectors.toList());
     }
+  
     @Override
     public List<InsightDTO> getInsightsByStatus(InsightStatus status) {
         List<Insight> insights = insightRepository.findByStatus(status);
@@ -78,4 +79,12 @@ public class InsightServiceImpl implements InsightService {
                 .map(insight -> mapper.map(insight, InsightDTO.class))
                 .collect(Collectors.toList());
     }
+  
+    @Override
+    public void updateInsightStatus(Long insightId, InsightStatus newStatus) {
+        Insight insight = insightRepository.findById(insightId).orElseThrow(() -> new ResourceNotFoundException("Insight", "id", insightId));
+        insight.setStatus(newStatus);
+        insightRepository.save(insight);
+    }
+      
 }

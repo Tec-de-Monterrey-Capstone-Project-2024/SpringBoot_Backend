@@ -1,6 +1,7 @@
 package com.springboot.connectmate.controllers;
 
 import com.springboot.connectmate.dtos.Insight.InsightDTO;
+import com.springboot.connectmate.dtos.Insight.InsightStatusUpdateDTO;
 import com.springboot.connectmate.dtos.OldDTOS.OldInsightDTO;
 import com.springboot.connectmate.enums.InsightStatus;
 import com.springboot.connectmate.services.InsightService;
@@ -157,4 +158,22 @@ public class InsightController {
     public ResponseEntity<String> deleteInsight(@PathVariable Long insightId){
         return ResponseEntity.noContent().build();
     }
+
+    @Operation(
+      summary = "Update Insight Status",
+      description = "Updates the Insight Status With a New Status"
+    )
+    @ApiResponse(
+      responseCode = "200", 
+      description = "Status updated successfully")
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<String> updateInsightStatus(
+            @PathVariable Long id,
+            @RequestBody InsightStatusUpdateDTO statusUpdateDTO
+    ) {
+        InsightStatus newStatus = statusUpdateDTO.getNewStatus();
+        insightService.updateInsightStatus(id, newStatus);
+        return ResponseEntity.ok("Status updated successfully");
+    }
+
 }
