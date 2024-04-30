@@ -1,7 +1,8 @@
 package com.springboot.connectmate.controllers;
 
-import com.springboot.connectmate.dtos.AlertDTO;
-import com.springboot.connectmate.exceptions.AlertNotFoundException;
+
+import com.springboot.connectmate.dtos.Alert.AlertDTO;
+import com.springboot.connectmate.dtos.OldDTOS.OldAlertDTO;
 import com.springboot.connectmate.services.AlertService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -59,24 +60,19 @@ public class AlertController {
         return new ResponseEntity<>(alertDTOList, HttpStatus.OK);
     }
 
-    // Get Alert by ID API
+    // Get Alert by ID API Rest API
     @Operation(
-            summary = "Get Alert by ID",
-            description = "Gets a specific alert by its ID"
+            summary = "Get Alert by Id",
+            description = "Get Alert by Id"
     )
     @ApiResponse(
             responseCode = "200",
             description = "Alert fetched successfully"
     )
-    @GetMapping("/{alertId}")
-    public ResponseEntity<AlertDTO> getAlertById(@PathVariable Long alertId) {
-        AlertDTO alertDTO;
-        try {
-            alertDTO = alertService.getAlertById(alertId);
-        } catch (AlertNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(alertDTO, HttpStatus.OK);
+
+    @GetMapping("/{id}")
+    public ResponseEntity<AlertDTO> getAlertById(@PathVariable(name = "id") Long id) {
+        return ResponseEntity.ok(alertService.getAlertById(id));
     }
 
     // Update Alert
@@ -90,7 +86,7 @@ public class AlertController {
     )
    @PutMapping("/{alertId}")
     public ResponseEntity<AlertDTO> updateAlert(@PathVariable Long alertId, @RequestBody AlertDTO alertDTO) {
-        AlertDTO updatedAlertDTO = alertService.updateAlert(alertId, alertDTO);
+        AlertDTO updatedAlertDTO = alertService.updateAlert(alertDTO);
         return new ResponseEntity<>(updatedAlertDTO, HttpStatus.OK);
     }
 

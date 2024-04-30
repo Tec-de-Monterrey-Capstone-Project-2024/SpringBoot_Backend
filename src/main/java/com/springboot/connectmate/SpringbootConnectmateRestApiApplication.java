@@ -34,8 +34,9 @@ import org.springframework.context.annotation.Bean;
 				url = "https://github.com/Tec-de-Monterrey-Capstone-Project-2024/SpringBoot_Backend"
 		),
 		servers = {
-				@Server(url = "https://connectmate-f72xn3ewaa-uc.a.run.app", description = "Production server"),
-				@Server(url = "http://localhost:8080", description = "Local development server")
+				@Server(url = "http://localhost:8080", description = "Local development server"),
+				@Server(url = "https://connectmate-f72xn3ewaa-uc.a.run.app", description = "Production server")
+
 		}
 )
 public class SpringbootConnectmateRestApiApplication {

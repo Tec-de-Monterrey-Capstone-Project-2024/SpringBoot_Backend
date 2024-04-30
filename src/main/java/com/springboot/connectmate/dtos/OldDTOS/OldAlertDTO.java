@@ -1,6 +1,8 @@
 package com.springboot.connectmate.dtos.OldDTOS;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.springboot.connectmate.dtos.Alert.AlertDTO;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -8,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Data // Lombok's annotation to create all the getters, setters, equals, hash, and toString methods based on the fields
 @Schema(
-        name = "Alert",
+        name = "Old Alert",
         description = "DTO for Alert"
 )
 public class OldAlertDTO {
