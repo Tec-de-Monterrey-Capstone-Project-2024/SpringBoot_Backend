@@ -71,4 +71,13 @@ public class InsightServiceImpl implements InsightService {
                 })
                 .collect(Collectors.toList());
     }
+
+
+    @Override
+    @Transactional
+    public void updateInsightStatus(Long insightId, InsightStatus newStatus) {
+        Insight insight = insightRepository.findById(insightId).orElseThrow(() -> new ResourceNotFoundException("Insight", "id", insightId));
+        insight.setStatus(newStatus);
+        insightRepository.save(insight);
+    }
 }
