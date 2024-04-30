@@ -52,4 +52,6 @@ public class ThresholdBreach {
     @OneToOne(fetch = FetchType.EAGER, mappedBy = "thresholdBreach", cascade = CascadeType.ALL, orphanRemoval = true)
     private Insight insight;
 
+    
+
 }
