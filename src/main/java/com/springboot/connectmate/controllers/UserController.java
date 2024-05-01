@@ -1,6 +1,7 @@
 package com.springboot.connectmate.controllers;
 
 import com.springboot.connectmate.dtos.User.UserInfoDTO;
+import com.springboot.connectmate.dtos.User.UpdateUserRequestDTO;
 import com.springboot.connectmate.exceptions.ResourceNotFoundException;
 import com.springboot.connectmate.dtos.User.UserDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -102,18 +103,9 @@ public class UserController {
         return new ResponseEntity<>(userResponse, HttpStatus.OK);
     }
 
-    @PatchMapping("/{userId}")
-    public ResponseEntity<UserInfoDTO> updateUserPartially(@PathVariable(name = "userId") long id, @RequestBody UserInfoDTO userInfoDTO) {
-        UserDTO existingUser = userService.getUserById(id);
-        if (existingUser == null) {
-            throw new ResourceNotFoundException("User", "id", id);
-        }
-
-        existingUser.setFirstName(userInfoDTO.getFirstName());
-        existingUser.setLastName(userInfoDTO.getLastName());
-
-        UserDTO updatedUser = userService.updateUser(id, existingUser);
-
+    @PatchMapping("/{id}/update-partially")
+    public ResponseEntity<UserInfoDTO> updateUserPartially(@PathVariable(name = "id") long id, @RequestBody UpdateUserRequestDTO updateUserRequestDTO) {
+        UserDTO updatedUser = userService.updateUserPartially(id, updateUserRequestDTO);
         UserInfoDTO userInfoResponse = convertToUserInfoDTO(updatedUser);
         return ResponseEntity.ok(userInfoResponse);
     }
