@@ -15,8 +15,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/insights")
@@ -41,41 +43,19 @@ public class InsightController {
     })
     @Operation(summary = "Get all insights for the Call Center")
     @GetMapping
-    public ResponseEntity<List<OldInsightDTO>> getAllInsights(){
-        List<OldInsightDTO> response = new ArrayList<>();
-        OldInsightDTO insight1 = new OldInsightDTO();
-        insight1.setId(1L);
-        insight1.setType(OldInsightDTO.InsightType.QUEUE);
-        insight1.setStatus(OldInsightDTO.InsightStatus.TODO);
-        insight1.setDescription("Not enough people on virtual floor.");
-        insight1.setCreatedAt(LocalDateTime.now());
+    public ResponseEntity<Map<Long, InsightDTO>> getAllInsights() {
+        List<InsightDTO> insights = insightService.getQueueInsights();
+        if (insights == null || insights.isEmpty()) {
+            return ResponseEntity.ok(Collections.emptyMap());
+        }
 
-        OldInsightDTO insight2 = new OldInsightDTO();
-        insight2.setId(2L);
-        insight2.setType(OldInsightDTO.InsightType.QUEUE);
-        insight2.setStatus(OldInsightDTO.InsightStatus.DONE);
-        insight2.setDescription("Add agents to Queue 2.");
-        insight2.setCreatedAt(LocalDateTime.now());
+        Map<Long, InsightDTO> insightsMap = insights.stream()
+                .collect(Collectors.toMap(
+                        InsightDTO::getId,
+                        insight -> insight,
+                        (existing, replacement) -> existing));
 
-        OldInsightDTO insight3 = new OldInsightDTO();
-        insight3.setId(3L);
-        insight3.setType(OldInsightDTO.InsightType.QUEUE);
-        insight3.setStatus(OldInsightDTO.InsightStatus.TODO);
-        insight3.setDescription("Review agents on Queue 2.");
-        insight3.setCreatedAt(LocalDateTime.now());
-
-        OldInsightDTO insight4 = new OldInsightDTO();
-        insight4.setId(4L);
-        insight4.setType(OldInsightDTO.InsightType.OTHER);
-        insight4.setStatus(OldInsightDTO.InsightStatus.TODO);
-        insight4.setDescription("Review clients on Queue 1.");
-        insight4.setCreatedAt(LocalDateTime.now());
-
-        response.add(insight1);
-        response.add(insight2);
-        response.add(insight3);
-        response.add(insight4);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(insightsMap);
     }
 
     // Get Insight by ID API
