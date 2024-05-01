@@ -12,6 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -79,8 +80,6 @@ public class InsightServiceImpl implements InsightService {
                 .map(insight -> mapper.map(insight, InsightDTO.class))
                 .collect(Collectors.toList());
     }
-
-  
     @Override
     public void updateInsightStatus(Long insightId, InsightStatus newStatus) {
         Insight insight = insightRepository.findById(insightId).orElseThrow(() -> new ResourceNotFoundException("Insight", "id", insightId));
@@ -90,10 +89,14 @@ public class InsightServiceImpl implements InsightService {
     @Override
     public List<InsightDTO> getAllInsights() {
         List<Insight> insights = insightRepository.findAll();
-        return insights.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+        List<InsightDTO> insightDTOs = new ArrayList<>();
+        for (Insight insight : insights) {
+                InsightDTO dto = getInsightById(insight.getId());
+                insightDTOs.add(dto);
+        }
+        return insightDTOs;
     }
+    /* Ya no usé esta función, pero la dejo comentada por si algun dia la gustan refactorizar o hacerle algo
     private InsightDTO convertToDTO(Insight insight) {
         InsightDTO dto = mapper.map(insight, InsightDTO.class);
         TemplateDTO template = templateService.getRightTemplateByBreachId(insight.getThresholdBreach().getId());
@@ -101,5 +104,5 @@ public class InsightServiceImpl implements InsightService {
             mapper.map(template, dto);
         }
         return dto;
-    }
+    } */
 }

@@ -15,9 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @RestController
@@ -44,18 +44,8 @@ public class InsightController {
     @Operation(summary = "Get all insights for the Call Center")
     @GetMapping
     public ResponseEntity<Map<Long, InsightDTO>> getAllInsights() {
-        List<InsightDTO> insights = insightService.getQueueInsights();
-        if (insights == null || insights.isEmpty()) {
-            return ResponseEntity.ok(Collections.emptyMap());
-        }
-
-        Map<Long, InsightDTO> insightsMap = insights.stream()
-                .collect(Collectors.toMap(
-                        InsightDTO::getId,
-                        insight -> insight,
-                        (existing, replacement) -> existing));
-
-        return ResponseEntity.ok(insightsMap);
+        return ResponseEntity.ok(insightService.getAllInsights().stream()
+                .collect(Collectors.toMap(InsightDTO::getId, Function.identity(), (existing, replacement) -> existing)));
     }
 
     // Get Insight by ID API
