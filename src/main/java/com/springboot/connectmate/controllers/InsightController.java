@@ -124,7 +124,7 @@ public class InsightController {
     // Get Insight by Status API
     @ApiResponse(
             responseCode = "200",
-            description = "Insight fetched successfully"
+            description = "Insights fetched successfully"
     )
     @Operation(
             summary = "Get Insights by Status",

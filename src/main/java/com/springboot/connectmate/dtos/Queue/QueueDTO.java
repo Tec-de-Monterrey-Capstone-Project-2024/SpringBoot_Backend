@@ -2,10 +2,6 @@ package com.springboot.connectmate.dtos.Queue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
-
 @Data
 @Schema(
         name = "Queue",

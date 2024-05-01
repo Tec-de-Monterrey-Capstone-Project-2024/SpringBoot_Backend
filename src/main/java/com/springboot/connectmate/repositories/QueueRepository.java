@@ -1,4 +1,5 @@
 package com.springboot.connectmate.repositories;
+
 import com.springboot.connectmate.models.Queue;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.query.Procedure;

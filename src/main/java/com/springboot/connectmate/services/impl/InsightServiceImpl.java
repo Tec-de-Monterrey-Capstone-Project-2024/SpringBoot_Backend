@@ -76,10 +76,15 @@ public class InsightServiceImpl implements InsightService {
     public List<InsightDTO> getInsightsByStatus(InsightStatus status) {
         List<Insight> insights = insightRepository.findByStatus(status);
         return insights.stream()
-                .map(insight -> mapper.map(insight, InsightDTO.class))
+                .map(insight -> {
+                    InsightDTO insightDTO = mapper.map(insight, InsightDTO.class);
+                    TemplateDTO templateInfo = templateService.getRightTemplateByBreachId(insight.getThresholdBreach().getId());
+                    mapper.map(templateInfo, insightDTO);
+                    return insightDTO;
+                })
                 .collect(Collectors.toList());
     }
-  
+
     @Override
     public void updateInsightStatus(Long insightId, InsightStatus newStatus) {
         Insight insight = insightRepository.findById(insightId).orElseThrow(() -> new ResourceNotFoundException("Insight", "id", insightId));
