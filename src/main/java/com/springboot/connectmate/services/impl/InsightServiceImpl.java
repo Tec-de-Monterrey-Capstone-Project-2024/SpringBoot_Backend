@@ -79,6 +79,7 @@ public class InsightServiceImpl implements InsightService {
                 .map(insight -> mapper.map(insight, InsightDTO.class))
                 .collect(Collectors.toList());
     }
+
   
     @Override
     public void updateInsightStatus(Long insightId, InsightStatus newStatus) {
@@ -86,5 +87,19 @@ public class InsightServiceImpl implements InsightService {
         insight.setStatus(newStatus);
         insightRepository.save(insight);
     }
-      
+    @Override
+    public List<InsightDTO> getAllInsights() {
+        List<Insight> insights = insightRepository.findAll();
+        return insights.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+    private InsightDTO convertToDTO(Insight insight) {
+        InsightDTO dto = mapper.map(insight, InsightDTO.class);
+        TemplateDTO template = templateService.getRightTemplateByBreachId(insight.getThresholdBreach().getId());
+        if (template != null) {
+            mapper.map(template, dto);
+        }
+        return dto;
+    }
 }
