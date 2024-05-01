@@ -1,5 +1,7 @@
 package com.springboot.connectmate.services.impl;
 
+import com.springboot.connectmate.dtos.Metric.MetricDTO;
+import com.springboot.connectmate.enums.MetricCategory;
 import com.springboot.connectmate.dtos.Metric.MetricDescriptionDTO;
 import com.springboot.connectmate.exceptions.ResourceNotFoundException;
 import com.springboot.connectmate.models.Metric;
@@ -8,6 +10,11 @@ import com.springboot.connectmate.services.MetricService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MetricServiceImpl implements MetricService {
@@ -29,5 +36,23 @@ public class MetricServiceImpl implements MetricService {
         // description is not part of the entity, therefore
         metricDescription.setDescription(metric.getCode().getDescription());
         return metricDescription;
+    }
+
+    @Override
+    @Transactional
+    public List<MetricDTO> getContactCenterMetrics() {
+        // Get the data from a Store Procedure (SP) form our database server
+        List<Object[]> results = metricRepository.getContactCenterMetrics();
+
+        // Deserialization
+        return results.stream()
+                .map(result -> {
+                    MetricDTO dto = new MetricDTO();
+                    dto.setCode(MetricCategory.valueOf((String) result[0]));
+                    dto.setName((String) result[1]);
+                    dto.setValue((BigDecimal) result[2]);
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 }
