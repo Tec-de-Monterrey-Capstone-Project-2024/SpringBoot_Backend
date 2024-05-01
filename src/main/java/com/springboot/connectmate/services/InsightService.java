@@ -9,5 +9,4 @@ public interface InsightService {
 
     List<InsightDTO> getQueueInsights();
     List<InsightDTO> getAllInsights();
-
 }
