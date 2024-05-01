@@ -1,7 +1,9 @@
 package com.springboot.connectmate.controllers;
 
 import com.springboot.connectmate.dtos.Insight.InsightDTO;
+import com.springboot.connectmate.dtos.Insight.InsightStatusUpdateDTO;
 import com.springboot.connectmate.dtos.OldDTOS.OldInsightDTO;
+import com.springboot.connectmate.enums.InsightStatus;
 import com.springboot.connectmate.services.InsightService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -20,7 +22,7 @@ import java.util.List;
 @RequestMapping("/api/insights")
 @Tag(
         name = "Insight REST API",
-        description = "An API that have the CRUD services for insights in the Call Center"
+        description = "CRUD REST API for Insights"
 )
 public class InsightController {
 
@@ -63,10 +65,10 @@ public class InsightController {
         insight3.setCreatedAt(LocalDateTime.now());
 
         OldInsightDTO insight4 = new OldInsightDTO();
-        insight4.setId(3L);
-        insight4.setType(OldInsightDTO.InsightType.QUEUE);
+        insight4.setId(4L);
+        insight4.setType(OldInsightDTO.InsightType.OTHER);
         insight4.setStatus(OldInsightDTO.InsightStatus.TODO);
-        insight4.setDescription("Review agents on Queue 2.");
+        insight4.setDescription("Review clients on Queue 1.");
         insight4.setCreatedAt(LocalDateTime.now());
 
         response.add(insight1);
@@ -86,17 +88,8 @@ public class InsightController {
             description = "Gets a specific insight by its ID."
     )
     @GetMapping("/{insightId}")
-    public OldInsightDTO getInsightByID(@PathVariable Long insightId){
-        OldInsightDTO insight = new OldInsightDTO();
-        
-        insight.setId(insightId);
-        insight.setType(OldInsightDTO.InsightType.QUEUE);
-        insight.setStatus(OldInsightDTO.InsightStatus.TODO);
-        insight.setDescription("Not enough people on virtual floor.");
-        insight.setCreatedAt(LocalDateTime.parse("2007-12-03T10:15:30"));
-        insight.setUpdatedAt(LocalDateTime.parse("2007-12-03T10:15:31"));
-        
-        return insight;
+    public InsightDTO getInsightByID(@PathVariable(name = "insightId") Long insightId){
+        return insightService.getInsightById(insightId);
     }
 
     // Get Insight by Breach ID API
@@ -105,13 +98,14 @@ public class InsightController {
             description = "Insight fetched successfully"
     )
     @Operation(
-            summary = "Get Insight by ID",
-            description = "Gets a specific insight by its ID."
+            summary = "Get Insight by Alert Id",
+            description = "Gets a specific insight by its associated alert Id."
     )
-    @GetMapping("breach/{insightId}")
-    public InsightDTO getInsightByBreachID(@PathVariable Long insightId){
-        return insightService.getInsightByBreachId(insightId);
+    @GetMapping("alert/{alertId}")
+    public InsightDTO getInsightByBreachID(@PathVariable(name = "alertId") Long alertId){
+        return insightService.getInsightByBreachId(alertId);
     }
+
 
     // Get Queue Insights API
     @ApiResponse(
@@ -119,12 +113,26 @@ public class InsightController {
             description = "Insights fetched successfully"
     )
     @Operation(
-            summary = "Get Insights by QueueID",
-            description = "Gets all Queue insights"
+            summary = "Get Insights From All Queues",
+            description = "Get All Insights From All Queues"
     )
     @GetMapping("/queues")
     public List<InsightDTO> getQueueInsights(){
         return insightService.getQueueInsights();
+    }
+
+    // Get Insight by Status API
+    @ApiResponse(
+            responseCode = "200",
+            description = "Insight fetched successfully"
+    )
+    @Operation(
+            summary = "Get Insights by Status",
+            description = "Gets all insights order by its status."
+    )
+    @GetMapping("/status/{status}")
+    public List<InsightDTO> getInsightsByStatus(@PathVariable InsightStatus status){
+        return insightService.getInsightsByStatus(status);
     }
 
     @ApiResponse(responseCode = "200",
@@ -163,4 +171,23 @@ public class InsightController {
     public List<InsightDTO> getInsightsByAgentId(@PathVariable("agentId") Long id) {
         return insightService.getInsightsByAgentId(id);
     }
+
+    @Operation(
+      summary = "Update Insight Status",
+      description = "Updates the Insight Status With a New Status"
+    )
+    @ApiResponse(
+      responseCode = "200", 
+      description = "Status updated successfully")
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<String> updateInsightStatus(
+            @PathVariable Long id,
+            @RequestBody InsightStatusUpdateDTO statusUpdateDTO
+    ) {
+        InsightStatus newStatus = statusUpdateDTO.getNewStatus();
+        insightService.updateInsightStatus(id, newStatus);
+        return ResponseEntity.ok("Status updated successfully");
+    }
+
+
 }
