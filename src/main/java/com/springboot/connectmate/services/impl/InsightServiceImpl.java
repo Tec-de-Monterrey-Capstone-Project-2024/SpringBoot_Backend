@@ -6,12 +6,14 @@ import com.springboot.connectmate.enums.InsightStatus;
 import com.springboot.connectmate.exceptions.ResourceNotFoundException;
 import com.springboot.connectmate.models.Insight;
 import com.springboot.connectmate.repositories.InsightRepository;
+import com.springboot.connectmate.repositories.UserRepository;
 import com.springboot.connectmate.services.InsightService;
 import com.springboot.connectmate.services.TemplateService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,18 +31,19 @@ public class InsightServiceImpl implements InsightService {
     }
 
     @Override
+    @Transactional
     public List<InsightDTO> getInsightsByAgentId(Long agentId) {
-        /*
-        Insight insight = insightRepository.findAllByAgentId(agentId).stream();
-        TemplateDTO templateInfo = templateService.getRightTemplateByBreachId(agentId);
-        InsightDTO completeInsight = mapper.map(insight, InsightDTO.class);
-        mapper.map(templateInfo, completeInsight);
-        return completeInsight; */
+        List<Insight> insights = insightRepository.findAllByAgentId(agentId);
+        List<InsightDTO> insightDTOs = new ArrayList<>();
+        for (Insight insight : insights) {
+            InsightDTO dto = getInsightById(insight.getId());
+            insightDTOs.add(dto);
+        }
+        return insightDTOs;
 
-        return insightRepository.findAllByAgentId(agentId).stream()
-                .map(insight -> mapper.map(insight, InsightDTO.class))
-                .collect(Collectors.toList()); 
     }
+
+
 
 
 
