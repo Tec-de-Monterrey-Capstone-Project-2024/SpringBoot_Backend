@@ -7,6 +7,9 @@ import com.springboot.connectmate.exceptions.ResourceNotFoundException;
 import com.springboot.connectmate.models.Metric;
 import com.springboot.connectmate.repositories.MetricRepository;
 import com.springboot.connectmate.services.MetricService;
+
+import com.springboot.connectmate.dtos.Metric.SetThresholdsDTO;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,5 +57,22 @@ public class MetricServiceImpl implements MetricService {
                     return dto;
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public void removeMetricThresholds(Long userId, Long queueId, MetricCategory code) {
+        metricRepository.removeThresholds(userId, queueId, code);
+    }
+
+
+    @Override
+    @Transactional
+    public void updateMetricThresholds(SetThresholdsDTO thresholdsDTO) {
+        metricRepository.findById(thresholdsDTO.getMetricId()).ifPresent(metric -> {
+            metric.setMinimumThreshold(thresholdsDTO.getMinimumThreshold());
+            metric.setMaximumThreshold(thresholdsDTO.getMaximumThreshold());
+            metricRepository.save(metric);
+        });
     }
 }
