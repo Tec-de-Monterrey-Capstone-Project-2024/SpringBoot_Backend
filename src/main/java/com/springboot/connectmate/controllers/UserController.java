@@ -1,5 +1,7 @@
 package com.springboot.connectmate.controllers;
 
+import com.springboot.connectmate.dtos.User.UserInfoDTO;
+import com.springboot.connectmate.exceptions.ResourceNotFoundException;
 import com.springboot.connectmate.dtos.User.UserDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -100,15 +102,15 @@ public class UserController {
         return new ResponseEntity<>(userResponse, HttpStatus.OK);
     }
 
-    @PatchMapping ("/{id}/change relevant info")
-    public ResponseEntity<UserInfoDTO> updateUserPartially(@PathVariable(name = "id") long id, @RequestBody UserInfoDTO UserInfoDTO) {
+    @PatchMapping("/{userId}")
+    public ResponseEntity<UserInfoDTO> updateUserPartially(@PathVariable(name = "userId") long id, @RequestBody UserInfoDTO userInfoDTO) {
         UserDTO existingUser = userService.getUserById(id);
         if (existingUser == null) {
-            throw new ResourceNotFoundException ("User not found");
+            throw new ResourceNotFoundException("User", "id", id);
         }
 
-        existingUser.setFirstName(UserInfoDTO.getFirstName());
-        existingUser.setLastName(UserInfoDTO.getLastName());
+        existingUser.setFirstName(userInfoDTO.getFirstName());
+        existingUser.setLastName(userInfoDTO.getLastName());
 
         UserDTO updatedUser = userService.updateUser(id, existingUser);
 
@@ -118,8 +120,8 @@ public class UserController {
 
     private UserInfoDTO convertToUserInfoDTO(UserDTO userDTO) {
         UserInfoDTO userInfoDTO = new UserInfoDTO();
-        userInfoDTO.setFirstName(updatedUser.getFirstName());
-        userInfoDTO.setLastName(updatedUser.getLastName());
+        userInfoDTO.setFirstName(userDTO.getFirstName());
+        userInfoDTO.setLastName(userDTO.getLastName());
         return userInfoDTO;
     }
 
