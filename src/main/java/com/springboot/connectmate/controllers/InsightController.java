@@ -151,8 +151,16 @@ public class InsightController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/agents/{id}")
-    public List<InsightDTO> getInsightsByAgentId(@PathVariable("id") Long id) {
+    @ApiResponse(
+            responseCode = "200",
+            description = "Insight fetched successfully"
+    )
+    @Operation(
+            summary = "Get Insights by AgentID",
+            description = "Get all insights from one agent"
+    )
+    @GetMapping("/agents/{agentId}")
+    public List<InsightDTO> getInsightsByAgentId(@PathVariable("agentId") Long id) {
         return insightService.getInsightsByAgentId(id);
     }
 }

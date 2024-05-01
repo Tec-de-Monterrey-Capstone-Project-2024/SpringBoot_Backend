@@ -35,4 +35,23 @@ public class InsightDTO {
             example = "TO_DO"
     )
     private InsightStatus status;
+
+    @Schema(
+            description = "Template summary of the Insight",
+            example = "Consider reconfiguring the virtual floor."
+    )
+    private String summaryTemplate;
+
+    @Schema(
+            description = "Template situation of the Insight",
+            example = "Reconfigure the virtual floor..."
+    )
+    private String situationTemplate;
+
+    @Schema(
+            description = "Template actions of the Insight",
+            example = "1. Give incentives to high-performing agents."
+    )
+    private String actionsTemplate;
 }
+
