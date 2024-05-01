@@ -1,5 +1,6 @@
 package com.springboot.connectmate.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.springboot.connectmate.enums.InsightStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -32,6 +33,7 @@ public class Insight {
     // Child side
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "threshold_breach_id", nullable = false, unique = true)
+    @JsonIgnore
     private ThresholdBreach thresholdBreach;
 
     @Column(name = "constructed_description", nullable = false, columnDefinition = "TEXT")

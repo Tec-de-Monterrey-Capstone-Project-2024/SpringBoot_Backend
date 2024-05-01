@@ -2,6 +2,7 @@ package com.springboot.connectmate.controllers;
 
 import com.springboot.connectmate.dtos.Alert.AlertDTO;
 import com.springboot.connectmate.dtos.OldDTOS.OldAlertDTO;
+import com.springboot.connectmate.models.ThresholdBreach;
 import com.springboot.connectmate.services.AlertService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -57,6 +58,21 @@ public class AlertController {
         return List.of(new OldAlertDTO());
     }
 
+    // Get All Threshold Breach Alerts
+    @Operation(
+            summary = "Get All Threshold Breach Alerts",
+            description = "Gets all alerts related to threshold breaches"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Alerts fetched successfully"
+    )
+    @GetMapping("/threshold-breaches")
+    public ResponseEntity<List<ThresholdBreach>> getAllThresholdBreachAlerts() {
+        List<ThresholdBreach> alerts = alertService.getAllThresholdBreachAlerts();
+        return ResponseEntity.ok(alerts);
+    }
+
     // Get Alert by ID API Rest API
     @Operation(
             summary = "Get Alert by Id",
@@ -66,16 +82,8 @@ public class AlertController {
             responseCode = "200",
             description = "Alert fetched successfully"
     )
-    @GetMapping("/{id}")
+    @GetMapping("/find/{id}")
     public ResponseEntity<AlertDTO> getAlertById(@PathVariable(name = "id") Long id) {
         return ResponseEntity.ok(alertService.getAlertById(id));
-    }
-    // Get All Threshold Breach Alerts
-    @GetMapping("/threshold-breaches")
-    @Operation(summary = "Get All Threshold Breach Alerts", description = "Gets all alerts related to threshold breaches")
-    @ApiResponse(responseCode = "200", description = "Alerts fetched successfully")
-    public ResponseEntity<List<AlertDTO>> getAllThresholdBreachAlerts() {
-        List<AlertDTO> alerts = alertService.getAllThresholdBreachAlerts();
-        return ResponseEntity.ok(alerts);
     }
 }

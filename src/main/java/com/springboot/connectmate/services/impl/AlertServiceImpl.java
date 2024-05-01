@@ -45,10 +45,10 @@ public class AlertServiceImpl implements AlertService {
         return alert;
     }
     @Override
-    public List<AlertDTO> getAllThresholdBreachAlerts() {
+    public List<ThresholdBreach> getAllThresholdBreachAlerts() {
         List<ThresholdBreach> breaches = thresholdBreachRepository.findAll(); // Assuming this fetches all breaches
         return breaches.stream()
-                       .map(breach -> mapper.map(breach, AlertDTO.class))
+                       .map(breach -> mapper.map(breach, ThresholdBreach.class))
                        .collect(Collectors.toList());
     }
 }

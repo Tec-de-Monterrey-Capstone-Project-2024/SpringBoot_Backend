@@ -5,6 +5,7 @@ import com.springboot.connectmate.enums.ThresholdBreachPerformanceCategory;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
@@ -19,7 +20,7 @@ public class AlertDTO {
     private MetricDescriptionDTO metric;
 
     @Schema(description = "Value of the Alert", example = "70")
-    private double value;
+    private BigDecimal value;
 
     @Schema(description = "Breach Category of the Alert", example = "CRITICAL")
     private ThresholdBreachPerformanceCategory breachCategory;

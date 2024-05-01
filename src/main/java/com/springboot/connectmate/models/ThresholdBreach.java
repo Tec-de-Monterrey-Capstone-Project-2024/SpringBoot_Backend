@@ -1,5 +1,6 @@
 package com.springboot.connectmate.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.springboot.connectmate.enums.ThresholdBreachPerformanceCategory;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -28,6 +29,7 @@ public class ThresholdBreach {
     // Child side
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "metric_id", nullable = false)
+    @JsonIgnore
     private Metric metric;
 
     @Column(name = "value", precision = 10, scale = 2, nullable = false)
