@@ -1,11 +1,20 @@
 package com.springboot.connectmate.controllers;
 
+import com.springboot.connectmate.dtos.Insight.InsightDTO;
+import com.springboot.connectmate.dtos.Metric.ConnectMetricDTO;
+import com.springboot.connectmate.dtos.Metric.MetricDTO;
+import com.springboot.connectmate.enums.InsightStatus;
 import com.springboot.connectmate.services.MetricService;
-import com.springboot.connectmate.services.QueueService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/metrics")
@@ -20,5 +29,34 @@ public class MetricController {
     @Autowired
     public MetricController(MetricService metricService) {
         this.metricService = metricService;
+    }
+
+    // Get average metrics (average of all agents) for the Call Center API
+    @Operation(
+            summary = "Get the metrics for the Call Center in general",
+            description = "With the individual agent metrics in contact " +
+                    "center the API obtain the average of each metric."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Metrics fetched successfully"
+    )
+    @GetMapping("/agents")
+    public List<MetricDTO> getContactCenterMetrics(){
+        return metricService.getContactCenterMetrics();
+    }
+
+    // Get all metrics for a single agent.
+    @Operation(
+            summary = "Get all the metrics for a single agent",
+            description = "Get all the metrics for a single agent in the contact center."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Metrics fetched successfully"
+    )
+    @GetMapping("/agents/{agent_id}")
+    public List<ConnectMetricDTO> getAgentMetrics(@PathVariable Long agent_id){
+        return metricService.getAgentMetrics(agent_id);
     }
 }
