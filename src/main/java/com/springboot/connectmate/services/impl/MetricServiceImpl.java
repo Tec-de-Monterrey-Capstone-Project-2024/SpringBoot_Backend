@@ -1,5 +1,6 @@
 package com.springboot.connectmate.services.impl;
 
+import com.springboot.connectmate.dtos.Metric.ConnectMetricDTO;
 import com.springboot.connectmate.dtos.Metric.MetricDTO;
 import com.springboot.connectmate.enums.MetricCategory;
 import com.springboot.connectmate.dtos.Metric.MetricDescriptionDTO;
@@ -11,6 +12,7 @@ import com.springboot.connectmate.services.MetricService;
 
 import com.springboot.connectmate.dtos.Metric.MetricThresholdsDTO;
 
+import jakarta.persistence.Tuple;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -74,5 +76,21 @@ public class MetricServiceImpl implements MetricService {
         metricDTO.setMinimumThreshold(metric.getMinimumThreshold());
         metricDTO.setMaximumThreshold(metric.getMaximumThreshold());
         return metricDTO;
+    }
+
+    @Override
+    public List<ConnectMetricDTO> getAgentMetrics(Long agentId){
+        List<Tuple> results = metricRepository.getAgentMetrics(agentId);
+        return results.stream()
+                .map(result -> {
+                    ConnectMetricDTO dto = new ConnectMetricDTO();
+                    dto.setId(result.get("id", Long.class));
+                    dto.setMetric_info_code(String.valueOf(MetricCategory.valueOf(result.get("metric_info_code", String.class))));
+                    dto.setValue(result.get("value", BigDecimal.class));
+                    dto.setAgent_id(result.get("agent_id", Long.class));
+                    dto.setQueue_id(result.get("queue_id", Long.class));
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 }

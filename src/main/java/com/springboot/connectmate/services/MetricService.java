@@ -1,5 +1,6 @@
 package com.springboot.connectmate.services;
 
+import com.springboot.connectmate.dtos.Metric.ConnectMetricDTO;
 import com.springboot.connectmate.dtos.Metric.MetricDTO;
 import com.springboot.connectmate.dtos.Metric.MetricDescriptionDTO;
 import com.springboot.connectmate.enums.MetricCategory;
@@ -15,4 +16,5 @@ public interface MetricService {
 
     MetricThresholdsDTO updateMetricThresholds(Long metricId, BigDecimal minimumThreshold, BigDecimal maximumThreshold);
 
+    List<ConnectMetricDTO> getAgentMetrics(Long agentId);
 }
