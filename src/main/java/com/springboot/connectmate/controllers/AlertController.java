@@ -53,8 +53,8 @@ public class AlertController {
             description = "Alerts fetched successfully"
     )
     @GetMapping
-    public List<OldAlertDTO> getAllAlerts() {
-        return List.of(new OldAlertDTO());
+    public List<AlertDTO> getAllAlerts() {
+        return alertService.getAllAlerts();
     }
 
     // Get Alert by ID API Rest API

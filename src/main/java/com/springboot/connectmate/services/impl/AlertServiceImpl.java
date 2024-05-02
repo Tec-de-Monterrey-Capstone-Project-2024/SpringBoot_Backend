@@ -11,6 +11,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class AlertServiceImpl implements AlertService {
 
@@ -26,6 +29,25 @@ public class AlertServiceImpl implements AlertService {
         this.thresholdBreachRepository = thresholdBreachRepository;
         this.metricService = metricService;
         this.mapper = mapper;
+    }
+
+    @Override
+    public List<AlertDTO> getAllAlerts() {
+        List<ThresholdBreach> breaches = thresholdBreachRepository.findAll();
+        return breaches.stream().map(breach -> {
+            // Get the Metric Description DTO for each breach
+            MetricDescriptionDTO metricDescription = metricService.getMetricDescriptionById(breach.getMetric().getId());
+
+            // Return the constructed AlertDTO
+            return new AlertDTO(
+                    breach.getId(),
+                    metricDescription,
+                    breach.getValue(),
+                    breach.getBreachCategory(),
+                    breach.getOccurredAt()
+            );
+        }).collect(Collectors.toList());
+
     }
 
     @Override
