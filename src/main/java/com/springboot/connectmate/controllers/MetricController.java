@@ -54,7 +54,7 @@ public class MetricController {
     }
 
 
-    // Endpoint para eliminar (resetear a null) los umbrales de una métrica específica
+    // Reset the thresholds of a metric
     @PatchMapping("/{metricId}/remove-thresholds")
     public ResponseEntity<MetricThresholdsDTO> removeThresholds(@PathVariable Long metricId) {
     BigDecimal zeroThreshold = BigDecimal.ZERO; 
