@@ -1,5 +1,7 @@
 package com.springboot.connectmate.controllers;
 
+import com.springboot.connectmate.dtos.User.UpdateUserDTO;
+import com.springboot.connectmate.dtos.User.UserInfoDTO;
 import com.springboot.connectmate.dtos.User.UserDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -95,8 +97,8 @@ public class UserController {
             description = "User partially updated successfully"
     )
     @PatchMapping("/{id}")
-    public ResponseEntity<UserDTO> patchUser(@PathVariable(name = "id") long id, @RequestBody Map<String, Object> fields) {
-        UserDTO userResponse = userService.patchUser(id, fields);
+    public ResponseEntity<UserInfoDTO> patchUser(@PathVariable(name = "id") long id, @RequestBody UpdateUserDTO fields) {
+        UserInfoDTO userResponse = userService.patchUser(id, fields);
         return new ResponseEntity<>(userResponse, HttpStatus.OK);
     }
 
