@@ -59,7 +59,7 @@ public class MetricController {
 
 
     // Reset the thresholds of a metric
-    @PatchMapping("/remove-thresholds/{metricId}")
+    @DeleteMapping("/remove-thresholds/{metricId}")
     public ResponseEntity<MetricThresholdsDTO> removeThresholds(@PathVariable Long metricId) {
         BigDecimal zeroThreshold = BigDecimal.ZERO; 
         BigDecimal maxThreshold = new BigDecimal("9999999"); 
