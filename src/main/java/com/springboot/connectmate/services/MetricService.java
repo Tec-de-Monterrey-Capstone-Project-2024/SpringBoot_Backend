@@ -4,7 +4,7 @@ import com.springboot.connectmate.dtos.Metric.ConnectMetricDTO;
 import com.springboot.connectmate.dtos.Metric.MetricDTO;
 import com.springboot.connectmate.dtos.Metric.MetricDescriptionDTO;
 import com.springboot.connectmate.enums.MetricCategory;
-
+import com.springboot.connectmate.models.Metric;
 import com.springboot.connectmate.dtos.Metric.MetricThresholdsDTO;
 
 import java.math.BigDecimal;
@@ -14,6 +14,7 @@ public interface MetricService {
     MetricDescriptionDTO getMetricDescriptionById(Long metricId);
     List<MetricDTO> getContactCenterMetrics();
 
+    MetricThresholdsDTO removeMetricThresholds(Long metricId);
     MetricThresholdsDTO updateMetricThresholds(Long metricId, BigDecimal minimumThreshold, BigDecimal maximumThreshold);
 
     List<ConnectMetricDTO> getAgentMetrics(Long agentId);

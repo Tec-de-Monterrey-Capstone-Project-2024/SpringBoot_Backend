@@ -63,7 +63,14 @@ public class MetricServiceImpl implements MetricService {
     }
 
     @Override
-    @Transactional
+    public MetricThresholdsDTO removeMetricThresholds(Long metricId) {
+        metricRepository.updateThresholds(metricId, BigDecimal.ZERO, new BigDecimal("9999999"));
+        Metric metric = metricRepository.findById(metricId).orElseThrow(() -> new ResourceNotFoundException("Metric", "id", metricId));
+
+        return mapper.map(metric, MetricThresholdsDTO.class);
+    }
+
+    @Override
     public MetricThresholdsDTO updateMetricThresholds(Long metricId, BigDecimal minimumThreshold, BigDecimal maximumThreshold) {
         Metric metric = metricRepository.findById(metricId).orElseThrow(() -> new ResourceNotFoundException("Metric", "id", metricId));
 
@@ -71,12 +78,9 @@ public class MetricServiceImpl implements MetricService {
         metric.setMaximumThreshold(maximumThreshold);
         metric = metricRepository.save(metric);
 
-        MetricThresholdsDTO metricDTO = new MetricThresholdsDTO();
-        metricDTO.setMetricId(metric.getId());
-        metricDTO.setMinimumThreshold(metric.getMinimumThreshold());
-        metricDTO.setMaximumThreshold(metric.getMaximumThreshold());
-        return metricDTO;
+        return mapper.map(metric, MetricThresholdsDTO.class);
     }
+
 
     @Override
     public List<ConnectMetricDTO> getAgentMetrics(Long agentId){
