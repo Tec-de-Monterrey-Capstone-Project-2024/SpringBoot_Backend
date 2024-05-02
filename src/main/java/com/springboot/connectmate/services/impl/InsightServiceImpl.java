@@ -30,7 +30,6 @@ public class InsightServiceImpl implements InsightService {
     }
 
     @Override
-    @Transactional
     public List<InsightDTO> getInsightsByAgentId(Long agentId) {
         List<Insight> insights = insightRepository.findAllByAgentId(agentId);
         List<InsightDTO> insightDTOs = new ArrayList<>();
