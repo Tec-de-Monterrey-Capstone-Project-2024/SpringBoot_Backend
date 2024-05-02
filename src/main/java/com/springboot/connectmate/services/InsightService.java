@@ -9,6 +9,7 @@ public interface InsightService {
     InsightDTO getInsightById(Long insightId);
     InsightDTO getInsightByBreachId(Long breachId);
     List<InsightDTO> getQueueInsights();
+    List<InsightDTO> getAllInsights();
     List<InsightDTO> getInsightsByStatus(InsightStatus status);
     void updateInsightStatus(Long id, InsightStatus newStatus);
 }
