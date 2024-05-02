@@ -15,8 +15,4 @@ public interface MetricRepository extends JpaRepository<Metric, Long> {
     @Procedure("sp_get_contact_center_metrics")
     List<Object[]> getContactCenterMetrics();
     
-    @Transactional
-    @Modifying
-    @Query("UPDATE Metric m SET m.minimumThreshold = NULL, m.maximumThreshold = NULL WHERE m.user.id = :userId AND m.queue.id = :queueId AND m.code = :code")
-    void removeThresholds(Long userId, Long queueId, MetricCategory code);
 }

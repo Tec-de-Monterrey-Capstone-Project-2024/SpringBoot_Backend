@@ -3,12 +3,13 @@ package com.springboot.connectmate.services.impl;
 import com.springboot.connectmate.dtos.Metric.MetricDTO;
 import com.springboot.connectmate.enums.MetricCategory;
 import com.springboot.connectmate.dtos.Metric.MetricDescriptionDTO;
+import com.springboot.connectmate.dtos.Metric.MetricThresholdsDTO;
 import com.springboot.connectmate.exceptions.ResourceNotFoundException;
 import com.springboot.connectmate.models.Metric;
 import com.springboot.connectmate.repositories.MetricRepository;
 import com.springboot.connectmate.services.MetricService;
 
-import com.springboot.connectmate.dtos.Metric.SetThresholdsDTO;
+import com.springboot.connectmate.dtos.Metric.MetricThresholdsDTO;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,18 +62,17 @@ public class MetricServiceImpl implements MetricService {
 
     @Override
     @Transactional
-    public void removeMetricThresholds(Long userId, Long queueId, MetricCategory code) {
-        metricRepository.removeThresholds(userId, queueId, code);
-    }
+    public MetricThresholdsDTO updateMetricThresholds(Long metricId, BigDecimal minimumThreshold, BigDecimal maximumThreshold) {
+        Metric metric = metricRepository.findById(metricId).orElseThrow(() -> new ResourceNotFoundException("Metric", "id", metricId));
 
+        metric.setMinimumThreshold(minimumThreshold);
+        metric.setMaximumThreshold(maximumThreshold);
+        metric = metricRepository.save(metric);
 
-    @Override
-    @Transactional
-    public void updateMetricThresholds(SetThresholdsDTO thresholdsDTO) {
-        metricRepository.findById(thresholdsDTO.getMetricId()).ifPresent(metric -> {
-            metric.setMinimumThreshold(thresholdsDTO.getMinimumThreshold());
-            metric.setMaximumThreshold(thresholdsDTO.getMaximumThreshold());
-            metricRepository.save(metric);
-        });
+        MetricThresholdsDTO metricDTO = new MetricThresholdsDTO();
+        metricDTO.setMetricId(metric.getId());
+        metricDTO.setMinimumThreshold(metric.getMinimumThreshold());
+        metricDTO.setMaximumThreshold(metric.getMaximumThreshold());
+        return metricDTO;
     }
 }

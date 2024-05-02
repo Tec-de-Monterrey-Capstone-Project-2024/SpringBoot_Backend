@@ -1,12 +1,12 @@
 package com.springboot.connectmate.controllers;
 
 import com.springboot.connectmate.dtos.Metric.MetricDTO;
-import com.springboot.connectmate.dtos.Metric.RemoveThresholdsDTO;
+import com.springboot.connectmate.dtos.Metric.MetricThresholdsDTO;
 import com.springboot.connectmate.services.MetricService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import com.springboot.connectmate.dtos.Metric.SetThresholdsDTO;
+import com.springboot.connectmate.dtos.Metric.MetricThresholdsDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 
+import org.springframework.web.bind.annotation.PathVariable;
+
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -51,26 +54,15 @@ public class MetricController {
     }
 
 
-    // Set thresholds to null for a specific metric.
-    @DeleteMapping("/remove-thresholds")
-    @Operation(
-            summary = "Remove thresholds from metrics",
-            description = "This operation sets the thresholds (minimum and maximum) of specified metrics to null based on user, queue, and metric category."
-    )
-    @ApiResponse(
-            responseCode = "200",
-            description = "Thresholds removed successfully"
-    )
-    public ResponseEntity<Void> removeThresholds(@RequestBody RemoveThresholdsDTO dto) {
-        metricService.removeMetricThresholds(dto.getUserId(), dto.getQueueId(), dto.getCode());
-        return ResponseEntity.ok().build();
-    }
+    // Endpoint para eliminar (resetear a null) los umbrales de una métrica específica
+    @PatchMapping("/{metricId}/remove-thresholds")
+    public ResponseEntity<MetricThresholdsDTO> removeThresholds(@PathVariable Long metricId) {
+    BigDecimal zeroThreshold = BigDecimal.ZERO; 
+    BigDecimal maxThreshold = new BigDecimal("9999999"); 
 
-    // Set metrics for a specific threshold.
-    @PatchMapping("/set-thresholds")
-    @Operation(summary = "Update metric thresholds", description = "Updates the minimum and maximum thresholds for a specific metric.")
-    public ResponseEntity<Void> setThresholds(@RequestBody SetThresholdsDTO thresholdsDTO) {
-        metricService.updateMetricThresholds(thresholdsDTO);
-        return ResponseEntity.ok().build();
-    }
+    MetricThresholdsDTO updatedMetric = metricService.updateMetricThresholds(metricId, zeroThreshold, maxThreshold);
+    return ResponseEntity.ok(updatedMetric);
+}
+
+    
 }
