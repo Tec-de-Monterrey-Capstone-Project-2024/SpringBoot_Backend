@@ -29,7 +29,6 @@ public class InsightDTO {
     )
     private Long thresholdBreachId;
 
-
     @Schema(
             description = "Status of the Insight",
             example = "TO_DO"

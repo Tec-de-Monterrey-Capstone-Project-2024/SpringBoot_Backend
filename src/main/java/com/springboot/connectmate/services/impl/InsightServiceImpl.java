@@ -6,7 +6,6 @@ import com.springboot.connectmate.enums.InsightStatus;
 import com.springboot.connectmate.exceptions.ResourceNotFoundException;
 import com.springboot.connectmate.models.Insight;
 import com.springboot.connectmate.repositories.InsightRepository;
-import com.springboot.connectmate.repositories.UserRepository;
 import com.springboot.connectmate.services.InsightService;
 import com.springboot.connectmate.services.TemplateService;
 import org.modelmapper.ModelMapper;
@@ -40,7 +39,6 @@ public class InsightServiceImpl implements InsightService {
             insightDTOs.add(dto);
         }
         return insightDTOs;
-
     }
 
 
@@ -56,7 +54,6 @@ public class InsightServiceImpl implements InsightService {
         // Inject Template Info into InsightDTO
         mapper.map(templateInfo, completeInsight);
         return completeInsight;
-
     }
 
     @Override
@@ -105,5 +102,4 @@ public class InsightServiceImpl implements InsightService {
         insight.setStatus(newStatus);
         insightRepository.save(insight);
     }
-      
 }

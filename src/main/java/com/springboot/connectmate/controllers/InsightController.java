@@ -161,7 +161,7 @@ public class InsightController {
 
     @ApiResponse(
             responseCode = "200",
-            description = "Insight fetched successfully"
+            description = "Insights fetched successfully"
     )
     @Operation(
             summary = "Get Insights by AgentID",
