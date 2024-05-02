@@ -5,10 +5,10 @@ import lombok.Data;
 
 @Data
 @Schema(
-        name = "UpdateUserRequestDTO",
-        description = "Data Transfer Object for updating User"
+        name = "UpdateUserDTO",
+        description = "DTO for Updating User"
 )
-public class UpdateUserRequestDTO {
+public class UpdateUserDTO {
 
     @Schema(
             description = "First name of the user",

@@ -1,8 +1,7 @@
 package com.springboot.connectmate.controllers;
 
+import com.springboot.connectmate.dtos.User.UpdateUserDTO;
 import com.springboot.connectmate.dtos.User.UserInfoDTO;
-import com.springboot.connectmate.dtos.User.UpdateUserRequestDTO;
-import com.springboot.connectmate.exceptions.ResourceNotFoundException;
 import com.springboot.connectmate.dtos.User.UserDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -98,23 +97,9 @@ public class UserController {
             description = "User partially updated successfully"
     )
     @PatchMapping("/{id}")
-    public ResponseEntity<UserDTO> patchUser(@PathVariable(name = "id") long id, @RequestBody Map<String, Object> fields) {
-        UserDTO userResponse = userService.patchUser(id, fields);
+    public ResponseEntity<UserInfoDTO> patchUser(@PathVariable(name = "id") long id, @RequestBody UpdateUserDTO fields) {
+        UserInfoDTO userResponse = userService.patchUser(id, fields);
         return new ResponseEntity<>(userResponse, HttpStatus.OK);
-    }
-
-    @PatchMapping("/{id}/update-partially")
-    public ResponseEntity<UserInfoDTO> updateUserPartially(@PathVariable(name = "id") long id, @RequestBody UpdateUserRequestDTO updateUserRequestDTO) {
-        UserDTO updatedUser = userService.updateUserPartially(id, updateUserRequestDTO);
-        UserInfoDTO userInfoResponse = convertToUserInfoDTO(updatedUser);
-        return ResponseEntity.ok(userInfoResponse);
-    }
-
-    private UserInfoDTO convertToUserInfoDTO(UserDTO userDTO) {
-        UserInfoDTO userInfoDTO = new UserInfoDTO();
-        userInfoDTO.setFirstName(userDTO.getFirstName());
-        userInfoDTO.setLastName(userDTO.getLastName());
-        return userInfoDTO;
     }
 
     // Delete User Rest API

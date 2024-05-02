@@ -31,7 +31,7 @@ public class Queue {
     private String name;
 
     // Link to Users(Agents) Table
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "queues")
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "queues")
     private Set<User> users;
 
     // Link to Metrics Table

@@ -1,7 +1,8 @@
 package com.springboot.connectmate.services.impl;
 
+import com.springboot.connectmate.dtos.User.UpdateUserDTO;
 import com.springboot.connectmate.dtos.User.UserDTO;
-import com.springboot.connectmate.dtos.User.UpdateUserRequestDTO;
+import com.springboot.connectmate.dtos.User.UserInfoDTO;
 import com.springboot.connectmate.exceptions.ResourceNotFoundException;
 import com.springboot.connectmate.models.User;
 import com.springboot.connectmate.services.UserService;
@@ -66,20 +67,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO updateUserPartially(long id, UpdateUserRequestDTO updateUserRequestDTO) {
-        UserDTO existingUser = getUserById(id);
-        if (existingUser == null) {
-            throw new ResourceNotFoundException("User", "id", id);
-        }
-        existingUser.setFirstName(updateUserRequestDTO.getFirstName());
-        existingUser.setLastName(updateUserRequestDTO.getLastName());
-        if (updateUserRequestDTO.getPassword() != null && !updateUserRequestDTO.getPassword().isEmpty()) {
-            existingUser.setPassword(updateUserRequestDTO.getPassword());
-        }
-        return updateUser(id, existingUser);
-    }
-
-    @Override
     public UserDTO updateUser(long id, UserDTO userDTO) {
         // Get User by ID
         User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
@@ -98,33 +85,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO patchUser(long id, Map<String, Object> fields) {
+    public UserInfoDTO patchUser(long id, UpdateUserDTO updateUserDTO) {
         // Get User by ID
         User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
+        // Patch Fields
+        if (updateUserDTO.getFirstName() != null) {
+            user.setFirstName(updateUserDTO.getFirstName());
+        }
+        if (updateUserDTO.getLastName() != null) {
+            user.setLastName(updateUserDTO.getLastName());
+        }
+        if (updateUserDTO.getPassword() != null) {
+            user.setPassword(updateUserDTO.getPassword()); // Ensure password is hashed if necessary
+        }
+        userRepository.save(user);
 
-        fields.forEach((key, value) -> {
-            // Map fields to properties of User
-            switch (key) {
-                case "first_name":
-                    user.setFirstName((String) value);
-                    break;
-                case "last_name":
-                    user.setLastName((String) value);
-                    break;
-                case "email":
-                    user.setEmail((String) value);
-                    break;
-                case "password":
-                    user.setPassword((String) value);
-                    break;
-
-            }
-        });
-
-        User updatedUser = userRepository.save(user);
-
-        // Convert to DTO and return (assuming there's a method to convert an entity to DTO)
-        return convertEntityModelToDTO(updatedUser);
+        return mapper.map(user, UserInfoDTO.class);
     }
 
     @Override

@@ -49,7 +49,7 @@ public class User {
 
     // Link to Queues Table
     // Declares the Many to Many relationship between User and Queue
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "queue_agents",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "queue_id", referencedColumnName = "id")
