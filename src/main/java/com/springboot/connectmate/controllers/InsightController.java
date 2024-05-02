@@ -43,9 +43,9 @@ public class InsightController {
     })
     @Operation(summary = "Get all insights for the Call Center")
     @GetMapping
-    public ResponseEntity<Map<Long, InsightDTO>> getAllInsights() {
-        return ResponseEntity.ok(insightService.getAllInsights().stream()
-                .collect(Collectors.toMap(InsightDTO::getId, Function.identity(), (existing, replacement) -> existing)));
+    public ResponseEntity<List<InsightDTO>> getAllInsights() {
+        List<InsightDTO> insights = insightService.getAllInsights();
+        return ResponseEntity.ok(insights);
     }
 
     // Get Insight by ID API
