@@ -4,10 +4,14 @@ import com.springboot.connectmate.dtos.Metric.ConnectMetricDTO;
 import com.springboot.connectmate.dtos.Metric.MetricDTO;
 import com.springboot.connectmate.enums.MetricCategory;
 import com.springboot.connectmate.dtos.Metric.MetricDescriptionDTO;
+import com.springboot.connectmate.dtos.Metric.MetricThresholdsDTO;
 import com.springboot.connectmate.exceptions.ResourceNotFoundException;
 import com.springboot.connectmate.models.Metric;
 import com.springboot.connectmate.repositories.MetricRepository;
 import com.springboot.connectmate.services.MetricService;
+
+import com.springboot.connectmate.dtos.Metric.MetricThresholdsDTO;
+
 import jakarta.persistence.Tuple;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +61,19 @@ public class MetricServiceImpl implements MetricService {
                 })
                 .collect(Collectors.toList());
     }
+
+    @Override
+    @Transactional
+    public MetricThresholdsDTO updateMetricThresholds(Long metricId, BigDecimal minimumThreshold, BigDecimal maximumThreshold) {
+        Metric metric = metricRepository.findById(metricId).orElseThrow(() -> new ResourceNotFoundException("Metric", "id", metricId));
+
+        metric.setMinimumThreshold(minimumThreshold);
+        metric.setMaximumThreshold(maximumThreshold);
+        metricRepository.save(metric);
+
+        return mapper.map(metric, MetricThresholdsDTO.class);
+    }
+
 
     @Override
     public List<ConnectMetricDTO> getAgentMetrics(Long agentId){

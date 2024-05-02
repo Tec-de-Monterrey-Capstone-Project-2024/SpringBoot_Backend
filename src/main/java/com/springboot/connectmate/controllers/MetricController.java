@@ -3,17 +3,28 @@ package com.springboot.connectmate.controllers;
 import com.springboot.connectmate.dtos.Insight.InsightDTO;
 import com.springboot.connectmate.dtos.Metric.ConnectMetricDTO;
 import com.springboot.connectmate.dtos.Metric.MetricDTO;
+import com.springboot.connectmate.dtos.Metric.MetricThresholdsDTO;
 import com.springboot.connectmate.enums.InsightStatus;
 import com.springboot.connectmate.services.MetricService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import com.springboot.connectmate.dtos.Metric.MetricThresholdsDTO;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+
+import org.springframework.web.bind.annotation.PathVariable;
+
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -45,6 +56,25 @@ public class MetricController {
     public List<MetricDTO> getContactCenterMetrics(){
         return metricService.getContactCenterMetrics();
     }
+
+
+    // Reset the thresholds of a metric
+    @DeleteMapping("/remove-thresholds/{metricId}")
+    public ResponseEntity<MetricThresholdsDTO> removeThresholds(@PathVariable Long metricId) {
+        BigDecimal zeroThreshold = BigDecimal.ZERO; 
+        BigDecimal maxThreshold = new BigDecimal("9999999"); 
+
+        MetricThresholdsDTO updatedMetric = metricService.updateMetricThresholds(metricId, zeroThreshold, maxThreshold);
+        return ResponseEntity.ok(updatedMetric);
+    }
+
+    // Endpoint to set the thresholds for a specific metric
+    @PatchMapping("/set-thresholds/{metricId}")
+    public ResponseEntity<MetricThresholdsDTO> setThresholds(@PathVariable Long metricId, @RequestBody MetricThresholdsDTO thresholdsDTO) {
+        MetricThresholdsDTO updatedMetric = metricService.updateMetricThresholds(metricId, thresholdsDTO.getMinimumThreshold(), thresholdsDTO.getMaximumThreshold());
+        return ResponseEntity.ok(updatedMetric);
+    }
+    
 
     // Get all metrics for a single agent.
     @Operation(
