@@ -68,6 +68,12 @@ public class MetricController {
         return ResponseEntity.ok(updatedMetric);
     }
 
+    // Endpoint to set the thresholds for a specific metric
+    @PatchMapping("/set-thresholds/{metricId}")
+    public ResponseEntity<MetricThresholdsDTO> setThresholds(@PathVariable Long metricId, @RequestBody MetricThresholdsDTO thresholdsDTO) {
+        MetricThresholdsDTO updatedMetric = metricService.updateMetricThresholds(metricId, thresholdsDTO.getMinimumThreshold(), thresholdsDTO.getMaximumThreshold());
+        return ResponseEntity.ok(updatedMetric);
+    }
     
 
     // Get all metrics for a single agent.
