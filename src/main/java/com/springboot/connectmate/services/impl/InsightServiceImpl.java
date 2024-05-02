@@ -30,6 +30,20 @@ public class InsightServiceImpl implements InsightService {
     }
 
     @Override
+    public List<InsightDTO> getInsightsByAgentId(Long agentId) {
+        List<Insight> insights = insightRepository.findAllByAgentId(agentId);
+        List<InsightDTO> insightDTOs = new ArrayList<>();
+        for (Insight insight : insights) {
+            InsightDTO dto = getInsightById(insight.getId());
+            insightDTOs.add(dto);
+        }
+        return insightDTOs;
+    }
+
+
+
+
+
     public InsightDTO getInsightById(Long insightId) {
         // Get Insight by ID and Template by Breach ID
         Insight insight = insightRepository.findById(insightId).orElseThrow(() -> new ResourceNotFoundException("Insight", "id", insightId));

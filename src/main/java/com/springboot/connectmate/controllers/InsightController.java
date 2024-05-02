@@ -129,6 +129,19 @@ public class InsightController {
         return ResponseEntity.noContent().build();
     }
 
+    @ApiResponse(
+            responseCode = "200",
+            description = "Insights fetched successfully"
+    )
+    @Operation(
+            summary = "Get Insights by AgentID",
+            description = "Get all insights from one agent"
+    )
+    @GetMapping("/agents/{agentId}")
+    public List<InsightDTO> getInsightsByAgentId(@PathVariable("agentId") Long id) {
+        return insightService.getInsightsByAgentId(id);
+    }
+
     @Operation(
       summary = "Update Insight Status",
       description = "Updates the Insight Status With a New Status"
@@ -145,5 +158,6 @@ public class InsightController {
         insightService.updateInsightStatus(id, newStatus);
         return ResponseEntity.ok("Status updated successfully");
     }
+
 
 }
