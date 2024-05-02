@@ -84,7 +84,7 @@ public class InsightServiceImpl implements InsightService {
                     dto.setSummaryTemplate((String) result[2]);
                     dto.setSituationTemplate((String) result[3]);
                     dto.setActionsTemplate((String) result[4]);
-                     dto.setThresholdBreachId((Long) result[5]);
+                    dto.setThresholdBreachId((Long) result[5]);
                     dto.setConstructedDescription((String)result[6]);
                     return dto;
                 })
