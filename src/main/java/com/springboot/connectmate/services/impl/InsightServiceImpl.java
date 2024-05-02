@@ -95,11 +95,23 @@ public class InsightServiceImpl implements InsightService {
                 .map(insight -> mapper.map(insight, InsightDTO.class))
                 .collect(Collectors.toList());
     }
-  
+    
     @Override
     public void updateInsightStatus(Long insightId, InsightStatus newStatus) {
         Insight insight = insightRepository.findById(insightId).orElseThrow(() -> new ResourceNotFoundException("Insight", "id", insightId));
         insight.setStatus(newStatus);
         insightRepository.save(insight);
+    }
+
+    // TODO: FIX N+1 QUERY PROBLEM
+    @Override
+    public List<InsightDTO> getAllInsights() {
+        List<Insight> insights = insightRepository.findAll();
+        List<InsightDTO> insightDTOs = new ArrayList<>();
+        for (Insight insight : insights) {
+                InsightDTO dto = getInsightById(insight.getId());
+                insightDTOs.add(dto);
+        }
+        return insightDTOs;
     }
 }
