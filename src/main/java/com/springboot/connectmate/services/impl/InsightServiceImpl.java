@@ -80,12 +80,15 @@ public class InsightServiceImpl implements InsightService {
                 .map(insight -> mapper.map(insight, InsightDTO.class))
                 .collect(Collectors.toList());
     }
+    
     @Override
     public void updateInsightStatus(Long insightId, InsightStatus newStatus) {
         Insight insight = insightRepository.findById(insightId).orElseThrow(() -> new ResourceNotFoundException("Insight", "id", insightId));
         insight.setStatus(newStatus);
         insightRepository.save(insight);
     }
+
+    // TODO: FIX N+1 QUERY PROBLEM
     @Override
     public List<InsightDTO> getAllInsights() {
         List<Insight> insights = insightRepository.findAll();
@@ -96,13 +99,4 @@ public class InsightServiceImpl implements InsightService {
         }
         return insightDTOs;
     }
-    /* Ya no usé esta función, pero la dejo comentada por si algun dia la gustan refactorizar o hacerle algo
-    private InsightDTO convertToDTO(Insight insight) {
-        InsightDTO dto = mapper.map(insight, InsightDTO.class);
-        TemplateDTO template = templateService.getRightTemplateByBreachId(insight.getThresholdBreach().getId());
-        if (template != null) {
-            mapper.map(template, dto);
-        }
-        return dto;
-    } */
 }
