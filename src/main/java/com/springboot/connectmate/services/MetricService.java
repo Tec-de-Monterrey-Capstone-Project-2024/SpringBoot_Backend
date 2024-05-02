@@ -13,9 +13,6 @@ import java.util.List;
 public interface MetricService {
     MetricDescriptionDTO getMetricDescriptionById(Long metricId);
     List<MetricDTO> getContactCenterMetrics();
-
-    MetricThresholdsDTO removeMetricThresholds(Long metricId);
     MetricThresholdsDTO updateMetricThresholds(Long metricId, BigDecimal minimumThreshold, BigDecimal maximumThreshold);
-
     List<ConnectMetricDTO> getAgentMetrics(Long agentId);
 }
