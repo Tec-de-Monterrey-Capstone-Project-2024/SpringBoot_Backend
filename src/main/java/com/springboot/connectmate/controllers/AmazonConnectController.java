@@ -1,5 +1,6 @@
 package com.springboot.connectmate.controllers;
 
+import com.springboot.connectmate.dtos.AmazonConnect.*;
 import com.springboot.connectmate.services.AmazonConnectService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,19 +29,33 @@ public class AmazonConnectController {
     }
 
     @GetMapping("/instances")
-    public ResponseEntity<List<String>> listConnectInstances() {
+    public ResponseEntity<List<ConnectInstanceDTO>> listConnectInstances() {
         return ResponseEntity.ok(amazonConnectService.listConnectInstances());
     }
 
     @GetMapping("/instances/{instanceId}/queues")
-    public ResponseEntity<List<String>> listQueues(@PathVariable(name = "instanceId") String instanceId) {
+    public ResponseEntity<List<ConnectQueueDTO>> listQueues(@PathVariable(name = "instanceId") String instanceId) {
         return ResponseEntity.ok(amazonConnectService.listQueues(instanceId));
     }
 
+    @GetMapping("/instances/{instanceId}/users")
+    public ResponseEntity<List<ConnectUserDTO>> listUsers(@PathVariable(name = "instanceId") String instanceId) {
+        return ResponseEntity.ok(amazonConnectService.listUsers(instanceId));
+    }
+
     @GetMapping("/instances/{instanceId}/agents")
-    public ResponseEntity<List<String>> listAgents(@PathVariable(name = "instanceId") String instanceId) {
+    public ResponseEntity<List<ConnectAgentDTO>> listAgents(@PathVariable(name = "instanceId") String instanceId) {
         return ResponseEntity.ok(amazonConnectService.listAgents(instanceId));
     }
 
+    @GetMapping("/instances/{instanceId}/historial-metrics")
+    public ResponseEntity<List<String>> getHistoricalMetrics(@PathVariable(name = "instanceId") String instanceId) {
+        return ResponseEntity.ok(amazonConnectService.getHistoricalMetrics(instanceId));
+    }
+
+    @GetMapping("/instances/{instanceId}/routing-profiles")
+    public ResponseEntity<List<ConnectRoutingProfileDTO>> getRoutingProfiles(@PathVariable(name = "instanceId") String instanceId) {
+        return ResponseEntity.ok(amazonConnectService.listRoutingProfiles(instanceId));
+    }
 
 }
