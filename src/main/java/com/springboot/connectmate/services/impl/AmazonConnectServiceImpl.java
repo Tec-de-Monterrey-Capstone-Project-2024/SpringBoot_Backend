@@ -157,5 +157,43 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
         return "to do: do the controllers/services for these connect list requests";
     }
 
+    @Override
+    public List<String> getCurrentData(String instanceId) {
+        List<String> states = new ArrayList<>();
+        states.add("INCOMING");
+        states.add("PENDING");
+        states.add("CONNECTING");
+        states.add("CONNECTED");
+        states.add("CONNECTED_ONHOLD");
+        states.add("MISSED");
+        states.add("ERROR");
+        states.add("ENDED");
+        states.add("REJECTED");
+
+        ContactFilter contactFilter = new ContactFilter()
+                .withContactStates(states);
+
+        UserDataFilters userDataFilters = new UserDataFilters()
+                .withQueues(listQueues(instanceId).stream()
+                        .map(ConnectQueueDTO::getId)
+                        .collect(Collectors.toList()));
+
+        System.out.println(listQueues(instanceId).stream()
+                .map(ConnectQueueDTO::getId)
+                .collect(Collectors.toList()));
+
+        GetCurrentUserDataRequest getCurrentUserDataRequest = new GetCurrentUserDataRequest()
+                .withFilters(userDataFilters)
+                .withInstanceId(instanceId);
+
+        System.out.println(getCurrentUserDataRequest.toString());
+
+        GetCurrentUserDataResult getCurrentUserDataResult = amazonConnectClient().getCurrentUserData(getCurrentUserDataRequest);
+        System.out.println(getCurrentUserDataResult.toString());
+        return getCurrentUserDataResult.getUserDataList().stream()
+                .map(UserData::toString)
+                .collect(Collectors.toList());
+    }
+
 
 }

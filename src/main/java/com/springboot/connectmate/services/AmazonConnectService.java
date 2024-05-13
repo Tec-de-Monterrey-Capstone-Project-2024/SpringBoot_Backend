@@ -17,4 +17,6 @@ public interface AmazonConnectService {
     String getTests(String instanceId);
     String listTests(String instanceId);
 
+    List<String> getCurrentData(String instanceId);
+
 }

@@ -9,4 +9,5 @@ public class ConnectUserDTO {
     private String username;
     private String lastModifiedTime;
     private String lastModifiedRegion;
+    private String hierarchyGroupId;
 }

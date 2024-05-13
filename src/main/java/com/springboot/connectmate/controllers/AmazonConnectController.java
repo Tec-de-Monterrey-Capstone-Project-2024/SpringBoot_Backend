@@ -58,4 +58,9 @@ public class AmazonConnectController {
         return ResponseEntity.ok(amazonConnectService.listRoutingProfiles(instanceId));
     }
 
+    @GetMapping("/instances/{instanceId}/queueAgents")
+    public ResponseEntity<List<String>> getQueueAgents(@PathVariable(name = "instanceId") String instanceId) {
+        return ResponseEntity.ok(amazonConnectService.getCurrentData(instanceId));
+    }
+
 }
