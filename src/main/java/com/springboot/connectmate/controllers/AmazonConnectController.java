@@ -2,6 +2,9 @@ package com.springboot.connectmate.controllers;
 
 import com.springboot.connectmate.dtos.AmazonConnect.*;
 import com.springboot.connectmate.services.AmazonConnectService;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +33,9 @@ public class AmazonConnectController {
 
     @ApiResponse(
             responseCode = "200",
-            description = "List of instances fetched successfully"
+            content = @Content(mediaType = "application/json",
+                               array = @ArraySchema(schema = @Schema(implementation = ConnectInstanceDTO.class))),
+            description = "List of instances fetched successfully."
     )
     @GetMapping("/instances")
     public ResponseEntity<List<ConnectInstanceDTO>> listConnectInstances() {
@@ -39,7 +44,9 @@ public class AmazonConnectController {
 
     @ApiResponse(
             responseCode = "200",
-            description = "Queue list of a given instance fetched successfully"
+            content = @Content(mediaType = "application/json",
+                               array = @ArraySchema(schema = @Schema(implementation = ConnectQueueDTO.class))),
+            description = "Queue list of a given instance fetched successfully."
     )
     @GetMapping("/instances/{instanceId}/queues")
     public ResponseEntity<List<ConnectQueueDTO>> listQueues(@PathVariable(name = "instanceId") String instanceId) {
@@ -48,7 +55,9 @@ public class AmazonConnectController {
 
     @ApiResponse(
             responseCode = "200",
-            description = "List of users for a given instance fetched successfully"
+            content = @Content(mediaType = "application/json",
+                               array = @ArraySchema(schema = @Schema(implementation = ConnectUserDTO.class))),
+            description = "List of users for a given instance fetched successfully."
     )
     @GetMapping("/instances/{instanceId}/users")
     public ResponseEntity<List<ConnectUserDTO>> listUsers(@PathVariable(name = "instanceId") String instanceId) {
@@ -57,7 +66,9 @@ public class AmazonConnectController {
 
     @ApiResponse(
             responseCode = "200",
-            description = "List of agent statues for a given instance fetched successfully"
+            content = @Content(mediaType = "application/json",
+                               array = @ArraySchema(schema = @Schema(implementation = ConnectAgentDTO.class))),
+            description = "List of agent statues for a given instance fetched successfully."
     )
     @GetMapping("/instances/{instanceId}/agents")
     public ResponseEntity<List<ConnectAgentDTO>> listAgents(@PathVariable(name = "instanceId") String instanceId) {
@@ -66,7 +77,9 @@ public class AmazonConnectController {
 
     @ApiResponse(
             responseCode = "200",
-            description = "List of historical metrics for a given instance fetched successfully"
+            content = @Content(mediaType = "application/json",
+                               array = @ArraySchema(schema = @Schema(implementation = String.class))),
+            description = "List of historical metrics for a given instance fetched successfully."
     )
     @GetMapping("/instances/{instanceId}/historial-metrics")
     public ResponseEntity<List<String>> getHistoricalMetrics(@PathVariable(name = "instanceId") String instanceId) {
@@ -75,7 +88,9 @@ public class AmazonConnectController {
 
     @ApiResponse(
             responseCode = "200",
-            description = "List of routing profiles for a given instance fetched successfully"
+            content = @Content(mediaType = "application/json",
+                               array = @ArraySchema(schema = @Schema(implementation = ConnectRoutingProfileDTO.class))),
+            description = "List of routing profiles for a given instance fetched successfully."
     )
     @GetMapping("/instances/{instanceId}/routing-profiles")
     public ResponseEntity<List<ConnectRoutingProfileDTO>> getRoutingProfiles(@PathVariable(name = "instanceId") String instanceId) {
