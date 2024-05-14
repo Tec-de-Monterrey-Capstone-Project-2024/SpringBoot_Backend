@@ -46,7 +46,7 @@ public class AmazonConnectController {
             responseCode = "200",
             content = @Content(mediaType = "application/json",
                                array = @ArraySchema(schema = @Schema(implementation = ConnectQueueDTO.class))),
-            description = "Queue list of a given instance fetched successfully."
+            description = "List of queues for a given instance fetched successfully."
     )
     @GetMapping("/instances/{instanceId}/queues")
     public ResponseEntity<List<ConnectQueueDTO>> listQueues(@PathVariable(name = "instanceId") String instanceId) {
