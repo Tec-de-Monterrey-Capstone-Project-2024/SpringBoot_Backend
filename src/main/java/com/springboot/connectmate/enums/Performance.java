@@ -1,6 +1,6 @@
 package com.springboot.connectmate.enums;
 
-public enum ThresholdBreachPerformanceCategory {
+public enum Performance {
     CRITICAL,
     UNSATISFACTORY,
     BELOW_EXPECTATIONS,

@@ -1,6 +1,7 @@
 package com.springboot.connectmate.services;
 
 import com.springboot.connectmate.dtos.AmazonConnect.*;
+import com.springboot.connectmate.dtos.AmazonConnect.ConnectUserDataDTO;
 
 import java.util.List;
 
@@ -17,6 +18,6 @@ public interface AmazonConnectService {
     String getTests(String instanceId);
     String listTests(String instanceId);
 
-    List<String> getCurrentData(String instanceId);
+    List<ConnectUserDataDTO> getCurrentData(String instanceId);
 
 }

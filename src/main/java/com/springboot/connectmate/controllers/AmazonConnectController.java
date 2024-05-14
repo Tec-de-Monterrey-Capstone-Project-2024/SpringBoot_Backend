@@ -1,6 +1,7 @@
 package com.springboot.connectmate.controllers;
 
 import com.springboot.connectmate.dtos.AmazonConnect.*;
+import com.springboot.connectmate.dtos.AmazonConnect.ConnectUserDataDTO;
 import com.springboot.connectmate.services.AmazonConnectService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -82,8 +83,8 @@ public class AmazonConnectController {
         return ResponseEntity.ok(amazonConnectService.listRoutingProfiles(instanceId));
     }
 
-    @GetMapping("/instances/{instanceId}/queueAgents")
-    public ResponseEntity<List<String>> getQueueAgents(@PathVariable(name = "instanceId") String instanceId) {
+    @GetMapping("/instances/{instanceId}/queue-agents")
+    public ResponseEntity<List<ConnectUserDataDTO>> getQueueAgents(@PathVariable(name = "instanceId") String instanceId) {
         return ResponseEntity.ok(amazonConnectService.getCurrentData(instanceId));
     }
 }

@@ -1,6 +1,6 @@
 package com.springboot.connectmate.dtos.Insight;
 
-import com.springboot.connectmate.enums.InsightStatus;
+import com.springboot.connectmate.enums.Status;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -33,7 +33,7 @@ public class InsightDTO {
             description = "Status of the Insight",
             example = "TO_DO"
     )
-    private InsightStatus status;
+    private Status status;
 
     @Schema(
             description = "Template summary of the Insight",

@@ -3,7 +3,7 @@ package com.springboot.connectmate.enums;
 import lombok.Getter;
 
 @Getter
-public enum MetricCategory {
+public enum Code {
     SL("Service Level"),
     FCR("First Contact Resolution"),
     ACR("Abandonment Call Rate"),
@@ -15,7 +15,7 @@ public enum MetricCategory {
 
     private final String description;
 
-    MetricCategory(String description) {
+    Code(String description) {
         this.description = description;
     }
 }

@@ -1,4 +1,4 @@
-package com.springboot.connectmate.dtos;
+package com.springboot.connectmate.dtos.Error;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,6 +1,6 @@
 package com.springboot.connectmate.dtos.Metric;
 
-import com.springboot.connectmate.enums.MetricCategory;
+import com.springboot.connectmate.enums.Code;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -16,7 +16,7 @@ public class MetricDTO {
             description = "Category of the metric.",
             example = "SL"
     )
-    private MetricCategory code;
+    private Code code;
 
     @Schema(
             description = "Name of the category of the metric.",
