@@ -7,10 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -60,7 +57,7 @@ public class AmazonConnectController {
             responseCode = "200",
             description = "List of agent statues for a given instance fetched successfully"
     )
-    @GetMapping("/instances/{instanceId}/agents")
+    @GetMapping("/instances/{instanceId}/agent-statuses")
     public ResponseEntity<List<ConnectAgentDTO>> listAgents(@PathVariable(name = "instanceId") String instanceId) {
         return ResponseEntity.ok(amazonConnectService.listAgents(instanceId));
     }
@@ -69,9 +66,33 @@ public class AmazonConnectController {
             responseCode = "200",
             description = "List of historical metrics for a given instance fetched successfully"
     )
-    @GetMapping("/instances/{instanceId}/historial-metrics")
+    @GetMapping("/instances/historical-metrics")
+    public ResponseEntity<List<String>> getHistoricalMetricsV2(
+        @RequestParam(name = "instanceArn") String instanceArn,
+        @RequestParam(name = "queueId") String queueId
+    ){
+        return ResponseEntity.ok(amazonConnectService.getHistoricalMetricsV2(instanceArn, queueId));
+    }
+
+    @ApiResponse(
+            responseCode = "200",
+            description = "List of historical metrics for a given instance fetched successfully"
+    )
+    @GetMapping("/instances/{instanceId}/queues/{queueId}/historial-metrics")
     public ResponseEntity<List<String>> getHistoricalMetrics(@PathVariable(name = "instanceId") String instanceId) {
-        return ResponseEntity.ok(amazonConnectService.getHistoricalMetrics(instanceId));
+        return ResponseEntity.ok(amazonConnectService.getHistoricalMetrics(instanceId, null));
+    }
+
+    @ApiResponse(
+            responseCode = "200",
+            description = "List of current metrics for a given instance fetched successfully"
+    )
+    @GetMapping("/instances/current-metrics")
+    public ResponseEntity<List<String>> getCurrentMetrics(
+            @RequestParam(name = "instanceArn") String instanceArn,
+            @RequestParam(name = "queueId") String queueId
+            ){
+        return ResponseEntity.ok(amazonConnectService.getCurrentMetrics(instanceArn));
     }
 
     @ApiResponse(

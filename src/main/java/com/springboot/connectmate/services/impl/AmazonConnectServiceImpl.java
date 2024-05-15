@@ -92,7 +92,7 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
     }
 
     @Override
-    public List<String> getHistoricalMetrics(String instanceId) {
+    public List<String> getHistoricalMetrics(String instanceId, String queueId) {
 
         Threshold threshold = new Threshold()
                 .withComparison(Comparison.LT)
@@ -115,10 +115,9 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
                 .withStatistic(Statistic.SUM)
                 .withUnit(Unit.COUNT)
         );
-
         Filters filters = new Filters()
                 .withChannels(Channel.VOICE)
-                .withQueues("f0813607-af92-4a36-91e6-630ababb643c");
+                .withQueues(queueId);
 
 
         ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
@@ -140,6 +139,51 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
     }
 
     @Override
+    public List<String> getHistoricalMetricsV2(String instanceArn, String queueId) {
+
+        List<MetricV2> metrics = new ArrayList<>();
+        metrics.add(new MetricV2()
+                .withName("ABANDONMENT_RATE")
+        );
+        List<FilterV2> filters = new ArrayList<>();
+        filters.add( new FilterV2()
+                .withFilterKey("QUEUE")
+                .withFilterValues(Collections.singletonList("f0813607-af92-4a36-91e6-630ababb643c"))
+        );
+
+        ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
+        ZonedDateTime endTime = now.withSecond(0).withNano(0).minusMinutes(now.getMinute() % 5);
+        ZonedDateTime startTime = endTime.minusHours(23);
+
+        GetMetricDataV2Request getMetricDataV2Request = new GetMetricDataV2Request()
+                .withResourceArn("arn:aws:connect:us-east-1:674530197385:instance/7c78bd60-4a9f-40e5-b461-b7a0dfaad848")
+                .withMetrics(metrics)
+                .withFilters(filters)
+                .withStartTime(Date.from(startTime.toInstant()))
+                .withEndTime(Date.from(endTime.toInstant()));
+
+        GetMetricDataV2Result getMetricDataResult = amazonConnectClient().getMetricDataV2(getMetricDataV2Request);
+        System.out.println(getMetricDataResult.toString());
+
+        return getMetricDataResult.getMetricResults().stream()
+                .map(metricResult -> metricResult.toString())
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> getCurrentMetrics(String instanceId) {
+
+        GetCurrentMetricDataRequest getCurrentMetricDataRequest = new GetCurrentMetricDataRequest()
+                .withInstanceId(instanceId);
+
+        GetCurrentMetricDataResult getCurrentMetricDataResult = amazonConnectClient().getCurrentMetricData(getCurrentMetricDataRequest);
+        return getCurrentMetricDataResult.getMetricResults().stream()
+                .map(metric-> metric.toString())
+                .collect(Collectors.toList());
+    }
+
+
+    @Override
     public String getTests(String instanceId) {
         GetCurrentMetricDataRequest getCurrentMetricDataRequest = new GetCurrentMetricDataRequest()
                 .withInstanceId(instanceId);
@@ -151,9 +195,13 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
     }
     @Override
     public String listTests(String instanceId) {
+
         ListAgentStatusesRequest listAgentStatusesRequest = new ListAgentStatusesRequest().withInstanceId(instanceId);
+
         ListPhoneNumbersRequest listPhoneNumbersRequest = new ListPhoneNumbersRequest().withInstanceId(instanceId);
+
         ListUserProficienciesRequest listUserProficienciesRequest = new ListUserProficienciesRequest().withInstanceId(instanceId);
+
         ListContactEvaluationsRequest listContactEvaluationsRequest = new ListContactEvaluationsRequest().withInstanceId(instanceId);
         return "to do: do the controllers/services for these connect list requests";
     }
