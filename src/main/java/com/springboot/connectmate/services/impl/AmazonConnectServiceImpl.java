@@ -7,6 +7,7 @@ import com.amazonaws.services.connect.AmazonConnect;
 import com.amazonaws.services.connect.AmazonConnectClientBuilder;
 import com.amazonaws.services.connect.model.*;
 import com.springboot.connectmate.dtos.AmazonConnect.*;
+import com.springboot.connectmate.dtos.AmazonConnect.ConnectUserDataDTO;
 import com.springboot.connectmate.services.AmazonConnectService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -157,5 +158,27 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
         return "to do: do the controllers/services for these connect list requests";
     }
 
+    @Override
+    public List<ConnectUserDataDTO> getCurrentData(String instanceId) {
+        UserDataFilters userDataFilters = new UserDataFilters()
+                .withQueues(listQueues(instanceId).stream()
+                        .map(ConnectQueueDTO::getId)
+                        .collect(Collectors.toList()));
 
+        GetCurrentUserDataRequest getCurrentUserDataRequest = new GetCurrentUserDataRequest()
+                .withFilters(userDataFilters)
+                .withInstanceId(instanceId);
+
+        GetCurrentUserDataResult getCurrentUserDataResult = amazonConnectClient().getCurrentUserData(getCurrentUserDataRequest);
+
+        return getCurrentUserDataResult.getUserDataList().stream()
+                .map(userData -> {
+                    ConnectUserDataDTO connectUserDataDTO = new ConnectUserDataDTO();
+                    connectUserDataDTO.setUserId(userData.getUser().getId());
+                    connectUserDataDTO.setRoutingProfileId(userData.getRoutingProfile().getId());
+                    connectUserDataDTO.setQueueId(userData.getContacts().get(0).getQueue().getId());
+                    return connectUserDataDTO;
+                })
+                .collect(Collectors.toList());
+    }
 }
