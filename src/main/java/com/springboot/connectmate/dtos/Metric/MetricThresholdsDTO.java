@@ -1,6 +1,5 @@
 package com.springboot.connectmate.dtos.Metric;
 
-import com.springboot.connectmate.enums.MetricCategory;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 

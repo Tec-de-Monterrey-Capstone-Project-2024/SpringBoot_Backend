@@ -1,7 +1,7 @@
 package com.springboot.connectmate.dtos.Alert;
 
 import com.springboot.connectmate.dtos.Metric.MetricDescriptionDTO;
-import com.springboot.connectmate.enums.ThresholdBreachPerformanceCategory;
+import com.springboot.connectmate.enums.Performance;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -43,7 +43,7 @@ public class AlertDTO {
             description = "Breach Category of the Alert",
             example = "CRITICAL"
     )
-    private ThresholdBreachPerformanceCategory breachCategory;
+    private Performance breachCategory;
 
     @Schema(
             description = "Occurred At of the Alert",

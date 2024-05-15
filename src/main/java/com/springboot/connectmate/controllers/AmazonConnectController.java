@@ -1,6 +1,7 @@
 package com.springboot.connectmate.controllers;
 
 import com.springboot.connectmate.dtos.AmazonConnect.*;
+import com.springboot.connectmate.dtos.AmazonConnect.ConnectUserDataDTO;
 import com.springboot.connectmate.services.AmazonConnectService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -10,10 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -87,7 +85,7 @@ public class AmazonConnectController {
             summary = "Get all agent statuses",
             description = "Get Amazon Connect agent statuses (routable, custom, offline) by instance ID"
     )
-    @GetMapping("/instances/{instanceId}/agents")
+    @GetMapping("/instances/{instanceId}/agent-statuses")
     public ResponseEntity<List<ConnectAgentDTO>> listAgents(@PathVariable(name = "instanceId") String instanceId) {
         return ResponseEntity.ok(amazonConnectService.listAgents(instanceId));
     }
@@ -102,9 +100,33 @@ public class AmazonConnectController {
             summary = "Get all historical metrics",
             description = "Get Amazon Connect historical metrics by instance ID (maximum 24 hours)"
     )
-    @GetMapping("/instances/{instanceId}/historial-metrics")
+    @GetMapping("/instances/historical-metrics")
+    public ResponseEntity<List<String>> getHistoricalMetricsV2(
+        @RequestParam(name = "instanceArn") String instanceArn,
+        @RequestParam(name = "queueId") String queueId
+    ){
+        return ResponseEntity.ok(amazonConnectService.getHistoricalMetricsV2(instanceArn, queueId));
+    }
+
+    @ApiResponse(
+            responseCode = "200",
+            description = "List of historical metrics for a given instance fetched successfully"
+    )
+    @GetMapping("/instances/{instanceId}/queues/{queueId}/historial-metrics")
     public ResponseEntity<List<String>> getHistoricalMetrics(@PathVariable(name = "instanceId") String instanceId) {
-        return ResponseEntity.ok(amazonConnectService.getHistoricalMetrics(instanceId));
+        return ResponseEntity.ok(amazonConnectService.getHistoricalMetrics(instanceId, null));
+    }
+
+    @ApiResponse(
+            responseCode = "200",
+            description = "List of current metrics for a given instance fetched successfully"
+    )
+    @GetMapping("/instances/current-metrics")
+    public ResponseEntity<List<String>> getCurrentMetrics(
+            @RequestParam(name = "instanceArn") String instanceArn,
+            @RequestParam(name = "queueId") String queueId
+            ){
+        return ResponseEntity.ok(amazonConnectService.getCurrentMetrics(instanceArn));
     }
 
     @ApiResponse(
@@ -120,5 +142,10 @@ public class AmazonConnectController {
     @GetMapping("/instances/{instanceId}/routing-profiles")
     public ResponseEntity<List<ConnectRoutingProfileDTO>> getRoutingProfiles(@PathVariable(name = "instanceId") String instanceId) {
         return ResponseEntity.ok(amazonConnectService.listRoutingProfiles(instanceId));
+    }
+
+    @GetMapping("/instances/{instanceId}/queue-agents")
+    public ResponseEntity<List<ConnectUserDataDTO>> getQueueAgents(@PathVariable(name = "instanceId") String instanceId) {
+        return ResponseEntity.ok(amazonConnectService.getCurrentData(instanceId));
     }
 }
