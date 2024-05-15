@@ -1,6 +1,5 @@
 package com.springboot.connectmate.dtos.AmazonConnect;
 
-import com.amazonaws.services.connect.model.UserSummary;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
