@@ -21,7 +21,7 @@ public class ConnectRoutingProfileDTO {
 
     @Schema(
             description = "The Amazon Resource Number (arn) for the routing profile. It's a string " +
-                          "composed by the type of the instance (connect), the aws region, the aws " +
+                          "composed by the type of the instance (connect), the AWS region, the AWS " +
                           "account id and the identifier (id) of the routing profile separated by ':'",
             example = "arn:aws:connect:us-east-1:674530197385:instance/7c78bd60-4a9f-40e5-b461-b7a0dfaad848/routing-profile/4896ae34-a93e-41bc-8231-bf189e7628b1"
     )

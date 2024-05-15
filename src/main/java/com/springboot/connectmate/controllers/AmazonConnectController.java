@@ -81,7 +81,7 @@ public class AmazonConnectController {
             responseCode = "200",
             content = @Content(mediaType = "application/json",
                                array = @ArraySchema(schema = @Schema(implementation = ConnectAgentDTO.class))),
-            description = "List of agent statues for a given instance fetched successfully."
+            description = "List of agent statuses for a given instance fetched successfully."
     )
     @Operation(
             summary = "Get all agent statuses",
