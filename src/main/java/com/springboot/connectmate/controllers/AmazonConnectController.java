@@ -108,4 +108,9 @@ public class AmazonConnectController {
     public ResponseEntity<List<ConnectUserDataDTO>> getQueueAgents(@PathVariable(name = "instanceId") String instanceId) {
         return ResponseEntity.ok(amazonConnectService.getCurrentData(instanceId));
     }
+
+    @GetMapping("/instances/{instanceId}/users/{userId}/description")
+    public ResponseEntity<String> getUserDescription(@PathVariable(name = "instanceId") String instanceId, @PathVariable(name = "userId") String userId) {
+        return ResponseEntity.ok(amazonConnectService.getUserDescription(instanceId, userId));
+    }
 }
