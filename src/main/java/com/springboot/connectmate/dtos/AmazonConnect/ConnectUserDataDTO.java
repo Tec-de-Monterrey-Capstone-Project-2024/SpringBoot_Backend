@@ -3,6 +3,7 @@ package com.springboot.connectmate.dtos.AmazonConnect;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+// GetCurrentUserData for full JSON response
 @Data // Lombok annotation to create all the getters, setters, equals, hash, and toString methods for us
 @Schema(
         name = "ConnectUserData",

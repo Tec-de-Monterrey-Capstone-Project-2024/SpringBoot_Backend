@@ -1,5 +1,6 @@
 package com.springboot.connectmate.controllers;
 
+import com.amazonaws.services.connect.model.*;
 import com.springboot.connectmate.dtos.AmazonConnect.*;
 import com.springboot.connectmate.dtos.AmazonConnect.ConnectUserDataDTO;
 import com.springboot.connectmate.services.AmazonConnectService;
@@ -41,7 +42,7 @@ public class AmazonConnectController {
             description = "Get instances for an specific Amazon region with a given AWS account"
     )
     @GetMapping("/instances")
-    public ResponseEntity<List<ConnectInstanceDTO>> listConnectInstances() {
+    public ResponseEntity<List<InstanceSummary>> listConnectInstances() {
         return ResponseEntity.ok(amazonConnectService.listConnectInstances());
     }
 
@@ -56,7 +57,7 @@ public class AmazonConnectController {
             description = "Get Amazon Connect queues by instance ID"
     )
     @GetMapping("/instances/{instanceId}/queues")
-    public ResponseEntity<List<ConnectQueueDTO>> listQueues(@PathVariable(name = "instanceId") String instanceId) {
+    public ResponseEntity<List<QueueSummary>> listQueues(@PathVariable(name = "instanceId") String instanceId) {
         return ResponseEntity.ok(amazonConnectService.listQueues(instanceId));
     }
 
@@ -71,7 +72,7 @@ public class AmazonConnectController {
             description = "Get Amazon Connect users (supervisors, agents, etc) by instance ID"
     )
     @GetMapping("/instances/{instanceId}/users")
-    public ResponseEntity<List<ConnectUserDTO>> listUsers(@PathVariable(name = "instanceId") String instanceId) {
+    public ResponseEntity<List<UserSummary>> listUsers(@PathVariable(name = "instanceId") String instanceId) {
         return ResponseEntity.ok(amazonConnectService.listUsers(instanceId));
     }
 
@@ -86,7 +87,7 @@ public class AmazonConnectController {
             description = "Get Amazon Connect agent statuses (routable, custom, offline) by instance ID"
     )
     @GetMapping("/instances/{instanceId}/agent-statuses")
-    public ResponseEntity<List<ConnectAgentDTO>> listAgents(@PathVariable(name = "instanceId") String instanceId) {
+    public ResponseEntity<List<AgentStatusSummary>> listAgents(@PathVariable(name = "instanceId") String instanceId) {
         return ResponseEntity.ok(amazonConnectService.listAgents(instanceId));
     }
 
@@ -113,8 +114,10 @@ public class AmazonConnectController {
             description = "List of historical metrics for a given instance fetched successfully"
     )
     @GetMapping("/instances/{instanceId}/queues/{queueId}/historial-metrics")
-    public ResponseEntity<List<String>> getHistoricalMetrics(@PathVariable(name = "instanceId") String instanceId) {
-        return ResponseEntity.ok(amazonConnectService.getHistoricalMetrics(instanceId, null));
+    public ResponseEntity<List<String>> getHistoricalMetrics(
+            @PathVariable(name = "instanceId") String instanceId,
+            @PathVariable(name = "queueId") String queueId) {
+        return ResponseEntity.ok(amazonConnectService.getHistoricalMetrics(instanceId, queueId));
     }
 
     @ApiResponse(
@@ -123,9 +126,7 @@ public class AmazonConnectController {
     )
     @GetMapping("/instances/current-metrics")
     public ResponseEntity<List<String>> getCurrentMetrics(
-            @RequestParam(name = "instanceArn") String instanceArn,
-            @RequestParam(name = "queueId") String queueId
-            ){
+            @RequestParam(name = "instanceArn") String instanceArn){
         return ResponseEntity.ok(amazonConnectService.getCurrentMetrics(instanceArn));
     }
 
@@ -140,9 +141,10 @@ public class AmazonConnectController {
             description = "Get Amazon Connect routing profiles by instance ID"
     )
     @GetMapping("/instances/{instanceId}/routing-profiles")
-    public ResponseEntity<List<ConnectRoutingProfileDTO>> getRoutingProfiles(@PathVariable(name = "instanceId") String instanceId) {
+    public ResponseEntity<List<RoutingProfileSummary>> getRoutingProfiles(@PathVariable(name = "instanceId") String instanceId) {
         return ResponseEntity.ok(amazonConnectService.listRoutingProfiles(instanceId));
     }
+
 
     @GetMapping("/instances/{instanceId}/queue-agents")
     public ResponseEntity<List<ConnectUserDataDTO>> getQueueAgents(@PathVariable(name = "instanceId") String instanceId) {
