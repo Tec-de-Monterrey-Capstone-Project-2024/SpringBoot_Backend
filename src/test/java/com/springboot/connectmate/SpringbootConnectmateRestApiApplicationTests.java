@@ -29,4 +29,5 @@ class SpringbootConnectmateRestApiApplicationTests {
 	@Test
 	void contextLoads() {
 	}
+
 }
