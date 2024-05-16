@@ -47,47 +47,47 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
     }
 
     @Override
-    public List<ConnectInstanceDTO> listConnectInstances() {
+    public List<InstanceSummary> listConnectInstances() {
         ListInstancesRequest listInstancesRequest = new ListInstancesRequest();
         ListInstancesResult listInstancesResult = amazonConnectClient().listInstances(listInstancesRequest);
         return listInstancesResult.getInstanceSummaryList().stream()
-                .map(instance ->  mapper.map(instance, ConnectInstanceDTO.class))
+                .map(instance ->  mapper.map(instance, InstanceSummary.class))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<ConnectQueueDTO> listQueues(String instanceId) {
+    public List<QueueSummary> listQueues(String instanceId) {
         ListQueuesRequest listQueuesRequest = new ListQueuesRequest().withInstanceId(instanceId);
         ListQueuesResult listQueuesResult = amazonConnectClient().listQueues(listQueuesRequest);
         return listQueuesResult.getQueueSummaryList().stream()
-                .map(queue -> mapper.map(queue, ConnectQueueDTO.class))
+                .map(queue -> mapper.map(queue, QueueSummary.class))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<ConnectAgentDTO> listAgents(String instanceId) {
+    public List<AgentStatusSummary> listAgents(String instanceId) {
         ListAgentStatusesRequest listAgentStatusesRequest = new ListAgentStatusesRequest().withInstanceId(instanceId);
         ListAgentStatusesResult listAgentStatusesResult = amazonConnectClient().listAgentStatuses(listAgentStatusesRequest);
         return listAgentStatusesResult.getAgentStatusSummaryList().stream()
-                .map(agent -> mapper.map(agent, ConnectAgentDTO.class))
+                .map(agent -> mapper.map(agent, AgentStatusSummary.class))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<ConnectUserDTO> listUsers(String instanceId) {
+    public List<UserSummary> listUsers(String instanceId) {
         ListUsersRequest listUsersRequest = new ListUsersRequest().withInstanceId(instanceId);
         ListUsersResult listUsersResult = amazonConnectClient().listUsers(listUsersRequest);
         return listUsersResult.getUserSummaryList().stream()
-                .map(user -> mapper.map(user, ConnectUserDTO.class))
+                .map(user -> mapper.map(user, UserSummary.class))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<ConnectRoutingProfileDTO> listRoutingProfiles(String instanceId) {
+    public List<RoutingProfileSummary> listRoutingProfiles(String instanceId) {
         ListRoutingProfilesRequest listRoutingProfilesRequest = new ListRoutingProfilesRequest().withInstanceId(instanceId);
         ListRoutingProfilesResult listRoutingProfilesResult = amazonConnectClient().listRoutingProfiles(listRoutingProfilesRequest);
         return listRoutingProfilesResult.getRoutingProfileSummaryList().stream()
-                .map(routingProfile -> mapper.map(routingProfile, ConnectRoutingProfileDTO.class))
+                .map(routingProfile -> mapper.map(routingProfile, RoutingProfileSummary.class))
                 .collect(Collectors.toList());
     }
 
@@ -220,7 +220,7 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
     public List<ConnectUserDataDTO> getCurrentData(String instanceId) {
         UserDataFilters userDataFilters = new UserDataFilters()
                 .withQueues(listQueues(instanceId).stream()
-                        .map(ConnectQueueDTO::getId)
+                        .map(QueueSummary::getId)
                         .collect(Collectors.toList()));
 
         GetCurrentUserDataRequest getCurrentUserDataRequest = new GetCurrentUserDataRequest()
