@@ -22,29 +22,27 @@ public class ThresholdBreaches {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "code", referencedColumnName = "code")
-    private MetricsInfo code;
+    @JoinColumn(name = "metrics_info_id", nullable = false)
+    private MetricsInfo metricsInfoId;
 
-    @Column(name = "is_positive")
-    private Boolean isPositive;
+    @ManyToOne
+    @JoinColumn(name = "agent_id", nullable = true)
+    private Users agentId;
 
-    @Column(name = "agent_id")
-    private String agentId;
-
-    @Column(name = "queue_id")
+    @Column(name = "queue_id", nullable = false, columnDefinition = "TEXT")
     private String queueId;
 
-    @Column(name = "value")
+    @Column(name = "value", nullable = false)
     private BigDecimal value;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "performance")
+    @Column(name = "performance", nullable = false)
     private Performance performance;
 
-    @Column(name = "occurred_at")
+    @Column(name = "occurred_at", nullable = false)
     private LocalDateTime occurredAt;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status")
+    @Column(name = "status", nullable = false)
     private Status status;
 }
