@@ -39,12 +39,18 @@ jobs:
 
     - name: Debug environment variables
       run: |
-        echo "GITHUB_ENVIRONMENT_VARIABLES:"
-        printenv | grep GITHUB_
-        echo "SECRETS (excluding sensitive values):"
+        echo "SECRETS & Envs:"
+        echo "AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }}"
+        echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}"
+        echo "GCP_PROJECT_ID=${{ secrets.GCP_PROJECT_ID }}"
+        echo "GCR_SERVICE_ACCOUNT_KEY=${{ secrets.GCR_SERVICE_ACCOUNT_KEY }}"
+        echo "AWS_ACCESS_KEY=${{ env.AWS_ACCESS_KEY }}"
+        echo "AWS_REGION=${{ env.AWS_REGION }}"
         echo "DB_HOST=${{ env.DB_HOST }}"
         echo "DB_NAME=${{ env.DB_NAME }}"
         echo "DB_USER=${{ env.DB_USER }}"
+        echo "REGION=${{ env.REGION }}"
+      
         echo "AWS_REGION=${{ env.AWS_REGION }}"
         # Sensitive values are intentionally omitted for security
 
