@@ -77,7 +77,7 @@ jobs:
 
         gcloud run deploy connectmate \
           --image=us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/springboot-backend/connectmate \
-          --set-env-vars-file=env-vars.txt \
+          --env-vars-file=env-vars.txt \
           --platform=managed \
           --port=3001 \
           --region=us-central1 \
