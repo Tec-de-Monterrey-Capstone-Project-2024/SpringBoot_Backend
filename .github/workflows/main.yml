@@ -48,6 +48,18 @@ jobs:
       run: |
         gcloud auth configure-docker ${{ env.GCP_REGION }}-docker.pkg.dev --quiet
         
+        echo "docker build \
+                      -t ${{ env.GCP_AR_LOCATION }} \
+                      --build-arg PORT=${{ env.PORT }} \
+                      --build-arg DB_HOST=${{ env.DB_HOST }} \
+                      --build-arg DB_NAME=${{ env.DB_NAME }} \
+                      --build-arg DB_USER=${{ env.DB_USER }} \
+                      --build-arg DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+                      --build-arg AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }} \
+                      --build-arg AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }} \
+                      --build-arg AWS_REGION=${{ env.AWS_REGION }} \
+                      --no-cache ."
+        
         docker build \
                       -t ${{ env.GCP_AR_LOCATION }} \
                       --build-arg PORT="${{ env.PORT }}" \
