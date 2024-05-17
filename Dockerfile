@@ -16,11 +16,14 @@ COPY src ./src
 # Builds the application (except for tests).
 RUN mvn package -DskipTests
 
-# Copies the built JAR file from the previous stage.
-COPY --from=build /app/target/springboot-connectmate-rest-api-0.0.1-SNAPSHOT.jar /app/springboot-connectmate-rest-api.jar
 
 # Final Build Stage to reduce the image size.
 FROM openjdk:17-alpine
+
+# Copies the built JAR file from the previous stage.
+COPY --from=build /app/target/springboot-connectmate-rest-api-0.0.1-SNAPSHOT.jar /app/springboot-connectmate-rest-api.jar
+
+# Build-time arguments
 ARG PORT
 ARG DB_HOST
 ARG DB_NAME
