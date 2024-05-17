@@ -152,7 +152,7 @@ public class AmazonConnectController {
     }
 
     @GetMapping("/instances/{instanceId}/users/{userId}/description")
-    public ResponseEntity<String> getUserDescription(@PathVariable(name = "instanceId") String instanceId, @PathVariable(name = "userId") String userId) {
+    public ResponseEntity<User> getUserDescription(@PathVariable(name = "instanceId") String instanceId, @PathVariable(name = "userId") String userId) {
         return ResponseEntity.ok(amazonConnectService.getUserDescription(instanceId, userId));
     }
 }

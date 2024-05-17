@@ -183,13 +183,13 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
     }
 
     @Override
-    public String getUserDescription(String instanceId, String userId) {
+    public User getUserDescription(String instanceId, String userId) {
         DescribeUserRequest describeUserRequest = new DescribeUserRequest()
                 .withInstanceId(instanceId)
                 .withUserId(userId);
 
         DescribeUserResult describeUserResult = amazonConnectClient().describeUser(describeUserRequest);
-        return describeUserResult.getUser().toString();
+        return describeUserResult.getUser();
     }
 
 
