@@ -5,42 +5,42 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.util.List;
 
 @Data // Lombok annotation to create all the getters, setters, equals, hash, and toString methods for us
 @AllArgsConstructor // Lombok annotation to create a constructor with all the arguments
 @NoArgsConstructor // Lombok annotation to create a constructor with no arguments
 
+// MetricsInfo entity
 @Entity
 @Table(name = "metrics_info")
-@IdClass(MetricsInfoId.class)
 public class MetricsInfo {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @Enumerated(EnumType.STRING)
-    @Column(name = "code")
+    @Column(name = "code", nullable = false)
     private Code code;
 
-    @Id
-    @Column(name = "is_positive")
+    @Column(name = "is_positive", nullable = false)
     private Boolean isPositive;
 
-    @Column(name = "threshold")
+    @Column(name = "is_general", nullable = false)
+    private Boolean isGeneral;
+
+    @Column(name = "threshold", nullable = false)
     private Long threshold;
 
-    @Column(name = "name_template")
+    @Column(name = "name_template", nullable = false, columnDefinition = "TEXT")
     private String nameTemplate;
 
-    @Column(name = "summary_template")
+    @Column(name = "summary_template", nullable = false, columnDefinition = "TEXT")
     private String summaryTemplate;
 
-    @Column(name = "situation_template")
+    @Column(name = "situation_template", nullable = false, columnDefinition = "TEXT")
     private String situationTemplate;
 
-    @Column(name = "actions_template")
+    @Column(name = "actions_template", nullable = false, columnDefinition = "TEXT")
     private String actionsTemplate;
-
-    @OneToMany(mappedBy = "code")
-    private List<ThresholdBreaches> thresholdBreaches;
-
 }
