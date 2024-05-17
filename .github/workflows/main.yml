@@ -72,10 +72,14 @@ jobs:
         DB_USER: "root"
         AWS_REGION: "us-east-1"
       run: |
+        # Create a flags file for gcloud
+        echo "PORT=${{ env.PORT }},DB_HOST=${{ env.DB_HOST }},DB_NAME=${{ env.DB_NAME }},DB_USER=${{ env.DB_USER }},DB_PASSWORD=${{ secrets.DB_PASSWORD }},AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }},AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }},AWS_REGION=${{ env.AWS_REGION }}" > env-vars.txt
+
         gcloud run deploy connectmate \
           --image=us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/springboot-backend/connectmate \
-          --set-env-vars="PORT=${{ env.PORT }},DB_HOST=${{ env.DB_HOST }},DB_NAME=${{ env.DB_NAME }},DB_USER=${{ env.DB_USER }},DB_PASSWORD=${{ secrets.DB_PASSWORD }},AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }},AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }},AWS_REGION=${{ env.AWS_REGION }}" \
+          --set-env-vars-file=env-vars.txt \
           --platform=managed \
           --port=3001 \
           --region=us-central1 \
-          --allow-unauthenticated \
+          --allow-unauthenticated
+
