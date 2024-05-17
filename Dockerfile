@@ -17,6 +17,21 @@ FROM openjdk:17-alpine
 COPY --from=build /app/target/springboot-connectmate-rest-api-0.0.1-SNAPSHOT.jar /app/springboot-connectmate-rest-api.jar
 # Exposes the port where the application will be running.
 EXPOSE 8080
+# Sets environment variables
+ARG DB_HOST
+ARG DB_NAME
+ARG DB_USER
+ARG DB_PASSWORD
+ARG AWS_ACCESS_KEY
+ARG AWS_SECRET_KEY
+ARG AWS_REGION
+ENV DB_HOST=$DB_HOST
+ENV DB_NAME=$DB_NAME
+ENV DB_USER=$DB_USER
+ENV DB_PASSWORD=$DB_PASSWORD
+ENV AWS_ACCESS_KEY=$AWS_ACCESS_KEY
+ENV AWS_SECRET_KEY=$AWS_SECRET_KEY
+ENV AWS_REGION=$AWS_REGION
 # Command to run the application when the container starts.
 CMD ["java", "-jar", "/app/springboot-connectmate-rest-api.jar"]
 
