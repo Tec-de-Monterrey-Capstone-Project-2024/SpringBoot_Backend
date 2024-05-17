@@ -37,7 +37,7 @@ ENV AWS_ACCESS_KEY=$AWS_ACCESS_KEY
 ENV AWS_SECRET_KEY=$AWS_SECRET_KEY
 ENV AWS_REGION=$AWS_REGION
 # Echo environment variables for debugging
-RUN echo "env vars:" && \
+RUN echo "env vars on first stage:" && \
     echo "PORT=${PORT}" && \
     echo "DB_HOST=${DB_HOST}" && \
     echo "DB_NAME=${DB_NAME}" && \
@@ -70,7 +70,7 @@ ENV DB_PASSWORD=$DB_PASSWORD
 ENV AWS_ACCESS_KEY=$AWS_ACCESS_KEY
 ENV AWS_SECRET_KEY=$AWS_SECRET_KEY
 ENV AWS_REGION=$AWS_REGION
-RUN echo "env vars:" && \
+RUN echo "env vars on second stage:" && \
     echo "PORT=${PORT}" && \
     echo "DB_HOST=${DB_HOST}" && \
     echo "DB_NAME=${DB_NAME}" && \
