@@ -39,7 +39,7 @@ jobs:
 
     - name: Build and push Docker image to Artifact Registry
       env:
-        PORT: 8080
+        PORT: "8080"
         DB_HOST: "34.71.134.63"
         DB_NAME: "new_connectmate_db"
         DB_USER: "root"
