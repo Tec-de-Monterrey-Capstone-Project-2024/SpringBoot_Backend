@@ -45,7 +45,7 @@ ENV AWS_REGION=$AWS_REGION
 # Exposes the port where the application will be running.
 EXPOSE 8080
 # Command to run the application when the container starts.
-CMD ["sh", "-c", "echo 'PORT: ${PORT}' && \
+CMD ["sh", "-c", "echo 'PORT: ${8080}' && \
                     echo 'DB_HOST: ${DB_HOST}' && \
                     echo 'DB_NAME: ${DB_NAME}' && \
                     echo 'DB_USER: ${DB_USER}' && \
