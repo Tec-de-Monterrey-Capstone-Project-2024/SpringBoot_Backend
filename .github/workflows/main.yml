@@ -47,6 +47,7 @@ jobs:
       run: |
         echo "Envs:"
         echo "AWS_REGION=${{ env.AWS_REGION }}"
+        echo "AWS_REGION=$AWS_REGION"
         echo "DB_HOST=${{ env.DB_HOST }}"
         echo "DB_NAME=${{ env.DB_NAME }}"
         echo "DB_USER=${{ env.DB_USER }}"
