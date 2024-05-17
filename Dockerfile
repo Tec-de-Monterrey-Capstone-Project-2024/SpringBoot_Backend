@@ -8,8 +8,17 @@ COPY pom.xml .
 RUN mvn dependency:go-offline -B
 # Copies the source code to the container.
 COPY src ./src
+# Build Environment Variables
+ARG PORT
+ARG DB_HOST
+ARG DB_NAME
+ARG DB_USER
+ARG DB_PASSWORD
+ARG AWS_ACCESS_KEY
+ARG AWS_SECRET_KEY
+ARG AWS_REGION
 # Builds the application (except for tests).
-RUN mvn package -DskipTests
+RUN mvn package -DskipTests -DPORT=${PORT} -DDB_HOST=${DB_HOST} -DDB_NAME=${DB_NAME} -DDB_USER=${DB_USER} -DDB_PASSWORD=${DB_PASSWORD} -DAWS_ACCESS_KEY=${AWS_ACCESS_KEY} -DAWS_SECRET_KEY=${AWS_SECRET_KEY} -DAWS_REGION=${AWS_REGION}
 
 # Final Build Stage to reduce the image size.
 FROM openjdk:17-alpine
@@ -18,13 +27,7 @@ COPY --from=build /app/target/springboot-connectmate-rest-api-0.0.1-SNAPSHOT.jar
 # Exposes the port where the application will be running.
 EXPOSE 8080
 # Sets environment variables
-ARG DB_HOST
-ARG DB_NAME
-ARG DB_USER
-ARG DB_PASSWORD
-ARG AWS_ACCESS_KEY
-ARG AWS_SECRET_KEY
-ARG AWS_REGION
+ENV PORT=$PORT
 ENV DB_HOST=$DB_HOST
 ENV DB_NAME=$DB_NAME
 ENV DB_USER=$DB_USER
