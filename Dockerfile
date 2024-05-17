@@ -57,7 +57,7 @@ COPY --from=build /run.sh /app/run.sh
 RUN chmod +x /app/run.sh
 # Set environment variables from build-time arguments
 ENV PORT=$PORT
-ENV DB_HOST=$DB_HOST
+ENV DB_HOST='new_connectmate_db'
 ENV DB_NAME=$DB_NAME
 ENV DB_USER=$DB_USER
 ENV DB_PASSWORD=$DB_PASSWORD
@@ -65,7 +65,7 @@ ENV AWS_ACCESS_KEY=$AWS_ACCESS_KEY
 ENV AWS_SECRET_KEY=$AWS_SECRET_KEY
 ENV AWS_REGION=$AWS_REGION
 RUN echo "env vars on second stage:" && \
-    echo "PORT=${1234}" && \
+    echo "PORT=${PORT}" && \
     echo "DB_HOST=${DB_HOST}" && \
     echo "DB_NAME=${DB_NAME}" && \
     echo "DB_USER=${DB_USER}" && \
