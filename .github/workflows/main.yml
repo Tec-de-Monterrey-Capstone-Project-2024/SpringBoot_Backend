@@ -43,17 +43,14 @@ jobs:
           DB_NAME: 'new_connectmate_db'
           DB_USER: 'root'
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          AWS_ACCESS_KEY: ${{ env.AWS_ACCESS_KEY }}
           AWS_REGION: 'us-east-1'
       run: |
         echo "Envs:"
-        echo "AWS_ACCESS_KEY=${ env.AWS_ACCESS_KEY }"
         echo "AWS_REGION=${ env.AWS_REGION }"
         echo "DB_HOST=${ env.DB_HOST }"
         echo "DB_NAME=${ env.DB_NAME }"
         echo "DB_USER=${ env.DB_USER }"
-        echo "REGION=${ env.REGION }"
-        echo "AWS_REGION=${ env.AWS_REGION }"
+        echo "DB_PASSWORD=${ env.DB_PASSWORD }"
         # Sensitive values are intentionally omitted for security
 
     - name: Build and push Docker image to Artifact Registry
