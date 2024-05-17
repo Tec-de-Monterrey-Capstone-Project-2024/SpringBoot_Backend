@@ -51,6 +51,14 @@ RUN mvn package -DskipTests
 
 # Final Build Stage to reduce the image size.
 FROM openjdk:17-alpine
+ARG PORT
+ARG DB_HOST
+ARG DB_NAME
+ARG DB_USER
+ARG DB_PASSWORD
+ARG AWS_ACCESS_KEY
+ARG AWS_SECRET_KEY
+ARG AWS_REGION
 # Copies the built JAR file from the previous stage.
 COPY --from=build /app/target/springboot-connectmate-rest-api-0.0.1-SNAPSHOT.jar /app/springboot-connectmate-rest-api.jar
 # Set environment variables from build-time arguments
