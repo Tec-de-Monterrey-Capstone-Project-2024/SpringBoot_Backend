@@ -84,6 +84,8 @@ jobs:
           "AWS_REGION": "${{ env.AWS_REGION }}"
         }' > env-vars.json
         
+        cat env-vars.json
+        
         gcloud run deploy connectmate \
           --image=us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/springboot-backend/connectmate \
           --env-vars-file=env-vars.json \
