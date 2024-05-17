@@ -38,7 +38,6 @@ jobs:
 
     - name: Build and push Docker image to Artifact Registry
       env:
-        PORT: 8080
         DB_HOST: "34.71.134.63"
         DB_NAME: "new_connectmate_db"
         DB_USER: "root"
@@ -50,7 +49,6 @@ jobs:
         
         docker build \
         -t ${{ env.GCP_AR_LOCATION }} \
-        --build-arg PORT="${{ env.PORT }}" \
         --build-arg DB_HOST="${{ env.DB_HOST }}" \
         --build-arg DB_NAME="${{ env.DB_NAME }}" \
         --build-arg DB_USER="${{ env.DB_USER }}" \
@@ -66,7 +64,6 @@ jobs:
 
     - name: Deploy to Cloud Run
       env:
-        PORT: 8080
         DB_HOST: "34.71.134.63"
         DB_NAME: "new_connectmate_db"
         DB_USER: "root"
@@ -74,7 +71,6 @@ jobs:
       run: |
         # Create a JSON file for gcloud
         echo '{
-          "PORT": "${{ env.PORT }}",
           "DB_HOST": "${{ env.DB_HOST }}",
           "DB_NAME": "${{ env.DB_NAME }}",
           "DB_USER": "${{ env.DB_USER }}",
@@ -90,7 +86,7 @@ jobs:
           --image=us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/springboot-backend/connectmate \
           --env-vars-file=env-vars.json \
           --platform=managed \
-          --port=3001 \
+          --port=300O \
           --region=us-central1 \
           --allow-unauthenticated
 

@@ -24,7 +24,6 @@ FROM openjdk:17-alpine
 COPY --from=build /app/target/springboot-connectmate-rest-api-0.0.1-SNAPSHOT.jar /app/springboot-connectmate-rest-api.jar
 
 # Build-time arguments
-ARG PORT
 ARG DB_HOST
 ARG DB_NAME
 ARG DB_USER
@@ -34,7 +33,6 @@ ARG AWS_SECRET_KEY
 ARG AWS_REGION
 
 # Set environment variables from build-time arguments
-ENV PORT=$PORT
 ENV DB_HOST=$DB_HOST
 ENV DB_NAME=$DB_NAME
 ENV DB_USER=$DB_USER
