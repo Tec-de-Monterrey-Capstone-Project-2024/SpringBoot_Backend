@@ -39,13 +39,12 @@ jobs:
 
     - name: Debug environment variables
       env:
-          DB_HOST: ${{ env.DB_HOST }}
-          DB_NAME: ${{ env.DB_NAME }}
-          DB_USER: ${{ env.DB_USER }}
+          DB_HOST: '34.71.134.63'
+          DB_NAME: 'new_connectmate_db'
+          DB_USER: 'root'
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           AWS_ACCESS_KEY: ${{ env.AWS_ACCESS_KEY }}
-          AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
-          AWS_REGION: ${{ env.AWS_REGION }}
+          AWS_REGION: 'us-east-1'
       run: |
         echo "Envs:"
         echo "AWS_ACCESS_KEY=${ env.AWS_ACCESS_KEY }"
