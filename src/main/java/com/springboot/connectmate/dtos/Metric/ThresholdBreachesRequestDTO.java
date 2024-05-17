@@ -14,6 +14,10 @@ import java.time.LocalDateTime;
 )
 public class ThresholdBreachesRequestDTO {
     private Long metricsInfoId;
+
+    @Schema(
+            nullable = true
+    )
     private String agentConnectId;
     private String queueId;
     private BigDecimal value;

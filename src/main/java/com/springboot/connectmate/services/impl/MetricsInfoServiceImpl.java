@@ -45,7 +45,12 @@ public class MetricsInfoServiceImpl implements MetricsInfoService {
 
     public void addThresholdBreaches(ThresholdBreachesRequestDTO thresholdBreaches) {
         MetricsInfo metricsInfo = findById(thresholdBreaches.getMetricsInfoId());
-        Users agent = usersService.findById(thresholdBreaches.getAgentConnectId());
+        Users agent;
+
+        if(thresholdBreaches.getAgentConnectId() != null)
+            agent = usersService.findById(thresholdBreaches.getAgentConnectId());
+        else
+            agent = null;
 
         // DTO -> Model
         ThresholdBreaches thresholdBreachesModel = new ThresholdBreaches();
@@ -58,8 +63,7 @@ public class MetricsInfoServiceImpl implements MetricsInfoService {
         thresholdBreachesModel.setOccurredAt(thresholdBreaches.getOccurredAt());
         thresholdBreachesModel.setStatus(thresholdBreaches.getStatus());
 
-        if (metricsInfo != null) {
+        if (metricsInfo != null)
             thresholdBreachesRepository.save(thresholdBreachesModel);
-        }
     }
 }

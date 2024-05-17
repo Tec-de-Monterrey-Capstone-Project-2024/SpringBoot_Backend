@@ -24,10 +24,6 @@ public class UsersServiceImpl implements UsersService {
     public Users findById(String id){
         Optional<Users> usersOptional = usersRepository.findById(id);
 
-        if(usersOptional.isPresent()){
-            return usersOptional.get();
-        } else {
-            throw new RuntimeException("User not found for id '" + id +  "'");
-        }
+        return usersOptional.orElse(null);
     }
 }
