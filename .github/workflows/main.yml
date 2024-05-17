@@ -79,4 +79,3 @@ jobs:
           --port=3001 \
           --region=us-central1 \
           --allow-unauthenticated
-        
