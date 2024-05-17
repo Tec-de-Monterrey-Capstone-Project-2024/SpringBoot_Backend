@@ -27,6 +27,8 @@ COPY pom.xml .
 RUN mvn dependency:go-offline -B
 # Copies the source code to the container.
 COPY src ./src
+
+COPY ./run.sh /run.sh
 # Set environment variables from build-time arguments
 ENV PORT=$PORT
 ENV DB_HOST=$DB_HOST
@@ -61,6 +63,7 @@ ARG AWS_SECRET_KEY
 ARG AWS_REGION
 # Copies the built JAR file from the previous stage.
 COPY --from=build /app/target/springboot-connectmate-rest-api-0.0.1-SNAPSHOT.jar /app/springboot-connectmate-rest-api.jar
+COPY --from=build /run.sh /app/run.sh
 # Set environment variables from build-time arguments
 ENV PORT=$PORT
 ENV DB_HOST=$DB_HOST
