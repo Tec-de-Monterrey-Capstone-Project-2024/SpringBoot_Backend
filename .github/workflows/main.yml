@@ -74,7 +74,7 @@ jobs:
       run: |
         gcloud run deploy connectmate \
           --image=us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/springboot-backend/connectmate \
-          --set-env-vars PORT=8080,DB_HOST="34.71.134.63",DB_NAME="new_connectmate_db",DB_USER="root",DB_PASSWORD=${{ secrets.DB_PASSWORD }},AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }},AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }},AWS_REGION="us-east-1" \
+          --set-env-vars "PORT=8080,DB_HOST=34.71.134.63,DB_NAME=new_connectmate_db,DB_USER=root,DB_PASSWORD=${{ secrets.DB_PASSWORD }},AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }},AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }},AWS_REGION=us-east-1" \
           --platform=managed \
           --port=3001 \
           --region=us-central1 \
