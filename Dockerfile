@@ -76,4 +76,4 @@ RUN echo "env vars on second stage:" && \
 # Exposes the port where the application will be running.
 EXPOSE 8080
 # Command to run the application when the container starts.
-ENTRYPOINT ["java", "-DPORT=${PORT}", "-DDB_HOST=${DB_HOST}", "-DDB_NAME=${DB_NAME}", "-DDB_USER=${DB_USER}", "-DDB_PASSWORD=${DB_PASSWORD}", "-DAWS_ACCESS_KEY=${AWS_ACCESS_KEY}", "-DAWS_SECRET_KEY=${AWS_SECRET_KEY}", "-DAWS_REGION=${AWS_REGION}", "-jar", "/app/springboot-connectmate-rest-api.jar"]
+CMD ["/app/run.sh"]
