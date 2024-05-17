@@ -64,6 +64,7 @@ ARG AWS_REGION
 # Copies the built JAR file from the previous stage.
 COPY --from=build /app/target/springboot-connectmate-rest-api-0.0.1-SNAPSHOT.jar /app/springboot-connectmate-rest-api.jar
 COPY --from=build /run.sh /app/run.sh
+RUN chmod +x /app/run.sh
 # Set environment variables from build-time arguments
 ENV PORT=$PORT
 ENV DB_HOST=$DB_HOST
