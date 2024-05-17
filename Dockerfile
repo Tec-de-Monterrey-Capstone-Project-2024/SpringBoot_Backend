@@ -25,20 +25,20 @@ FROM openjdk:17-alpine
 # Copies the built JAR file from the previous stage.
 COPY --from=build /app/target/springboot-connectmate-rest-api-0.0.1-SNAPSHOT.jar /app/springboot-connectmate-rest-api.jar
 # Set environment variables
-ENV PORT=${PORT}
-ENV DB_HOST=${DB_HOST}
-ENV DB_NAME=${DB_NAME}
-ENV DB_USER=${DB_USER}
-ENV DB_PASSWORD=${DB_PASSWORD}
-ENV AWS_ACCESS_KEY=${AWS_ACCESS_KEY}
-ENV AWS_SECRET_KEY=${AWS_SECRET_KEY}
-ENV AWS_REGION=${AWS_REGION}
+ENV PORT=8080
+ENV DB_HOST=$DB_HOST
+ENV DB_NAME=$DB_NAME
+ENV DB_USER=$DB_USER
+ENV DB_PASSWORD=$DB_PASSWORD
+ENV AWS_ACCESS_KEY=$AWS_ACCESS_KEY
+ENV AWS_SECRET_KEY=$AWS_SECRET_KEY
+ENV AWS_REGION=$AWS_REGION
 # Exposes the port where the application will be running.
 EXPOSE 8080
 # Command to run the application when the container starts.
-CMD ["sh", "-c", "echo 'PORT: ${PORT}' && \
-                    echo 'DB_HOST: ${DB_HOST}' && \
-                    echo 'DB_NAME: ${DB_NAME}' && \
+CMD ["sh", "-c", "echo 'PORT: $PORT' && \
+                    echo 'DB_HOST: $DB_HOST' && \
+                    echo 'DB_NAME: $DB_NAME' && \
                     echo 'DB_USER: ${DB_USER}' && \
                     echo 'DB_PASSWORD: ${DB_PASSWORD}' && \
                     echo 'AWS_ACCESS_KEY: ${AWS_ACCESS_KEY}' && \
