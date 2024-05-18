@@ -6,13 +6,12 @@ on:
       - main
 
 jobs:
-         
+
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-    -
-      name: Login to GCR
+    - name: Login to GCR
       uses: docker/login-action@v3
       with:
         registry: gcr.io
@@ -39,24 +38,56 @@ jobs:
 
     - name: Build and push Docker image to Artifact Registry
       env:
-        ARTIFACT_REGISTRY_REGION: us-central1 
-        REGION: "us-central1" 
-        GAR_LOCATION: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/springboot-backend
+        DB_HOST: "34.71.134.63"
+        DB_NAME: "new_connectmate_db"
+        DB_USER: "root"
+        AWS_REGION: "us-east-1"
+        GCP_REGION: "us-central1"
+        GCP_AR_LOCATION: "us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/springboot-backend/connectmate"
       run: |
-        gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
-        docker build -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/springboot-backend/connectmate .
-        docker tag us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/springboot-backend/connectmate us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/springboot-backend/connectmate:$GITHUB_SHA
-        docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/springboot-backend/connectmate:$GITHUB_SHA
-        docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/springboot-backend/connectmate:latest
-
-
+        gcloud auth configure-docker ${{ env.GCP_REGION }}-docker.pkg.dev --quiet
+        
+        docker build \
+        -t ${{ env.GCP_AR_LOCATION }} \
+        --build-arg DB_HOST="${{ env.DB_HOST }}" \
+        --build-arg DB_NAME="${{ env.DB_NAME }}" \
+        --build-arg DB_USER="${{ env.DB_USER }}" \
+        --build-arg DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
+        --build-arg AWS_ACCESS_KEY="${{ secrets.AWS_ACCESS_KEY }}" \
+        --build-arg AWS_SECRET_KEY="${{ secrets.AWS_SECRET_KEY }}" \
+        --build-arg AWS_REGION="${{ env.AWS_REGION }}" \
+        --no-cache .
+      
+        docker tag ${{ env.GCP_AR_LOCATION }} ${{ env.GCP_AR_LOCATION }}:$GITHUB_SHA
+        docker push ${{ env.GCP_AR_LOCATION }}:$GITHUB_SHA
+        docker push ${{ env.GCP_AR_LOCATION }}:latest
 
     - name: Deploy to Cloud Run
+      env:
+        DB_HOST: "34.71.134.63"
+        DB_NAME: "new_connectmate_db"
+        DB_USER: "root"
+        AWS_REGION: "us-east-1"
       run: |
+        # Create a JSON file for gcloud
+        echo '{
+          "DB_HOST": "${{ env.DB_HOST }}",
+          "DB_NAME": "${{ env.DB_NAME }}",
+          "DB_USER": "${{ env.DB_USER }}",
+          "DB_PASSWORD": "${{ secrets.DB_PASSWORD }}",
+          "AWS_ACCESS_KEY": "${{ secrets.AWS_ACCESS_KEY }}",
+          "AWS_SECRET_KEY": "${{ secrets.AWS_SECRET_KEY }}",
+          "AWS_REGION": "${{ env.AWS_REGION }}"
+        }' > env-vars.json
+        
+        cat env-vars.json
+        
         gcloud run deploy connectmate \
           --image=us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/springboot-backend/connectmate \
+          --env-vars-file=env-vars.json \
           --platform=managed \
           --port=3000 \
           --region=us-central1 \
-          --allow-unauthenticated \
-          --set-env-vars DB_HOST=${{ env.DB_HOST }},DB_NAME=${{ env.DB_NAME }},DB_USER=${{ env.DB_USER }},DB_PASSWORD=${{ secrets.DB_PASSWORD }},AWS_ACCESS_KEY=${{ env.AWS_ACCESS_KEY }},AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }},AWS_REGION=${{ env.AWS_REGION }}
+          --allow-unauthenticated
+
+
