@@ -86,7 +86,7 @@ jobs:
           --image=us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/springboot-backend/connectmate \
           --env-vars-file=env-vars.json \
           --platform=managed \
-          --port=300O \
+          --port=3000 \
           --region=us-central1 \
           --allow-unauthenticated
 
