@@ -1,8 +1,6 @@
 package com.springboot.connectmate.services;
 
 import com.amazonaws.services.connect.model.*;
-import com.springboot.connectmate.dtos.AmazonConnect.*;
-import com.springboot.connectmate.dtos.AmazonConnect.ConnectUserDataDTO;
 
 import java.util.List;
 
@@ -16,13 +14,9 @@ public interface AmazonConnectService {
     List<String> getHistoricalMetrics(String instanceId, String queueId);
     List<String> getHistoricalMetricsV2(String instanceId, String queueId);
     List<String> getCurrentMetrics(String instanceId);
-
-    String getUserDescription(String instanceId, String userId);
-
-
+    User getUserDescription(String instanceId, String userId);
     String getTests(String instanceId);
     String listTests(String instanceId);
-
-    List<ConnectUserDataDTO> getCurrentData(String instanceId);
-
+    List<UserData> getCurrentData(String instanceId);
+    Queue describeQueue(String instanceId, String queueId);
 }

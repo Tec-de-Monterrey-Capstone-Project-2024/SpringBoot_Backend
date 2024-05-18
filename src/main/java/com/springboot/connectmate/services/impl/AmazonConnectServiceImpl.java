@@ -6,8 +6,7 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.connect.AmazonConnect;
 import com.amazonaws.services.connect.AmazonConnectClientBuilder;
 import com.amazonaws.services.connect.model.*;
-import com.springboot.connectmate.dtos.AmazonConnect.*;
-import com.springboot.connectmate.dtos.AmazonConnect.ConnectUserDataDTO;
+import com.amazonaws.services.connect.model.Queue;
 import com.springboot.connectmate.services.AmazonConnectService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -183,13 +182,13 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
     }
 
     @Override
-    public String getUserDescription(String instanceId, String userId) {
+    public User getUserDescription(String instanceId, String userId) {
         DescribeUserRequest describeUserRequest = new DescribeUserRequest()
                 .withInstanceId(instanceId)
                 .withUserId(userId);
 
         DescribeUserResult describeUserResult = amazonConnectClient().describeUser(describeUserRequest);
-        return describeUserResult.getUser().toString();
+        return describeUserResult.getUser();
     }
 
 
@@ -217,7 +216,7 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
     }
 
     @Override
-    public List<ConnectUserDataDTO> getCurrentData(String instanceId) {
+    public List<UserData> getCurrentData(String instanceId) {
         UserDataFilters userDataFilters = new UserDataFilters()
                 .withQueues(listQueues(instanceId).stream()
                         .map(QueueSummary::getId)
@@ -229,14 +228,17 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
 
         GetCurrentUserDataResult getCurrentUserDataResult = amazonConnectClient().getCurrentUserData(getCurrentUserDataRequest);
 
-        return getCurrentUserDataResult.getUserDataList().stream()
-                .map(userData -> {
-                    ConnectUserDataDTO connectUserDataDTO = new ConnectUserDataDTO();
-                    connectUserDataDTO.setUserId(userData.getUser().getId());
-                    connectUserDataDTO.setRoutingProfileId(userData.getRoutingProfile().getId());
-                    connectUserDataDTO.setQueueId(userData.getContacts().get(0).getQueue().getId());
-                    return connectUserDataDTO;
-                })
-                .collect(Collectors.toList());
+        return getCurrentUserDataResult.getUserDataList();
+    }
+
+    @Override
+    public Queue describeQueue(String instanceId, String queueId) {
+        DescribeQueueRequest describeQueueRequest = new DescribeQueueRequest()
+                .withInstanceId(instanceId)
+                .withQueueId(queueId);
+
+        DescribeQueueResult describeQueueResult = amazonConnectClient().describeQueue(describeQueueRequest);
+
+        return describeQueueResult.getQueue();
     }
 }
