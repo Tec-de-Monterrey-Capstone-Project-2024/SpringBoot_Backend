@@ -10,7 +10,6 @@ public interface AmazonConnectService {
     List<AgentStatusSummary> listAgents(String instanceId);
     List<UserSummary> listUsers(String instanceId);
     List<RoutingProfileSummary> listRoutingProfiles(String instanceId);
-
     List<String> getHistoricalMetrics(String instanceId, String queueId);
     List<String> getHistoricalMetricsV2(String instanceId, String queueId);
     List<String> getCurrentMetrics(String instanceId);
@@ -18,5 +17,5 @@ public interface AmazonConnectService {
     String getTests(String instanceId);
     String listTests(String instanceId);
     List<UserData> getCurrentData(String instanceId);
-    Queue describeQueue(String instanceId, String queueId);
+    Queue  describeQueue(String instanceId, String queueId);
 }
