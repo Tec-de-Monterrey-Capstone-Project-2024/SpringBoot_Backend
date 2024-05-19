@@ -2,7 +2,6 @@ package com.springboot.connectmate.controllers;
 
 import com.amazonaws.services.connect.model.*;
 import com.springboot.connectmate.dtos.AmazonConnect.*;
-import com.springboot.connectmate.dtos.AmazonConnect.ConnectUserDataDTO;
 import com.springboot.connectmate.services.AmazonConnectService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -34,7 +33,7 @@ public class AmazonConnectController {
     @ApiResponse(
             responseCode = "200",
             content = @Content(mediaType = "application/json",
-                               array = @ArraySchema(schema = @Schema(implementation = ConnectInstanceDTO.class))),
+                               array = @ArraySchema(schema = @Schema(implementation = InstanceSummary.class))),
             description = "List of instances fetched successfully."
     )
     @Operation(
@@ -49,7 +48,7 @@ public class AmazonConnectController {
     @ApiResponse(
             responseCode = "200",
             content = @Content(mediaType = "application/json",
-                               array = @ArraySchema(schema = @Schema(implementation = ConnectQueueDTO.class))),
+                               array = @ArraySchema(schema = @Schema(implementation = QueueSummary.class))),
             description = "List of queues for a given instance fetched successfully."
     )
     @Operation(
@@ -64,7 +63,7 @@ public class AmazonConnectController {
     @ApiResponse(
             responseCode = "200",
             content = @Content(mediaType = "application/json",
-                               array = @ArraySchema(schema = @Schema(implementation = ConnectUserDTO.class))),
+                               array = @ArraySchema(schema = @Schema(implementation = UserSummary.class))),
             description = "List of users for a given instance fetched successfully."
     )
     @Operation(
@@ -79,7 +78,7 @@ public class AmazonConnectController {
     @ApiResponse(
             responseCode = "200",
             content = @Content(mediaType = "application/json",
-                               array = @ArraySchema(schema = @Schema(implementation = ConnectAgentDTO.class))),
+                               array = @ArraySchema(schema = @Schema(implementation = AgentStatusSummary.class))),
             description = "List of agent statuses for a given instance fetched successfully."
     )
     @Operation(
@@ -111,6 +110,8 @@ public class AmazonConnectController {
 
     @ApiResponse(
             responseCode = "200",
+            content = @Content(mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = String.class))),
             description = "List of historical metrics for a given instance fetched successfully"
     )
     @GetMapping("/instances/{instanceId}/queues/{queueId}/historial-metrics")
@@ -122,7 +123,13 @@ public class AmazonConnectController {
 
     @ApiResponse(
             responseCode = "200",
+            content = @Content(mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = String.class))),
             description = "List of current metrics for a given instance fetched successfully"
+    )
+    @Operation(
+            summary = "Get all current metrics",
+            description = "Get Amazon Connect current metrics by instanceARN."
     )
     @GetMapping("/instances/current-metrics")
     public ResponseEntity<List<String>> getCurrentMetrics(
@@ -133,7 +140,7 @@ public class AmazonConnectController {
     @ApiResponse(
             responseCode = "200",
             content = @Content(mediaType = "application/json",
-                               array = @ArraySchema(schema = @Schema(implementation = ConnectRoutingProfileDTO.class))),
+                               array = @ArraySchema(schema = @Schema(implementation = RoutingProfileSummary.class))),
             description = "List of routing profiles for a given instance fetched successfully."
     )
     @Operation(
@@ -145,14 +152,48 @@ public class AmazonConnectController {
         return ResponseEntity.ok(amazonConnectService.listRoutingProfiles(instanceId));
     }
 
-
-    @GetMapping("/instances/{instanceId}/queue-agents")
-    public ResponseEntity<List<ConnectUserDataDTO>> getQueueAgents(@PathVariable(name = "instanceId") String instanceId) {
+    @ApiResponse(
+            responseCode = "200",
+            content = @Content(mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = UserData.class))),
+            description = "List of all current data of agents, queues, and contacts."
+    )
+    @Operation(
+            summary = "Get the current data of agents, queues, and contacts.",
+            description = "Get the current data of agents, queues, and contacts by instance ID"
+    )
+    @GetMapping("/instances/{instanceId}/current-data")
+    public ResponseEntity<List<UserData>> getCurrentData(@PathVariable(name = "instanceId") String instanceId) {
         return ResponseEntity.ok(amazonConnectService.getCurrentData(instanceId));
     }
 
+    @ApiResponse(
+            responseCode = "200",
+            content = @Content(mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = User.class))),
+            description = "Get a user's info."
+    )
+    @Operation(
+            summary = "Gets the data of a particular user.",
+            description = "Gets the data of a particular user by instance ID and user ID."
+    )
     @GetMapping("/instances/{instanceId}/users/{userId}/description")
-    public ResponseEntity<String> getUserDescription(@PathVariable(name = "instanceId") String instanceId, @PathVariable(name = "userId") String userId) {
+    public ResponseEntity<User> getUserDescription(@PathVariable(name = "instanceId") String instanceId, @PathVariable(name = "userId") String userId) {
         return ResponseEntity.ok(amazonConnectService.getUserDescription(instanceId, userId));
+    }
+
+    @ApiResponse(
+            responseCode = "200",
+            content = @Content(mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = Queue.class))),
+            description = "Get a queue's info."
+    )
+    @Operation(
+            summary = "Gets the data of a particular queue.",
+            description = "Gets the data of a particular queue by instance ID and queue ID."
+    )
+    @GetMapping("/instances/{instanceId}/queues/{queueId}/description")
+    public ResponseEntity<Queue> describeQueue(@PathVariable(name = "instanceId") String instanceId, @PathVariable(name = "queueId") String queueId) {
+        return ResponseEntity.ok(amazonConnectService.describeQueue(instanceId, queueId));
     }
 }

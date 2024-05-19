@@ -1,11 +1,12 @@
 package com.springboot.connectmate.controllers;
 
-import com.springboot.connectmate.models.ThresholdBreaches;
+import com.springboot.connectmate.dtos.Metric.ThresholdBreachesRequestDTO;
 import com.springboot.connectmate.services.MetricsInfoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,9 +34,9 @@ public class MetricsInfoController {
             responseCode = "201",
             description = "Threshold Breach created successfully"
     )
-    @PostMapping("/{id}")
-    public ResponseEntity<?> addThresholdBreach(@PathVariable int id, @RequestBody ThresholdBreaches thresholdBreaches){
-        metricsInfoService.addThresholdBreaches(id, thresholdBreaches);
-        return ResponseEntity.ok("Threshold Breach added successfully");
+    @PostMapping
+    public ResponseEntity<?> addThresholdBreach(@RequestBody ThresholdBreachesRequestDTO thresholdBreaches){
+        metricsInfoService.addThresholdBreaches(thresholdBreaches);
+        return new ResponseEntity<>(null, HttpStatus.CREATED);
     }
 }
