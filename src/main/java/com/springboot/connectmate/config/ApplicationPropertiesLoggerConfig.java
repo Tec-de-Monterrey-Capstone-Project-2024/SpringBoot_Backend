@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class ApplicationPropertiesLogger {
+public class ApplicationPropertiesLoggerConfig {
 
     @Value("${spring.application.name}")
     private String applicationName;
