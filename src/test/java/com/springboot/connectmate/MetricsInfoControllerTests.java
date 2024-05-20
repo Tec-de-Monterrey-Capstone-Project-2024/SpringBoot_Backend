@@ -2,11 +2,13 @@ package com.springboot.connectmate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.springboot.connectmate.dtos.Metric.ThresholdBreachesRequestDTO;
 import com.springboot.connectmate.enums.Performance;
 import com.springboot.connectmate.enums.Status;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,15 +22,15 @@ import java.time.LocalDateTime;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@AutoConfigureTestDatabase
+@EnableAutoConfiguration
 public class MetricsInfoControllerTests {
     @Autowired
     MockMvc mockMvc;
 
     @Test
+    @AutoConfigureTestDatabase
     public void addThresholdBreachForAgent() throws Exception {
         // Create user (firebase and connectmate, dummy data, no verification (no integrity))
-
 
         // Create metric
 
@@ -44,6 +46,8 @@ public class MetricsInfoControllerTests {
         requestBody.setOccurredAt(LocalDateTime.now());
         requestBody.setStatus(Status.IN_PROGRESS);
 
+        System.out.println(requestBody);
+
         mockMvc.perform(MockMvcRequestBuilders.post("/api/metrics-info")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectToJSON(requestBody))
@@ -51,8 +55,10 @@ public class MetricsInfoControllerTests {
     }
 
     private static String objectToJSON(Object object) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.writeValueAsString(object);
+        ObjectMapper om = new ObjectMapper();
+        om.registerModule(new JavaTimeModule());
+
+        return om.writeValueAsString(object);
     }
 
 }

@@ -40,7 +40,6 @@ import org.springframework.web.filter.CorsFilter;
 		servers = {
 				@Server(url = "http://localhost:8080", description = "Local development server"),
 				@Server(url = "https://connectmate-f72xn3ewaa-uc.a.run.app", description = "Production server")
-
 		}
 )
 
