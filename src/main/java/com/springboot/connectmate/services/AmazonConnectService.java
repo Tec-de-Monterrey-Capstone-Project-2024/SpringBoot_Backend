@@ -16,6 +16,6 @@ public interface AmazonConnectService {
     User getUserDescription(String instanceId, String userId);
     String getTests(String instanceId);
     String listTests(String instanceId);
-    List<UserData> getCurrentData(String instanceId);
-    Queue  describeQueue(String instanceId, String queueId);
+    List<UserData> getCurrentUserData(String instanceId);
+    Queue describeQueue(String instanceId, String queueId);
 }

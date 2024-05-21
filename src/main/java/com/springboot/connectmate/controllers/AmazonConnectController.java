@@ -162,9 +162,9 @@ public class AmazonConnectController {
             summary = "Get the current data of agents, queues, and contacts.",
             description = "Get the current data of agents, queues, and contacts by instance ID"
     )
-    @GetMapping("/instances/{instanceId}/current-data")
-    public ResponseEntity<List<UserData>> getCurrentData(@PathVariable(name = "instanceId") String instanceId) {
-        return ResponseEntity.ok(amazonConnectService.getCurrentData(instanceId));
+    @GetMapping("/instances/{instanceId}/current-user-data")
+    public ResponseEntity<List<UserData>> getCurrentUserData(@PathVariable(name = "instanceId") String instanceId) {
+        return ResponseEntity.ok(amazonConnectService.getCurrentUserData(instanceId));
     }
 
     @ApiResponse(
