@@ -1,5 +1,4 @@
 package com.springboot.connectmate.services;
 
-public interface ThresholdBreachesService {
-
+public interface BedrockService {
 }
