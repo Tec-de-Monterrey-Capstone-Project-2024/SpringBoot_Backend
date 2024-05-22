@@ -8,7 +8,6 @@ import lombok.Data;
 @Schema(
         name = "User",
         description = "DTO for User"
-
 )
 public class UserDTO {
 
