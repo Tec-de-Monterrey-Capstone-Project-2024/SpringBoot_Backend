@@ -1,7 +1,7 @@
 package com.springboot.connectmate.controllers;
 
 import com.amazonaws.services.connect.model.*;
-import com.springboot.connectmate.dtos.AmazonConnect.*;
+import com.amazonaws.services.connect.model.Queue;
 import com.springboot.connectmate.services.AmazonConnectService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/amazon-connect")
@@ -192,8 +192,45 @@ public class AmazonConnectController {
             summary = "Gets the data of a particular queue.",
             description = "Gets the data of a particular queue by instance ID and queue ID."
     )
-    @GetMapping("/instances/{instanceId}/queues/{queueId}/description")
+    @GetMapping("/instances/{instanceId}/queues /{queueId}/description")
     public ResponseEntity<Queue> describeQueue(@PathVariable(name = "instanceId") String instanceId, @PathVariable(name = "queueId") String queueId) {
         return ResponseEntity.ok(amazonConnectService.describeQueue(instanceId, queueId));
+    }
+
+    @ApiResponse(
+            responseCode = "200",
+            content = @Content(mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = Map.class))),
+            description = "Get all the users and contact info for all the queues."
+    )
+    @Operation(
+            summary = "Gets the user and contact data of all queues.",
+            description = "Gets the users and contacts of all queues."
+    )
+    @GetMapping("/instances/{instanceId}/queue-users")
+    public Map<String, Map<String, Object>> queueUserCounts(@PathVariable(name = "instanceId") String instanceId) {
+        ResponseEntity<List<UserData>> response = getCurrentData(instanceId);
+        List<UserData> userDataList = response.getBody();
+        Map<String, Map<String, Object>> queueInfo = new HashMap<>();
+
+        if (userDataList != null) {
+            for (UserData userData : userDataList) {
+                String userId = userData.getUser().getId();
+                for (AgentContactReference contact : userData.getContacts()) {
+                    String queueId = contact.getQueue().getId();
+                    queueInfo.putIfAbsent(queueId, new HashMap<>());
+                    queueInfo.get(queueId).putIfAbsent("users", new HashSet<>());
+                    queueInfo.get(queueId).putIfAbsent("contactCount", 0);
+
+                    Set<String> users = (Set<String>) queueInfo.get(queueId).get("users");
+                    users.add(userId);
+
+                    int count = (int) queueInfo.get(queueId).get("contactCount");
+                    queueInfo.get(queueId).put("contactCount", count + 1);
+                }
+            }
+        }
+
+        return queueInfo;
     }
 }
