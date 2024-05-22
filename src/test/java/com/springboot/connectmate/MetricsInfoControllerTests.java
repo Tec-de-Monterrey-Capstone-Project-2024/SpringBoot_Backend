@@ -92,7 +92,6 @@ public class MetricsInfoControllerTests {
         MetricsInfo savedMetric = metricsRepository.save(m);
 
 
-
         // Create queue
 
         // Create & fill the request body (JSON)

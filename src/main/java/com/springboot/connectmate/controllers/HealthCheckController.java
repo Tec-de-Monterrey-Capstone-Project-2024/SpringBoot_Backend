@@ -41,8 +41,8 @@ public class HealthCheckController {
     )
     @GetMapping("/version")
     public ResponseEntity<String> getVersion() {
-        String currentVersion = "1.0.0";
-        String deploymentDate = "2024-05-18";
+        String currentVersion = "0.0.0";
+        String deploymentDate = "2024-04-24";
         return ResponseEntity.ok("Current service version: " + currentVersion + ", deployed on: " + deploymentDate);
     }
 }
