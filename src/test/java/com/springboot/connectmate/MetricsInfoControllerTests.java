@@ -12,8 +12,10 @@ import com.springboot.connectmate.models.Users;
 import com.springboot.connectmate.repositories.MetricsInfoRepository;
 import com.springboot.connectmate.repositories.ThresholdBreachesRepository;
 import com.springboot.connectmate.repositories.UsersRepository;
+import com.springboot.connectmate.services.impl.AmazonConnectServiceImpl;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -41,11 +43,24 @@ public class MetricsInfoControllerTests {
     @Autowired
     private UsersRepository usersRepository;
 
-    @Test
-    public void addValidThresholdBreachForAgent() throws Exception {
-        // Create dummy User Connect ID
-        // Pattern 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX'
-        Random numberGenerator = new Random();
+    @Autowired
+    private AmazonConnectServiceImpl amazonConnectServices = new AmazonConnectServiceImpl(new ModelMapper());
+
+    private final static Random numberGenerator = new Random();
+
+
+    private static Boolean generateRandomBoolean(){
+        return numberGenerator.nextBoolean();
+    }
+
+    // Random data for metrics
+    private static Code generateRandomMetricCategory(){
+        return Code.values()[numberGenerator.nextInt(8)];
+    }
+
+    // Create dummy User Connect ID
+    // Pattern 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX'
+    private static String generateDummyAgentConnectId(){
         int randomNumber1Part1 = numberGenerator.nextInt(65536);
         int randomNumber1Part2 = numberGenerator.nextInt(65536);
         int randomNumber2 = numberGenerator.nextInt(65536);
@@ -55,24 +70,21 @@ public class MetricsInfoControllerTests {
         int randomNumber5Part2 = numberGenerator.nextInt(65536);
         int randomNumber5Part3 = numberGenerator.nextInt(65536);
 
-        // Create random data for Metrics
-        Code code = Code.values()[numberGenerator.nextInt(8)];
+        return Integer.toHexString(randomNumber1Part1) +
+                Integer.toHexString(randomNumber1Part2) + "-" +
+                Integer.toHexString(randomNumber2) + "-" +
+                Integer.toHexString(randomNumber3) + "-" +
+                Integer.toHexString(randomNumber4) + "-" +
+                Integer.toHexString(randomNumber5Part1) +
+                Integer.toHexString(randomNumber5Part2) +
+                Integer.toHexString(randomNumber5Part3);
+    }
 
-        String[] boolValues = {"FALSE", "TRUE"};
-        Boolean choosenBoolean1 = Boolean.getBoolean(boolValues[numberGenerator.nextInt(1)]);
-        Boolean choosenBoolean2 = Boolean.getBoolean(boolValues[numberGenerator.nextInt(1)]);
-
+    @Test
+    public void addValidThresholdBreachForAgent() throws Exception {
         // Create user (firebase and connectmate, dummy data, no verification (no integrity))
         Users u = new Users();
-        u.setConnectId(Integer.toHexString(randomNumber1Part1) +
-                       Integer.toHexString(randomNumber1Part2) + "-" +
-                       Integer.toHexString(randomNumber2) + "-" +
-                       Integer.toHexString(randomNumber3) + "-" +
-                       Integer.toHexString(randomNumber4) + "-" +
-                       Integer.toHexString(randomNumber5Part1) +
-                       Integer.toHexString(randomNumber5Part2) +
-                       Integer.toHexString(randomNumber5Part3)
-        );
+        u.setConnectId(generateDummyAgentConnectId());
         u.setFirebaseId(RandomStringUtils.randomAlphabetic(28));
 
         // Debug
@@ -81,23 +93,27 @@ public class MetricsInfoControllerTests {
 
         Users savedUser = usersRepository.save(u);
 
-        // Create metric
+        // Create metric (dummy data)
         MetricsInfo m = new MetricsInfo();
-        m.setCode(code);
-        m.setIsPositive(choosenBoolean1);
-        m.setIsGeneral(choosenBoolean2);
+        m.setCode(generateRandomMetricCategory());
+        m.setIsPositive(generateRandomBoolean());
+        m.setIsGeneral(generateRandomBoolean());
         m.setThreshold(numberGenerator.nextLong(200));
-        m.setNameTemplate("High occupancy in queue");
+        m.setNameTemplate("'Name Template' attribute for Testing. The name of the metric.");
+        m.setSummaryTemplate("'Summary Template' attribute for Testing");
+        m.setSituationTemplate("'Situation Template' attribute for Testing");
+        m.setActionsTemplate("''Actions Template' attribute for Testing");
 
         MetricsInfo savedMetric = metricsRepository.save(m);
 
-
         // Create queue
+        // Queue q = client.createQueue();
+
 
         // Create & fill the request body (JSON)
         ThresholdBreachesRequestDTO requestBody = new ThresholdBreachesRequestDTO();
-        requestBody.setMetricsInfoId(1L);
-        requestBody.setAgentConnectId("ed7c391c-8e65-415f-950c-7347dcc9f067");
+        requestBody.setMetricsInfoId(savedMetric.getId());
+        requestBody.setAgentConnectId(savedUser.getConnectId());
         requestBody.setQueueId("f0813607-af92-4a36-91e6-630ababb643c");
         requestBody.setValue(new BigDecimal(50));
         requestBody.setPerformance(Performance.BELOW_EXPECTATIONS);
@@ -111,7 +127,6 @@ public class MetricsInfoControllerTests {
         ).andExpect(MockMvcResultMatchers.content().string(""));
 
         // Validate that the data was created in the database
-
 
         // Eliminate the new register
 

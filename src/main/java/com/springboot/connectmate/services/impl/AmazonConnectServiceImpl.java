@@ -6,7 +6,6 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.connect.AmazonConnect;
 import com.amazonaws.services.connect.AmazonConnectClientBuilder;
 import com.amazonaws.services.connect.model.*;
-import com.springboot.connectmate.dtos.AmazonConnect.*;
 import com.springboot.connectmate.dtos.AmazonConnect.ConnectUserDataDTO;
 import com.springboot.connectmate.services.AmazonConnectService;
 import org.modelmapper.ModelMapper;
@@ -239,4 +238,24 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
                 })
                 .collect(Collectors.toList());
     }
+
+
+    public QueueReference createQueue(String instanceId, String name, String description){
+        CreateQueueRequest createQeueueRequest = new CreateQueueRequest()
+                .withInstanceId(instanceId)
+                .withName(name)
+                .withDescription(description);
+
+        return new QueueReference();
+    }
+
+
+
+        /*
+        CreateQueueRequest createQeueueRequest = new CreateQueueRequest()
+                .withInstanceId("7c78bd60-4a9f-40e5-b461-b7a0dfaad848")
+                .withName("TestQueue")
+                .withDescription("A temporary queue for testing");
+
+         */
 }
