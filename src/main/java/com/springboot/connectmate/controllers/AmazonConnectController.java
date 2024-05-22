@@ -209,7 +209,8 @@ public class AmazonConnectController {
     )
     @GetMapping("/instances/{instanceId}/queue-users")
     public Map<String, Map<String, Object>> queueUserCounts(@PathVariable(name = "instanceId") String instanceId) {
-        ResponseEntity<List<UserData>> response = getCurrentData(instanceId);
+        // Move to a Service
+        ResponseEntity<List<UserData>> response = getCurrentUserData(instanceId);
         List<UserData> userDataList = response.getBody();
         Map<String, Map<String, Object>> queueInfo = new HashMap<>();
 
