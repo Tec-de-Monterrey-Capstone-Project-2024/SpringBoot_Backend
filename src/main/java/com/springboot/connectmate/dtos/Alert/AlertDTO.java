@@ -1,13 +1,18 @@
 package com.springboot.connectmate.dtos.Alert;
 
 import com.springboot.connectmate.dtos.Metric.MetricDescriptionDTO;
-import com.springboot.connectmate.enums.ThresholdBreachPerformanceCategory;
+import com.springboot.connectmate.enums.Performance;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Schema(
         name = "Alert",
         description = "DTO for Alert"
@@ -32,13 +37,13 @@ public class AlertDTO {
             description = "Value of the Alert",
             example = "70"
     )
-    private double value;
+    private BigDecimal value;
 
     @Schema(
             description = "Breach Category of the Alert",
             example = "CRITICAL"
     )
-    private ThresholdBreachPerformanceCategory breachCategory;
+    private Performance breachCategory;
 
     @Schema(
             description = "Occurred At of the Alert",
