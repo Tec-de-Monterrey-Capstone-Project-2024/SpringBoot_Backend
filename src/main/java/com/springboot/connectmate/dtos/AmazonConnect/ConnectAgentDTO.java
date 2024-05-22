@@ -11,8 +11,8 @@ import lombok.Data;
 )
 public class ConnectAgentDTO {
     @Schema(
-            description = "Identifier (id) of the agent, in this case is a string of " +
-                    "hexadecimal numbers separated by '-' (not a number)",
+            description = "Identifier (id) of the agent status, in this case is a string of " +
+                          "hexadecimal numbers separated by '-' (not a number)",
             example = "05619af9-666f-48c4-986a-4e8874942904"
     )
     private String id;
@@ -25,14 +25,13 @@ public class ConnectAgentDTO {
 
     @Schema(
             description = "The name of the agent status (the minimum length must be of " +
-                    "1 character and the maximum length of 127 characters)",
-
+                          "1 character and the maximum length of 127 characters)",
             example = "Available"
     )
     private String name;
 
     @Schema(
-            description = "The status of the agent",
+            description = "The status type of the agent status",
             examples = {"ROUTABLE", "CUSTOM", "OFFLINE"}
     )
     private AgentStatusType type;

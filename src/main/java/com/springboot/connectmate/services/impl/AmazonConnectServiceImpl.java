@@ -1,17 +1,11 @@
 package com.springboot.connectmate.services.impl;
 
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.regions.Regions;
 import com.amazonaws.services.connect.AmazonConnect;
-import com.amazonaws.services.connect.AmazonConnectClientBuilder;
 import com.amazonaws.services.connect.model.*;
-import com.springboot.connectmate.dtos.AmazonConnect.*;
-import com.springboot.connectmate.dtos.AmazonConnect.ConnectUserDataDTO;
+import com.amazonaws.services.connect.model.Queue;
 import com.springboot.connectmate.services.AmazonConnectService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.ZoneOffset;
@@ -22,72 +16,58 @@ import java.util.stream.Collectors;
 @Service
 public class AmazonConnectServiceImpl implements AmazonConnectService {
 
+    private final AmazonConnect amazonConnectClient;
     private final ModelMapper mapper;
 
-    @Value("${aws.accessKeyId}")
-    private String accessKeyId;
-
-    @Value("${aws.secretKey}")
-    private String secretKey;
-
-    @Value("${aws.region}")
-    private String region;
-
     @Autowired
-    public AmazonConnectServiceImpl(ModelMapper mapper) {
+    public AmazonConnectServiceImpl(AmazonConnect amazonConnectClient, ModelMapper mapper) {
+        this.amazonConnectClient = amazonConnectClient;
         this.mapper = mapper;
     }
 
-    private AmazonConnect amazonConnectClient() {
-        BasicAWSCredentials awsCredentials = new BasicAWSCredentials(accessKeyId, secretKey);
-        return AmazonConnectClientBuilder.standard()
-                .withRegion(Regions.fromName(region))
-                .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
-                .build();
-    }
 
     @Override
-    public List<ConnectInstanceDTO> listConnectInstances() {
+    public List<InstanceSummary> listConnectInstances() {
         ListInstancesRequest listInstancesRequest = new ListInstancesRequest();
-        ListInstancesResult listInstancesResult = amazonConnectClient().listInstances(listInstancesRequest);
+        ListInstancesResult listInstancesResult = amazonConnectClient.listInstances(listInstancesRequest);
         return listInstancesResult.getInstanceSummaryList().stream()
-                .map(instance ->  mapper.map(instance, ConnectInstanceDTO.class))
+                .map(instance ->  mapper.map(instance, InstanceSummary.class))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<ConnectQueueDTO> listQueues(String instanceId) {
+    public List<QueueSummary> listQueues(String instanceId) {
         ListQueuesRequest listQueuesRequest = new ListQueuesRequest().withInstanceId(instanceId);
-        ListQueuesResult listQueuesResult = amazonConnectClient().listQueues(listQueuesRequest);
+        ListQueuesResult listQueuesResult = amazonConnectClient.listQueues(listQueuesRequest);
         return listQueuesResult.getQueueSummaryList().stream()
-                .map(queue -> mapper.map(queue, ConnectQueueDTO.class))
+                .map(queue -> mapper.map(queue, QueueSummary.class))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<ConnectAgentDTO> listAgents(String instanceId) {
+    public List<AgentStatusSummary> listAgents(String instanceId) {
         ListAgentStatusesRequest listAgentStatusesRequest = new ListAgentStatusesRequest().withInstanceId(instanceId);
-        ListAgentStatusesResult listAgentStatusesResult = amazonConnectClient().listAgentStatuses(listAgentStatusesRequest);
+        ListAgentStatusesResult listAgentStatusesResult = amazonConnectClient.listAgentStatuses(listAgentStatusesRequest);
         return listAgentStatusesResult.getAgentStatusSummaryList().stream()
-                .map(agent -> mapper.map(agent, ConnectAgentDTO.class))
+                .map(agent -> mapper.map(agent, AgentStatusSummary.class))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<ConnectUserDTO> listUsers(String instanceId) {
+    public List<UserSummary> listUsers(String instanceId) {
         ListUsersRequest listUsersRequest = new ListUsersRequest().withInstanceId(instanceId);
-        ListUsersResult listUsersResult = amazonConnectClient().listUsers(listUsersRequest);
+        ListUsersResult listUsersResult = amazonConnectClient.listUsers(listUsersRequest);
         return listUsersResult.getUserSummaryList().stream()
-                .map(user -> mapper.map(user, ConnectUserDTO.class))
+                .map(user -> mapper.map(user, UserSummary.class))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<ConnectRoutingProfileDTO> listRoutingProfiles(String instanceId) {
+    public List<RoutingProfileSummary> listRoutingProfiles(String instanceId) {
         ListRoutingProfilesRequest listRoutingProfilesRequest = new ListRoutingProfilesRequest().withInstanceId(instanceId);
-        ListRoutingProfilesResult listRoutingProfilesResult = amazonConnectClient().listRoutingProfiles(listRoutingProfilesRequest);
+        ListRoutingProfilesResult listRoutingProfilesResult = amazonConnectClient.listRoutingProfiles(listRoutingProfilesRequest);
         return listRoutingProfilesResult.getRoutingProfileSummaryList().stream()
-                .map(routingProfile -> mapper.map(routingProfile, ConnectRoutingProfileDTO.class))
+                .map(routingProfile -> mapper.map(routingProfile, RoutingProfileSummary.class))
                 .collect(Collectors.toList());
     }
 
@@ -96,7 +76,7 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
 
         Threshold threshold = new Threshold()
                 .withComparison(Comparison.LT)
-                .withThresholdValue(30.00);
+                .withThresholdValue(20.00);
 
         List<HistoricalMetric> metrics = new ArrayList<>();
         metrics.add(new HistoricalMetric()
@@ -131,7 +111,7 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
                 .withStartTime(Date.from(startTime.toInstant()))
                 .withEndTime(Date.from(endTime.toInstant()));
 
-        GetMetricDataResult getMetricDataResult = amazonConnectClient().getMetricData(getMetricDataRequest);
+        GetMetricDataResult getMetricDataResult = amazonConnectClient.getMetricData(getMetricDataRequest);
         System.out.println(getMetricDataResult.toString());
         return getMetricDataResult.getMetricResults().stream()
                 .map(metricResult -> metricResult.toString())
@@ -141,9 +121,14 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
     @Override
     public List<String> getHistoricalMetricsV2(String instanceArn, String queueId) {
 
+        ThresholdV2 threshold = new ThresholdV2()
+                .withComparison("LT")
+                .withThresholdValue(20.00);
+
         List<MetricV2> metrics = new ArrayList<>();
         metrics.add(new MetricV2()
-                .withName("ABANDONMENT_RATE")
+                .withName("SERVICE_LEVEL")
+                .withThreshold(threshold)
         );
         List<FilterV2> filters = new ArrayList<>();
         filters.add( new FilterV2()
@@ -162,7 +147,7 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
                 .withStartTime(Date.from(startTime.toInstant()))
                 .withEndTime(Date.from(endTime.toInstant()));
 
-        GetMetricDataV2Result getMetricDataResult = amazonConnectClient().getMetricDataV2(getMetricDataV2Request);
+        GetMetricDataV2Result getMetricDataResult = amazonConnectClient.getMetricDataV2(getMetricDataV2Request);
         System.out.println(getMetricDataResult.toString());
 
         return getMetricDataResult.getMetricResults().stream()
@@ -173,13 +158,31 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
     @Override
     public List<String> getCurrentMetrics(String instanceId) {
 
-        GetCurrentMetricDataRequest getCurrentMetricDataRequest = new GetCurrentMetricDataRequest()
-                .withInstanceId(instanceId);
+        List<CurrentMetric> currentMetrics = new ArrayList<>();
+        currentMetrics.add(new CurrentMetric()
+                .withName(CurrentMetricName.AGENTS_ON_CALL)
+        );
 
-        GetCurrentMetricDataResult getCurrentMetricDataResult = amazonConnectClient().getCurrentMetricData(getCurrentMetricDataRequest);
+
+
+        GetCurrentMetricDataRequest getCurrentMetricDataRequest = new GetCurrentMetricDataRequest()
+                .withInstanceId(instanceId)
+                .withCurrentMetrics();
+
+        GetCurrentMetricDataResult getCurrentMetricDataResult = amazonConnectClient.getCurrentMetricData(getCurrentMetricDataRequest);
         return getCurrentMetricDataResult.getMetricResults().stream()
                 .map(metric-> metric.toString())
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public User getUserDescription(String instanceId, String userId) {
+        DescribeUserRequest describeUserRequest = new DescribeUserRequest()
+                .withInstanceId(instanceId)
+                .withUserId(userId);
+
+        DescribeUserResult describeUserResult = amazonConnectClient.describeUser(describeUserRequest);
+        return describeUserResult.getUser();
     }
 
 
@@ -207,26 +210,29 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
     }
 
     @Override
-    public List<ConnectUserDataDTO> getCurrentData(String instanceId) {
+    public List<UserData> getCurrentUserData(String instanceId) {
         UserDataFilters userDataFilters = new UserDataFilters()
                 .withQueues(listQueues(instanceId).stream()
-                        .map(ConnectQueueDTO::getId)
+                        .map(QueueSummary::getId)
                         .collect(Collectors.toList()));
 
         GetCurrentUserDataRequest getCurrentUserDataRequest = new GetCurrentUserDataRequest()
                 .withFilters(userDataFilters)
                 .withInstanceId(instanceId);
 
-        GetCurrentUserDataResult getCurrentUserDataResult = amazonConnectClient().getCurrentUserData(getCurrentUserDataRequest);
+        GetCurrentUserDataResult getCurrentUserDataResult = amazonConnectClient.getCurrentUserData(getCurrentUserDataRequest);
 
-        return getCurrentUserDataResult.getUserDataList().stream()
-                .map(userData -> {
-                    ConnectUserDataDTO connectUserDataDTO = new ConnectUserDataDTO();
-                    connectUserDataDTO.setUserId(userData.getUser().getId());
-                    connectUserDataDTO.setRoutingProfileId(userData.getRoutingProfile().getId());
-                    connectUserDataDTO.setQueueId(userData.getContacts().get(0).getQueue().getId());
-                    return connectUserDataDTO;
-                })
-                .collect(Collectors.toList());
+        return getCurrentUserDataResult.getUserDataList();
+    }
+
+    @Override
+    public Queue describeQueue(String instanceId, String queueId) {
+        DescribeQueueRequest describeQueueRequest = new DescribeQueueRequest()
+                .withInstanceId(instanceId)
+                .withQueueId(queueId);
+
+        DescribeQueueResult describeQueueResult = amazonConnectClient.describeQueue(describeQueueRequest);
+
+        return describeQueueResult.getQueue();
     }
 }
