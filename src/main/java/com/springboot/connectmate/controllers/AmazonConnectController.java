@@ -133,8 +133,8 @@ public class AmazonConnectController {
     )
     @GetMapping("/instances/current-metrics")
     public ResponseEntity<List<String>> getCurrentMetrics(
-            @RequestParam(name = "instanceArn") String instanceArn){
-        return ResponseEntity.ok(amazonConnectService.getCurrentMetrics(instanceArn));
+            @RequestParam(name = "instanceId") String instanceId){
+        return ResponseEntity.ok(amazonConnectService.getCurrentMetrics(instanceId));
     }
 
     @ApiResponse(
