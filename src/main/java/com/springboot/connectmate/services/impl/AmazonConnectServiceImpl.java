@@ -22,16 +22,12 @@ import java.util.stream.Collectors;
 public class AmazonConnectServiceImpl implements AmazonConnectService {
 
     private final ModelMapper mapper;
-
     @Value("${aws.accessKeyId}")
     private String accessKeyId;
-
     @Value("${aws.secretKey}")
     private String secretKey;
-
     @Value("${aws.region}")
     private String region;
-
     @Autowired
     public AmazonConnectServiceImpl(ModelMapper mapper) {
         this.mapper = mapper;
