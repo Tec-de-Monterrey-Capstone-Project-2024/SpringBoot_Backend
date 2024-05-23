@@ -35,6 +35,7 @@ public class ApplicationPropertiesLoggerConfig {
     @Bean
     public CommandLineRunner logProperties() {
         return args -> {
+            System.out.println("Application Properties Check");
             System.out.println("Application Name: " + applicationName);
             System.out.println("Server Port: " + serverPort);
             System.out.println("Datasource URL: " + datasourceUrl);
