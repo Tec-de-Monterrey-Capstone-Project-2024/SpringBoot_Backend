@@ -35,6 +35,7 @@ public class ApplicationPropertiesLoggerConfig {
     @Bean
     public CommandLineRunner logProperties() {
         return args -> {
+            System.out.println("---------------------------------");
             System.out.println("Application Properties Check");
             System.out.println("Application Name: " + applicationName);
             System.out.println("Server Port: " + serverPort);
@@ -45,6 +46,7 @@ public class ApplicationPropertiesLoggerConfig {
             System.out.println("AWS Access Key ID: " + maskSensitiveInfo(awsAccessKeyId));
             System.out.println("AWS Secret Key: " + maskSensitiveInfo(awsSecretKey));
             System.out.println("AWS Region: " + awsRegion);
+            System.out.println("---------------------------------");
         };
     }
 
@@ -55,4 +57,3 @@ public class ApplicationPropertiesLoggerConfig {
         return sensitiveInfo.substring(0, 4) + "****";
     }
 }
-

@@ -15,16 +15,22 @@ public class DataSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        System.out.println("---------------------------------");
         System.out.println("Inserting metrics into the database...");
-        /*
         for (ConnectMetricCode code : ConnectMetricCode.values()) {
             if (!metricRepository.existsById(code)) {
-                Metric metric = new Metric(code, null, null, null, null);
+                System.out.println("Inserting metric: " + code);
+                Metric metric = new Metric();
+                metric.setCode(code);
+                metric.setMinimumThresholdValue(null);
+                metric.setMaximumThresholdValue(null);
+                metric.setTargetValue(code.getDefaultTargetValue());
                 metricRepository.save(metric);
+            } else {
+                System.out.println("Metric already exists: " + code);
             }
         }
-        */
-
+        System.out.println("---------------------------------");
     }
 
 
