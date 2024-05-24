@@ -6,5 +6,6 @@ public enum Performance {
     BELOW_EXPECTATIONS,
     EXCEEDS_EXPECTATIONS,
     OUTSTANDING,
-    PIONEERING
+    PIONEERING,
+    UNKNOWN;
 }
