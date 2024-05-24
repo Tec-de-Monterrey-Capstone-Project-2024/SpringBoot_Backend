@@ -1,6 +1,6 @@
 package com.springboot.connectmate.enums;
 
-public enum Performance {
+public enum InsightPerformance {
     CRITICAL,
     UNSATISFACTORY,
     BELOW_EXPECTATIONS,
