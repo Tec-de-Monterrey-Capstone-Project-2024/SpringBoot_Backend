@@ -12,7 +12,7 @@ public enum ConnectMetricCode {
             "The percentage of calls answered within 20 seconds.",
             "Important for assessing the efficiency and responsiveness of the service team.",
             Unit.PERCENT,
-            ConnectApiType.MetricDataV2,
+            ConnectMetricApiType.MetricDataV2,
             80.0,
             "To ensure a high level of customer satisfaction by minimizing wait times."
     );
@@ -22,7 +22,7 @@ public enum ConnectMetricCode {
     private final String description;
     private final String additionalInfo;
     private final Unit units;
-    private final ConnectApiType apiType;
+    private final ConnectMetricApiType apiType;
     private final Double defaultTargetValue;
     private final String rationale;
 }
