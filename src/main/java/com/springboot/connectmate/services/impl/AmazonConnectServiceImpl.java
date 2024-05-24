@@ -45,7 +45,7 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
     }
 
     @Override
-    public List<AgentStatusSummary> listAgents(String instanceId) {
+    public List<AgentStatusSummary> listAgentsStatuses(String instanceId) {
         ListAgentStatusesRequest listAgentStatusesRequest = new ListAgentStatusesRequest().withInstanceId(instanceId);
         ListAgentStatusesResult listAgentStatusesResult = amazonConnectClient.listAgentStatuses(listAgentStatusesRequest);
         return listAgentStatusesResult.getAgentStatusSummaryList().stream()
@@ -71,6 +71,45 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public User getUserDescription(String instanceId, String userId) {
+        DescribeUserRequest describeUserRequest = new DescribeUserRequest()
+                .withInstanceId(instanceId)
+                .withUserId(userId);
+
+        DescribeUserResult describeUserResult = amazonConnectClient.describeUser(describeUserRequest);
+        return describeUserResult.getUser();
+    }
+
+
+    @Override
+    public List<UserData> getCurrentUserData(String instanceId) {
+        UserDataFilters userDataFilters = new UserDataFilters()
+                .withQueues(listQueues(instanceId).stream()
+                        .map(QueueSummary::getId)
+                        .collect(Collectors.toList()));
+
+        GetCurrentUserDataRequest getCurrentUserDataRequest = new GetCurrentUserDataRequest()
+                .withFilters(userDataFilters)
+                .withInstanceId(instanceId);
+
+        GetCurrentUserDataResult getCurrentUserDataResult = amazonConnectClient.getCurrentUserData(getCurrentUserDataRequest);
+
+        return getCurrentUserDataResult.getUserDataList();
+    }
+
+    @Override
+    public Queue describeQueue(String instanceId, String queueId) {
+        DescribeQueueRequest describeQueueRequest = new DescribeQueueRequest()
+                .withInstanceId(instanceId)
+                .withQueueId(queueId);
+
+        DescribeQueueResult describeQueueResult = amazonConnectClient.describeQueue(describeQueueRequest);
+
+        return describeQueueResult.getQueue();
+    }
+
+    // Metric Service Implementations
     @Override
     public List<String> getHistoricalMetrics(String instanceId, String queueId) {
 
@@ -98,6 +137,7 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
         Filters filters = new Filters()
                 .withChannels(Channel.VOICE)
                 .withQueues(queueId);
+        
 
 
         ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
@@ -131,9 +171,14 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
                 .withThreshold(threshold)
         );
         List<FilterV2> filters = new ArrayList<>();
+
         filters.add( new FilterV2()
                 .withFilterKey("QUEUE")
                 .withFilterValues(Collections.singletonList("f0813607-af92-4a36-91e6-630ababb643c"))
+        );
+        filters.add( new FilterV2()
+                .withFilterKey("AGENT")
+                .withFilterValues(Collections.singletonList("ed1ad50d-2ffc-44ad-a565-71f13ad991a5"))
         );
 
         ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
@@ -160,7 +205,7 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
 
         List<CurrentMetric> currentMetrics = new ArrayList<>();
         currentMetrics.add(new CurrentMetric()
-                .withName(CurrentMetricName.AGENTS_ON_CALL)
+                .withName(CurrentMetricName.AGENTS_AVAILABLE)
         );
 
         GetCurrentMetricDataRequest getCurrentMetricDataRequest = new GetCurrentMetricDataRequest()
@@ -171,66 +216,5 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
         return getCurrentMetricDataResult.getMetricResults().stream()
                 .map(metric-> metric.toString())
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public User getUserDescription(String instanceId, String userId) {
-        DescribeUserRequest describeUserRequest = new DescribeUserRequest()
-                .withInstanceId(instanceId)
-                .withUserId(userId);
-
-        DescribeUserResult describeUserResult = amazonConnectClient.describeUser(describeUserRequest);
-        return describeUserResult.getUser();
-    }
-
-
-    @Override
-    public String getTests(String instanceId) {
-        GetCurrentMetricDataRequest getCurrentMetricDataRequest = new GetCurrentMetricDataRequest()
-                .withInstanceId(instanceId);
-
-        GetMetricDataV2Request getMetricDataV2Request = new GetMetricDataV2Request();
-
-
-        return "to do: do the controllers/services for these connect get requests";
-    }
-    @Override
-    public String listTests(String instanceId) {
-
-        ListAgentStatusesRequest listAgentStatusesRequest = new ListAgentStatusesRequest().withInstanceId(instanceId);
-
-        ListPhoneNumbersRequest listPhoneNumbersRequest = new ListPhoneNumbersRequest().withInstanceId(instanceId);
-
-        ListUserProficienciesRequest listUserProficienciesRequest = new ListUserProficienciesRequest().withInstanceId(instanceId);
-
-        ListContactEvaluationsRequest listContactEvaluationsRequest = new ListContactEvaluationsRequest().withInstanceId(instanceId);
-        return "to do: do the controllers/services for these connect list requests";
-    }
-
-    @Override
-    public List<UserData> getCurrentUserData(String instanceId) {
-        UserDataFilters userDataFilters = new UserDataFilters()
-                .withQueues(listQueues(instanceId).stream()
-                        .map(QueueSummary::getId)
-                        .collect(Collectors.toList()));
-
-        GetCurrentUserDataRequest getCurrentUserDataRequest = new GetCurrentUserDataRequest()
-                .withFilters(userDataFilters)
-                .withInstanceId(instanceId);
-
-        GetCurrentUserDataResult getCurrentUserDataResult = amazonConnectClient.getCurrentUserData(getCurrentUserDataRequest);
-
-        return getCurrentUserDataResult.getUserDataList();
-    }
-
-    @Override
-    public Queue describeQueue(String instanceId, String queueId) {
-        DescribeQueueRequest describeQueueRequest = new DescribeQueueRequest()
-                .withInstanceId(instanceId)
-                .withQueueId(queueId);
-
-        DescribeQueueResult describeQueueResult = amazonConnectClient.describeQueue(describeQueueRequest);
-
-        return describeQueueResult.getQueue();
     }
 }
