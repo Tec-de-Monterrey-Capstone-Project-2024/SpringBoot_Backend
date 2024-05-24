@@ -55,4 +55,3 @@ public class ApplicationPropertiesLoggerConfig {
         return sensitiveInfo.substring(0, 4) + "****";
     }
 }
-

@@ -6,4 +6,10 @@ public enum Severity {
     HIGH,
     CRITICAL,
     UNKNOWN;
+
+    public enum ApiType {
+        MetricData,
+        MetricDataV2,
+        CurrentMetric;
+    }
 }
