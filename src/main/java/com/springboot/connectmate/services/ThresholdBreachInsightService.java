@@ -1,5 +1,5 @@
 package com.springboot.connectmate.services;
 
-public interface UserService {
+public interface ThresholdBreachInsightService {
 
 }
