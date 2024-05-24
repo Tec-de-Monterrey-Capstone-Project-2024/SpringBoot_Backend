@@ -27,6 +27,12 @@ public class BedrockController {
         return Map.of("generation", chatClient.call(message));
     }
 
+    @GetMapping("/ai/generate/no-map")
+    public String generateNoMap(@RequestParam(value = "message", defaultValue = "Tell me a joke") String message) {
+        Prompt prompt = new Prompt(new UserMessage(message));
+        return chatClient.call(prompt).getResult().toString();
+    }
+
     @GetMapping("/ai/generateStream")
     public Flux<ChatResponse> generateStream(@RequestParam(value = "message", defaultValue = "Tell me a joke") String message) {
         Prompt prompt = new Prompt(new UserMessage(message));

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/metrics")
+@RequestMapping("/api/amazon-connect")
 @Tag(
         name = "Amazon Connect Metrics REST API",
         description = "CRUD REST API for Amazon Connect Metrics"
