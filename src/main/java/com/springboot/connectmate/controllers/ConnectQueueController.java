@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.*;
 
 @RestController
-@RequestMapping("/api/amazon-connect-queues")
+@RequestMapping("/api/amazon-connect")
 @Tag(
         name = "Amazon Connect Queues REST API",
         description = "CRUD REST API for Amazon Connect Queues"
@@ -33,20 +33,6 @@ public class ConnectQueueController {
         this.amazonConnectService = amazonConnectService;
     }
 
-    @ApiResponse(
-            responseCode = "200",
-            content = @Content(mediaType = "application/json",
-                    array = @ArraySchema(schema = @Schema(implementation = InstanceSummary.class))),
-            description = "List of instances fetched successfully."
-    )
-    @Operation(
-            summary = "Get instances",
-            description = "Get instances for an specific Amazon region with a given AWS account"
-    )
-    @GetMapping("/instances")
-    public ResponseEntity<List<InstanceSummary>> listConnectInstances() {
-        return ResponseEntity.ok(amazonConnectService.listConnectInstances());
-    }
 
     @ApiResponse(
             responseCode = "200",
