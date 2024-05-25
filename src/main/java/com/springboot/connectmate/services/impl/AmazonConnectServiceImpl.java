@@ -137,7 +137,7 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
         Filters filters = new Filters()
                 .withChannels(Channel.VOICE)
                 .withQueues(queueId);
-        
+
 
 
         ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
@@ -207,6 +207,8 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
         currentMetrics.add(new CurrentMetric()
                 .withName(CurrentMetricName.AGENTS_AVAILABLE)
         );
+
+
 
         GetCurrentMetricDataRequest getCurrentMetricDataRequest = new GetCurrentMetricDataRequest()
                 .withInstanceId(instanceId)
