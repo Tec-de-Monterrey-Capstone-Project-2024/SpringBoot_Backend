@@ -32,7 +32,7 @@ public class AmazonConnectController {
     @ApiResponse(
             responseCode = "200",
             content = @Content(mediaType = "application/json",
-                    array = @ArraySchema(schema = @Schema(implementation = InstanceSummary.class))),
+                               array = @ArraySchema(schema = @Schema(implementation = InstanceSummary.class))),
             description = "List of instances fetched successfully."
     )
     @Operation(
