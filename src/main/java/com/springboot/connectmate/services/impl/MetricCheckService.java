@@ -70,47 +70,37 @@ public class MetricCheckService {
             // Check the agent metric value
             Boolean agentNeedsInsight = hasBreachedOrIsOnTarget(metric, agentMetricValue);
 
-            /**
-             *  * Contexto, Este servicio checa si una metrica esta en breach o en target, si esta en breach
-             *              * genera un insight, si ya no esta en breach, borra el insight
-             * TODO: Fede Necesitas Implementar la Logica para borrar los insights que ya no esten en breach
-             * Si la flag de ___NeedsInsight es false Y hay un registro asocdiado a esa metrica y a ese item
-             * Borralo, eso quiere decir que la brecha se arreglo y ya no es necesario tener el insight
-             *literalmente es hacer otros ifs o agregarle elses a las clauses de abajo.
-             *
-             */
-
-            // Generate insights for the breached or on-target metrics
+            Optional<ThresholdBreachInsight> existingInstanceInsight = thresholdBreachInsightRepository
+                    .findByMetricCodeAndConnectItemId(metric, instanceId);
             if (instanceNeedsInsight) {
-                // Check if a threshold breach insight already exists for the INSTANCE
-                Optional<ThresholdBreachInsight> existingInsight =  thresholdBreachInsightRepository
-                        .findByMetricCodeAndConnectItemId(metric, instanceId);
-                // If it does not exist, generate an insight for the INSTANCE
-                if (existingInsight.isEmpty()) {
+                if (existingInstanceInsight.isEmpty()) {
                     bedrockService.generateInsight(metric, generalMetricValue, ConnectMetricType.INSTANCE, instanceId);
                 }
+            } else {
+                existingInstanceInsight.ifPresent(thresholdBreachInsightRepository::delete);
             }
+
+            // Handle insights for QUEUE
+            Optional<ThresholdBreachInsight> existingQueueInsight = thresholdBreachInsightRepository
+                    .findByMetricCodeAndConnectItemId(metric, queueId);
             if (queueNeedsInsight) {
-                // Check if a threshold breach insight already exists for the QUEUE
-                Optional<ThresholdBreachInsight> existingInsight =  thresholdBreachInsightRepository
-                        .findByMetricCodeAndConnectItemId(metric, queueId);
-                // If it does not exist, generate an insight for the QUEUE
-                if (existingInsight.isEmpty()) {
+                if (existingQueueInsight.isEmpty()) {
                     bedrockService.generateInsight(metric, queueMetricValue, ConnectMetricType.QUEUE, queueId);
                 }
+            } else {
+                existingQueueInsight.ifPresent(thresholdBreachInsightRepository::delete);
             }
+
+            // Handle insights for AGENT
+            Optional<ThresholdBreachInsight> existingAgentInsight = thresholdBreachInsightRepository
+                    .findByMetricCodeAndConnectItemId(metric, agentId);
             if (agentNeedsInsight) {
-                // Check if a threshold breach insight already exists for the AGENT
-                Optional<ThresholdBreachInsight> existingInsight =  thresholdBreachInsightRepository
-                        .findByMetricCodeAndConnectItemId(metric, agentId);
-                // If it does not exist, generate an insight for the AGENT
-                if (existingInsight.isEmpty()) {
+                if (existingAgentInsight.isEmpty()) {
                     bedrockService.generateInsight(metric, agentMetricValue, ConnectMetricType.AGENT, agentId);
                 }
+            } else {
+                existingAgentInsight.ifPresent(thresholdBreachInsightRepository::delete);
             }
-
-
-
         }
     }
 }
