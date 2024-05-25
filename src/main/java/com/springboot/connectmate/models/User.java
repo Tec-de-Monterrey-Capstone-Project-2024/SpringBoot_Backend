@@ -28,4 +28,8 @@ public class User {
 
     @Column(name = "connect_id", nullable = false)
     private String connectId;
+
+    @Column(name = "instance_id", nullable = false)
+    private String instanceId;
+
 }
