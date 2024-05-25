@@ -17,7 +17,6 @@ public enum ConnectMetricCode {
             "To ensure a high level of customer satisfaction by minimizing wait times."
     );
 
-
     private final String name;
     private final String description;
     private final String additionalInfo;
