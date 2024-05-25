@@ -208,8 +208,6 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
                 .withName(CurrentMetricName.AGENTS_AVAILABLE)
         );
 
-
-
         GetCurrentMetricDataRequest getCurrentMetricDataRequest = new GetCurrentMetricDataRequest()
                 .withInstanceId(instanceId)
                 .withCurrentMetrics();
