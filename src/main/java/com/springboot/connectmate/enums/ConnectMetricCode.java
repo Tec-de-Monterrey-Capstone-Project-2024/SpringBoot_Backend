@@ -87,6 +87,24 @@ public enum ConnectMetricCode {
             ConnectMetricApiType.MetricDataV2,
             0.0,
             "To reduce the time taken to resolve issues and improve customer satisfaction."
+    ),
+    SCHEDULE_ADHERENCE(
+            "Schedule Adherence",
+            "The degree to which agents stick to their scheduled work times.",
+            "Critical for workforce management and planning.",
+            Unit.PERCENT,
+            ConnectMetricApiType.MetricDataV2,
+            0.0,
+            "To ensure agents are available as planned and improve service coverage."
+    ),
+    VIRTUAL_FLOOR_RECONFIGURATION(
+            "Virtual Floor Reconfiguration",
+            "The process of adjusting virtual agent floor plans to meet demand.",
+            "Helps in managing and optimizing the distribution of virtual agents.",
+            Unit.COUNT,
+            ConnectMetricApiType.MetricDataV2,
+            0.0,
+            "To maintain an efficient and adaptable virtual agent environment."
     );
 
     private final String name;
