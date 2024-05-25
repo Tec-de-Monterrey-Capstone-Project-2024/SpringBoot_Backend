@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.*;
 
 @RestController
-@RequestMapping("/api/amazon-connect-users")
+@RequestMapping("/api/amazon-connect")
 @Tag(
         name = "Amazon Connect Users REST API",
         description = "CRUD REST API for Amazon Connect User"
