@@ -9,7 +9,7 @@ import lombok.Getter;
 public enum ConnectMetricCode {
     SERVICE_LEVEL(
             "Service Level",
-            "The percentage of calls answered within a specified time frame.",
+            "The percentage of calls answered within 20 seconds",
             "Important for assessing the efficiency and responsiveness of the service team.",
             Unit.PERCENT,
             ConnectMetricApiType.MetricDataV2,
