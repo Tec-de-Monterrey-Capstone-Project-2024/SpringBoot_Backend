@@ -22,7 +22,7 @@ public enum ConnectMetricCode {
             "Crucial for understanding customer patience and service efficiency.",
             Unit.PERCENT,
             ConnectMetricApiType.MetricDataV2,
-            0.0,
+            5.0, // Typical target in the industry is below 5%
             "To reduce the number of abandoned calls and improve customer experience."
     ),
     AVERAGE_SPEED_ANSWER(
@@ -31,7 +31,7 @@ public enum ConnectMetricCode {
             "Indicates the speed and efficiency of the call handling process.",
             Unit.SECONDS,
             ConnectMetricApiType.MetricDataV2,
-            0.0,
+            20.0, // Industry standard to answer within 20 seconds
             "To minimize the wait time for customers and improve service efficiency."
     ),
     AVERAGE_HANDLE_TIME(
@@ -40,7 +40,7 @@ public enum ConnectMetricCode {
             "Crucial for evaluating the efficiency of agents.",
             Unit.SECONDS,
             ConnectMetricApiType.MetricDataV2,
-            0.0,
+            300.0, // Typical industry standard is 5 minutes (300 seconds)
             "To optimize and reduce the time spent per contact."
     ),
     OCCUPANCY(
@@ -49,7 +49,7 @@ public enum ConnectMetricCode {
             "Reflects the workload and productivity of agents.",
             Unit.PERCENT,
             ConnectMetricApiType.MetricDataV2,
-            0.0,
+            85.0, // Industry standard target is around 85%
             "To balance agent workload and ensure efficient use of time."
     ),
     FIRST_CONTACT_RESOLUTION(
@@ -58,7 +58,7 @@ public enum ConnectMetricCode {
             "Indicates the effectiveness of agents in resolving issues quickly.",
             Unit.PERCENT,
             ConnectMetricApiType.MetricDataV2,
-            0.0,
+            70.0, // Typical target is 70-75%
             "To improve customer satisfaction by resolving issues promptly."
     ),
     AGENTS_AFTER_CONTACT_WORK(
@@ -66,8 +66,8 @@ public enum ConnectMetricCode {
             "The time agents spend completing tasks after a call.",
             "Important for understanding the total time agents are engaged with a contact.",
             Unit.SECONDS,
-            ConnectMetricApiType.MetricDataV2,
-            0.0,
+            ConnectMetricApiType.NoApi_SelfMade,
+            30.0, // Industry standard is around 30 seconds
             "To manage and reduce the after-call workload for agents."
     ),
     SLOTS_ACTIVE(
@@ -75,8 +75,8 @@ public enum ConnectMetricCode {
             "The number of active slots available for calls.",
             "Reflects the system's capacity to handle calls.",
             Unit.COUNT,
-            ConnectMetricApiType.MetricDataV2,
-            0.0,
+            ConnectMetricApiType.NoApi_SelfMade,
+            100.0, // Example value
             "To ensure the system can handle the call volume effectively."
     ),
     AVERAGE_RESOLUTION_TIME(
@@ -84,8 +84,8 @@ public enum ConnectMetricCode {
             "The average time taken to resolve customer issues.",
             "Indicates the efficiency of problem-solving processes.",
             Unit.SECONDS,
-            ConnectMetricApiType.MetricDataV2,
-            0.0,
+            ConnectMetricApiType.NoApi_SelfMade,
+            600.0, // Industry standard for resolution is often within 10 minutes (600 seconds)
             "To reduce the time taken to resolve issues and improve customer satisfaction."
     ),
     SCHEDULE_ADHERENCE(
@@ -93,8 +93,8 @@ public enum ConnectMetricCode {
             "The degree to which agents stick to their scheduled work times.",
             "Critical for workforce management and planning.",
             Unit.PERCENT,
-            ConnectMetricApiType.MetricDataV2,
-            0.0,
+            ConnectMetricApiType.NoApi_SelfMade,
+            95.0, // Typical industry target is 95%
             "To ensure agents are available as planned and improve service coverage."
     ),
     VIRTUAL_FLOOR_RECONFIGURATION(
@@ -102,8 +102,8 @@ public enum ConnectMetricCode {
             "The process of adjusting virtual agent floor plans to meet demand.",
             "Helps in managing and optimizing the distribution of virtual agents.",
             Unit.COUNT,
-            ConnectMetricApiType.MetricDataV2,
-            0.0,
+            ConnectMetricApiType.NoApi_SelfMade,
+            10.0, // Example value
             "To maintain an efficient and adaptable virtual agent environment."
     );
 
