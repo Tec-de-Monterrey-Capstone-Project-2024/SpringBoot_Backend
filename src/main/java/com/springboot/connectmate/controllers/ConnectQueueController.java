@@ -78,43 +78,4 @@ public class ConnectQueueController {
     public ResponseEntity<List<UserData>> getCurrentUserData(@PathVariable(name = "instanceId") String instanceId) {
         return ResponseEntity.ok(amazonConnectService.getCurrentUserData(instanceId));
     }
-
-
-    @ApiResponse(
-            responseCode = "200",
-            content = @Content(mediaType = "application/json",
-                    array = @ArraySchema(schema = @Schema(implementation = Map.class))),
-            description = "Get all the users and contact info for all the queues."
-    )
-    @Operation(
-            summary = "Gets the user and contact data of all queues.",
-            description = "Gets the users and contacts of all queues."
-    )
-    @GetMapping("/instances/{instanceId}/queue-users")
-    public Map<String, Map<String, Object>> queueUserCounts(@PathVariable(name = "instanceId") String instanceId) {
-        // Move to a Service
-        ResponseEntity<List<UserData>> response = getCurrentUserData(instanceId);
-        List<UserData> userDataList = response.getBody();
-        Map<String, Map<String, Object>> queueInfo = new HashMap<>();
-
-        if (userDataList != null) {
-            for (UserData userData : userDataList) {
-                String userId = userData.getUser().getId();
-                for (AgentContactReference contact : userData.getContacts()) {
-                    String queueId = contact.getQueue().getId();
-                    queueInfo.putIfAbsent(queueId, new HashMap<>());
-                    queueInfo.get(queueId).putIfAbsent("users", new HashSet<>());
-                    queueInfo.get(queueId).putIfAbsent("contactCount", 0);
-
-                    Set<String> users = (Set<String>) queueInfo.get(queueId).get("users");
-                    users.add(userId);
-
-                    int count = (int) queueInfo.get(queueId).get("contactCount");
-                    queueInfo.get(queueId).put("contactCount", count + 1);
-                }
-            }
-        }
-
-        return queueInfo;
-    }
 }

@@ -39,7 +39,7 @@ public class AmazonConnectInterpreterController {
             description = "Gets the users and contacts of all queues."
     )
     @GetMapping("/instances/{instanceId}/queue-users")
-    public ResponseEntity<Map<String, Map<String, Object>>> queueUserCounts(@PathVariable(name = "instanceId") String instanceId) {
+    public ResponseEntity<Map<String, Map<String, Object>>> getQueueUserCounts(@PathVariable(name = "instanceId") String instanceId) {
         return ResponseEntity.ok(amazonConnectInterpreterService.getQueueUserCounts(instanceId));
     }
 }
