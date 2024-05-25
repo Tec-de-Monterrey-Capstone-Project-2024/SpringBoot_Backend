@@ -24,7 +24,7 @@ public class AmazonConnectInterpreterServiceImpl implements AmazonConnectInterpr
     }
 
     public Map<String, Map<String, Object>> getQueueUserCounts(String instanceId) {
-        List<UserData> userDataList = amazonConnectService.getCurrentData(instanceId);
+        List<UserData> userDataList = amazonConnectService.getCurrentUserData(instanceId);
         Map<String, Map<String, Object>> queueInfo = new HashMap<>();
 
         if (userDataList != null) {
