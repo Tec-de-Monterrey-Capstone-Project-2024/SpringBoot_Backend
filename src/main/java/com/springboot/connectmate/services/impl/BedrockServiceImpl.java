@@ -1,6 +1,11 @@
 package com.springboot.connectmate.services.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.springboot.connectmate.dtos.AmazonConnect.InsightDTO;
+import com.springboot.connectmate.dtos.AmazonConnect.KpiDataDTO;
 import com.springboot.connectmate.enums.ConnectMetricType;
+import com.springboot.connectmate.enums.ResponseField;
 import com.springboot.connectmate.models.Metric;
 import com.springboot.connectmate.services.BedrockService;
 import org.springframework.ai.bedrock.titan.BedrockTitanChatClient;
@@ -64,6 +69,65 @@ public class BedrockServiceImpl implements BedrockService {
          * El resultado correcto seria que en base de datos este un registro ThresholdBreachInsight con insights de
          * muy buena calidad
          */
+    }
+
+    @Override
+    public InsightDTO createInsight(KpiDataDTO kpiDataDTO) {
+        String kpiDataJson = generateKpiDataJson(kpiDataDTO);
+        InsightDTO insight = new InsightDTO();
+
+        for (ResponseField responseField : ResponseField.values()) {
+            String response = callBedrockService(responseField.getPrompt(), kpiDataJson);
+            populateInsight(insight, responseField, response);
+        }
+
+        return insight;
+    }
+
+    private String generateKpiDataJson(KpiDataDTO kpiDataDTO) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            return objectMapper.writeValueAsString(kpiDataDTO);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Error al convertir KPI Data a JSON", e);
+        }
+    }
+
+    private String callBedrockService(String prompt, String kpiDataJson) {
+        String message = prompt + " " + kpiDataJson;
+        return generate(message);
+    }
+
+    private void populateInsight(InsightDTO insight, ResponseField responseField, String response) {
+        switch (responseField) {
+            case NAME:
+                insight.setInsightName(response);
+                break;
+            case SUMMARY:
+                insight.setInsightSummary(response);
+                break;
+            case DESCRIPTION:
+                insight.setInsightDescription(response);
+                break;
+            case ACTION:
+                insight.setInsightActions(response);
+                break;
+            case CATEGORY:
+                insight.setInsightCategory(response);
+                break;
+            case PERFORMANCE:
+                insight.setInsightPerformance(response);
+                break;
+            case ROOT_CAUSE:
+                insight.setInsightRootCause(response);
+                break;
+            case IMPACT:
+                insight.setInsightImpact(response);
+                break;
+            case PREVENTION:
+                insight.setInsightPrevention(response);
+                break;
+        }
     }
 
 }

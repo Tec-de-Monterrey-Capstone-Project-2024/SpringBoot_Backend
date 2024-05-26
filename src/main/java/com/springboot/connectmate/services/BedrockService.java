@@ -1,5 +1,7 @@
 package com.springboot.connectmate.services;
 
+import com.springboot.connectmate.dtos.AmazonConnect.InsightDTO;
+import com.springboot.connectmate.dtos.AmazonConnect.KpiDataDTO;
 import com.springboot.connectmate.enums.ConnectMetricType;
 import com.springboot.connectmate.models.Metric;
 import org.springframework.ai.chat.ChatResponse;
@@ -15,5 +17,6 @@ public interface BedrockService {
     );
     String generate(String message);
     Flux<ChatResponse> generateStream(String message);
+    InsightDTO createInsight(KpiDataDTO kpiDataDTO);
 
 }
