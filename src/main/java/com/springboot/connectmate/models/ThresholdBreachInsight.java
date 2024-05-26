@@ -38,7 +38,7 @@ public class ThresholdBreachInsight {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "metric_code", nullable = false, foreignKey = @ForeignKey(name = "fk_insight_metric_code"))
     private Metric metricCode;
 
