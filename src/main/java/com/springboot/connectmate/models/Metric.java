@@ -31,7 +31,7 @@ public class Metric {
     @Column(name = "target_value", nullable = true)
     private Double targetValue;
 
-    @OneToMany(mappedBy = "metricCode", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "metricCode", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ThresholdBreachInsight> thresholdBreachInsights;
 
 }
