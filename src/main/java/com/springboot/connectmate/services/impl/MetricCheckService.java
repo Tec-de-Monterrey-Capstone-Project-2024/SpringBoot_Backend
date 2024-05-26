@@ -77,26 +77,26 @@ public class MetricCheckService {
                     bedrockService.generateInsight(metric, generalMetricValue, ConnectMetricType.INSTANCE, instanceId);
                 }
             } else {
-                // Si no se necesita una insight, eliminamos cualquier insight existente
+                //If inishgt is not needed, we deelte any existing insight
                 existingInstanceInsight.ifPresent(thresholdBreachInsightRepository::delete);
             }
             // Handle insights for QUEUE
             Optional<ThresholdBreachInsight> existingQueueInsight = thresholdBreachInsightRepository
                     .findByMetricCodeAndConnectItemId(metric, queueId);
-            // Si el valor de la métrica de la cola ha alcanzado o superado el umbral, se hace nueva insight si no existe ya una
+            //If metric queue value has reached limit, new inishgt is created if there is not one already
             if (queueNeedsInsight) {
                 if (existingQueueInsight.isEmpty()) {
                     bedrockService.generateInsight(metric, queueMetricValue, ConnectMetricType.QUEUE, queueId);
                 }
             } else {
-                // Si no se necesita nueva insight, eliminamos cualquier insight existente
+                //If a new insight is not needed, we delete any existing insight
                 existingQueueInsight.ifPresent(thresholdBreachInsightRepository::delete);
             }
 
             // Handle insights for AGENT
             Optional<ThresholdBreachInsight> existingAgentInsight = thresholdBreachInsightRepository
                     .findByMetricCodeAndConnectItemId(metric, agentId);
-            // Si el valor de la métrica del agente ha alcanzado o superado el umbral, generamos una nueva insight si no existe ya una
+            //If the value of agent's metric has reached the limit, we create a new insight if there is not one already
             if (agentNeedsInsight) {
                 if (existingAgentInsight.isEmpty()) {
                     bedrockService.generateInsight(metric, agentMetricValue, ConnectMetricType.AGENT, agentId);
