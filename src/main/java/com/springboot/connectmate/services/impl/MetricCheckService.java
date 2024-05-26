@@ -77,23 +77,26 @@ public class MetricCheckService {
                     bedrockService.generateInsight(metric, generalMetricValue, ConnectMetricType.INSTANCE, instanceId);
                 }
             } else {
+                // Si no se necesita una insight, eliminamos cualquier insight existente
                 existingInstanceInsight.ifPresent(thresholdBreachInsightRepository::delete);
             }
-
             // Handle insights for QUEUE
             Optional<ThresholdBreachInsight> existingQueueInsight = thresholdBreachInsightRepository
                     .findByMetricCodeAndConnectItemId(metric, queueId);
+            // Si el valor de la métrica de la cola ha alcanzado o superado el umbral, se hace nueva insight si no existe ya una
             if (queueNeedsInsight) {
                 if (existingQueueInsight.isEmpty()) {
                     bedrockService.generateInsight(metric, queueMetricValue, ConnectMetricType.QUEUE, queueId);
                 }
             } else {
+                // Si no se necesita nueva insight, eliminamos cualquier insight existente
                 existingQueueInsight.ifPresent(thresholdBreachInsightRepository::delete);
             }
 
             // Handle insights for AGENT
             Optional<ThresholdBreachInsight> existingAgentInsight = thresholdBreachInsightRepository
                     .findByMetricCodeAndConnectItemId(metric, agentId);
+            // Si el valor de la métrica del agente ha alcanzado o superado el umbral, generamos una nueva insight si no existe ya una
             if (agentNeedsInsight) {
                 if (existingAgentInsight.isEmpty()) {
                     bedrockService.generateInsight(metric, agentMetricValue, ConnectMetricType.AGENT, agentId);
