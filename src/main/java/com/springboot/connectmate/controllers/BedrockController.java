@@ -2,6 +2,7 @@ package com.springboot.connectmate.controllers;
 
 import com.springboot.connectmate.dtos.AmazonConnect.InsightDTO;
 import com.springboot.connectmate.dtos.AmazonConnect.KpiDataDTO;
+import com.springboot.connectmate.enums.ConnectMetricType;
 import com.springboot.connectmate.services.BedrockService;
 import org.springframework.ai.bedrock.titan.BedrockTitanChatClient;
 import org.springframework.ai.chat.ChatResponse;
@@ -42,8 +43,13 @@ public class BedrockController {
     }
 
     @PostMapping("/ai/createInsight")
-    public ResponseEntity<InsightDTO> createInsight(@RequestBody KpiDataDTO kpiDataDTO) {
-        InsightDTO insight = bedrockService.createInsight(kpiDataDTO);
+    public ResponseEntity<InsightDTO> createInsight(
+            @RequestBody KpiDataDTO kpiDataDTO,
+            @RequestParam Double metricValue,
+            @RequestParam ConnectMetricType metricType,
+            @RequestParam String typeId) {
+
+        InsightDTO insight = bedrockService.createInsight(kpiDataDTO, metricValue, metricType, typeId);
         return ResponseEntity.ok(insight);
     }
 }

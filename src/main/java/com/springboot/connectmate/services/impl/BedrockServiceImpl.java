@@ -72,7 +72,7 @@ public class BedrockServiceImpl implements BedrockService {
     }
 
     @Override
-    public InsightDTO createInsight(KpiDataDTO kpiDataDTO) {
+    public InsightDTO createInsight(KpiDataDTO kpiDataDTO,Double metricValue, ConnectMetricType metricType, String typeId) {
         String kpiDataJson = generateKpiDataJson(kpiDataDTO);
         InsightDTO insight = new InsightDTO();
 
