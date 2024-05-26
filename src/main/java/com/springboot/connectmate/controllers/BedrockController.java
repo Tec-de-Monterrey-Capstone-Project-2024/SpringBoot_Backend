@@ -1,5 +1,6 @@
 package com.springboot.connectmate.controllers;
 
+import com.springboot.connectmate.services.BedrockService;
 import org.springframework.ai.bedrock.titan.BedrockTitanChatClient;
 import org.springframework.ai.chat.ChatResponse;
 import org.springframework.ai.chat.messages.UserMessage;
@@ -16,10 +17,12 @@ import java.util.Map;
 public class BedrockController {
 
     private final BedrockTitanChatClient chatClient;
+    private final BedrockService bedrockService;
 
     @Autowired
-    public BedrockController(BedrockTitanChatClient chatClient) {
+    public BedrockController(BedrockTitanChatClient chatClient, BedrockService bedrockService) {
         this.chatClient = chatClient;
+        this.bedrockService = bedrockService;
     }
 
     @GetMapping("/ai/generate")
@@ -29,13 +32,11 @@ public class BedrockController {
 
     @GetMapping("/ai/generate/no-map")
     public String generateNoMap(@RequestParam(value = "message", defaultValue = "Tell me a joke") String message) {
-        Prompt prompt = new Prompt(new UserMessage(message));
-        return chatClient.call(prompt).getResult().toString();
+        return chatClient.call(message);
     }
 
     @GetMapping("/ai/generateStream")
-    public Flux<ChatResponse> generateStream(@RequestParam(value = "message", defaultValue = "Tell me a joke") String message) {
-        Prompt prompt = new Prompt(new UserMessage(message));
-        return chatClient.stream(prompt);
+    public String testServiceResponse(@RequestParam(value = "message", defaultValue = "Tell me a joke") String message) {
+        return bedrockService.generate(message);
     }
 }

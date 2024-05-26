@@ -1,8 +1,8 @@
 package com.springboot.connectmate.models;
 
-import com.springboot.connectmate.enums.ConnectMetricCode;
-import com.springboot.connectmate.enums.Performance;
-import com.springboot.connectmate.enums.Severity;
+import com.springboot.connectmate.enums.ConnectMetricType;
+import com.springboot.connectmate.enums.InsightPerformance;
+import com.springboot.connectmate.enums.InsightSeverity;
 import com.springboot.connectmate.enums.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -25,6 +25,7 @@ import java.time.LocalDateTime;
                 @Index(columnList = "metric_code, connect_item_id", name = "idx_insight_metric_code_connect_item_id"),
                 @Index(columnList = "metric_code", name = "idx_insight_metric_code"),
                 @Index(columnList = "connect_item_id", name = "idx_insight_connect_item_id"),
+                @Index(columnList = "connect_item_type", name = "idx_insight_connect_item_type"),
                 @Index(columnList = "status", name = "idx_insight_status"),
                 @Index(columnList = "insight_category", name = "idx_insight_category"),
                 @Index(columnList = "insight_severity", name = "idx_insight_severity"),
@@ -37,12 +38,16 @@ public class ThresholdBreachInsight {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "metric_code", nullable = false, foreignKey = @ForeignKey(name = "fk_insight_metric_code"))
     private Metric metricCode;
 
     @Column(name = "connect_item_id", nullable = false)
     private String connectItemId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "connect_item_type", nullable = false, columnDefinition = "ENUM('INSTANCE', 'QUEUE', 'AGENT')")
+    private ConnectMetricType connectItemType;
 
     @Column(name = "value", nullable = false)
     private Double value;
@@ -68,11 +73,11 @@ public class ThresholdBreachInsight {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "insight_category", nullable = false, columnDefinition = "ENUM('CRITICAL', 'UNSATISFACTORY', 'BELOW_EXPECTATIONS', 'EXCEEDS_EXPECTATIONS', 'OUTSTANDING', 'PIONEERING', 'UNKNOWN')")
-    private Performance insightCategory;
+    private InsightPerformance insightCategory;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "insight_severity", nullable = false, columnDefinition = "ENUM('LOW', 'MEDIUM', 'HIGH', 'CRITICAL', 'UNKNOWN')")
-    private Severity insightSeverity;
+    private InsightSeverity insightSeverity;
 
     @Column(name = "insight_root_cause", nullable = false, columnDefinition = "TEXT")
     private String insightRootCause;
