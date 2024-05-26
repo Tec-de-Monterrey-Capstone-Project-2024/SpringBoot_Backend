@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 
@@ -32,6 +33,6 @@ public class MetricServiceImpl implements MetricService {
 
     @Override
     public List<MetricDTO> getAllConnectMateMetrics() {
-        return List.of(new MetricDTO());
+        return Collections.emptyList();
     }
 }

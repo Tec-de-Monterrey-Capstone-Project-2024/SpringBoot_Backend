@@ -13,4 +13,6 @@ import lombok.NoArgsConstructor;
         description = "DTO for a ConnectMate Metric"
 )
 public class MetricDTO {
+    private String code;
+    private String name;
 }
