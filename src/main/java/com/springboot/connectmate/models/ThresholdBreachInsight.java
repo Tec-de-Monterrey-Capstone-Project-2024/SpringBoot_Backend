@@ -1,6 +1,7 @@
 package com.springboot.connectmate.models;
 
 import com.springboot.connectmate.enums.ConnectMetricType;
+import com.springboot.connectmate.enums.ConnectItemType;
 import com.springboot.connectmate.enums.InsightPerformance;
 import com.springboot.connectmate.enums.InsightSeverity;
 import com.springboot.connectmate.enums.Status;
@@ -47,7 +48,7 @@ public class ThresholdBreachInsight {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "connect_item_type", nullable = false, columnDefinition = "ENUM('INSTANCE', 'QUEUE', 'AGENT')")
-    private ConnectMetricType connectItemType;
+    private ConnectItemType connectItemType;
 
     @Column(name = "value", nullable = false)
     private Double value;
