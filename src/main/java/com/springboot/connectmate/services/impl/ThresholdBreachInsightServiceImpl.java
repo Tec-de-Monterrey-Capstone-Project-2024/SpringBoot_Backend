@@ -1,8 +1,9 @@
 package com.springboot.connectmate.services.impl;
 
-import com.springboot.connectmate.dtos.Metric.ThresholdBreachInsightDTO;
+import com.springboot.connectmate.dtos.Insight.ThresholdBreachInsightDTO;
 import com.springboot.connectmate.enums.Status;
-import com.springboot.connectmate.enums.ConnectItemType;
+import com.springboot.connectmate.enums.ConnectMetricType;
+
 import com.springboot.connectmate.models.ThresholdBreachInsight;
 import com.springboot.connectmate.repositories.ThresholdBreachInsightRepository;
 import com.springboot.connectmate.services.ThresholdBreachInsightService;
@@ -49,8 +50,8 @@ public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsight
     }
 
     @Override
-    public List<ThresholdBreachInsightDTO> getInsightsByItemType(ConnectItemType connectItemType) {
-        List<ThresholdBreachInsight> insights = repository.findByConnectItemType(connectItemType);
+    public List<ThresholdBreachInsightDTO> getInsightsByItemType(ConnectMetricType connectMetricType) {
+        List<ThresholdBreachInsight> insights = repository.findByConnectItemType(connectMetricType);
         return insights.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
@@ -66,7 +67,7 @@ public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsight
         }
 
         dto.setConnectItemId(insight.getConnectItemId());
-        dto.setConnectItemType(insight.getConnectItemType().name());
+        dto.setConnectItemType(insight.getConnectItemType().getName());
         dto.setValue(insight.getValue());
         dto.setOccurredAt(insight.getOccurredAt().toString());
         dto.setStatus(insight.getStatus().name());

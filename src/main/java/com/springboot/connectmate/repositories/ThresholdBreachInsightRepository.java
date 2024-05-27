@@ -1,8 +1,7 @@
 package com.springboot.connectmate.repositories;
 
-import com.springboot.connectmate.enums.ConnectMetricCode;
 import com.springboot.connectmate.enums.Status;
-import com.springboot.connectmate.enums.ConnectItemType;
+import com.springboot.connectmate.enums.ConnectMetricType;
 import com.springboot.connectmate.models.Metric;
 import com.springboot.connectmate.models.ThresholdBreachInsight;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,6 +15,6 @@ public interface ThresholdBreachInsightRepository extends JpaRepository<Threshol
     Optional<ThresholdBreachInsight> findByMetricCodeAndConnectItemId(Metric metricCode, String connectItemId);
     List<ThresholdBreachInsight> findByStatus(Status status);
     List<ThresholdBreachInsight> findByConnectItemId(String connectItemId);
-    List<ThresholdBreachInsight> findByConnectItemType(ConnectItemType connectItemType);
+    List<ThresholdBreachInsight> findByConnectItemType(ConnectMetricType connectItemType);
 
 }
