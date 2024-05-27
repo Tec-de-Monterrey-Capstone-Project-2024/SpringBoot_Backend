@@ -18,10 +18,7 @@ public interface BedrockService {
     String generate(String message);
     Flux<ChatResponse> generateStream(String message);
     InsightDTO createInsight(
-            KpiDataDTO kpiDataDTO,
-            Double metricValue,
-            ConnectMetricType metricType,
-            String typeId
+            KpiDataDTO kpiDataDTO
             );
 
 }

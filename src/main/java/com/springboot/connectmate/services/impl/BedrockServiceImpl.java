@@ -72,7 +72,7 @@ public class BedrockServiceImpl implements BedrockService {
     }
 
     @Override
-    public InsightDTO createInsight(KpiDataDTO kpiDataDTO,Double metricValue, ConnectMetricType metricType, String typeId) {
+    public InsightDTO createInsight(KpiDataDTO kpiDataDTO) {
         String kpiDataJson = generateKpiDataJson(kpiDataDTO);
         InsightDTO insight = new InsightDTO();
 
@@ -99,35 +99,43 @@ public class BedrockServiceImpl implements BedrockService {
     }
 
     private void populateInsight(InsightDTO insight, ResponseField responseField, String response) {
+        String cleanResponse = response.replaceAll("Generation\\{assistantMessage=AssistantMessage\\{content='", "")
+                .replaceAll("', properties=\\{\\}, messageType=ASSISTANT\\}, chatGenerationMetadata=null\\}", "")
+                .replaceAll("\\r", "")
+                .replaceAll("\\n", "")
+                .replaceAll("\\t", "")
+                .trim();
+
         switch (responseField) {
             case NAME:
-                insight.setInsightName(response);
+                insight.setInsightName(cleanResponse);
                 break;
             case SUMMARY:
-                insight.setInsightSummary(response);
+                insight.setInsightSummary(cleanResponse);
                 break;
             case DESCRIPTION:
-                insight.setInsightDescription(response);
+                insight.setInsightDescription(cleanResponse);
                 break;
             case ACTION:
-                insight.setInsightActions(response);
+                insight.setInsightActions(cleanResponse);
                 break;
             case CATEGORY:
-                insight.setInsightCategory(response);
+                insight.setInsightCategory(cleanResponse);
                 break;
             case PERFORMANCE:
-                insight.setInsightPerformance(response);
+                insight.setInsightPerformance(cleanResponse);
                 break;
             case ROOT_CAUSE:
-                insight.setInsightRootCause(response);
+                insight.setInsightRootCause(cleanResponse);
                 break;
             case IMPACT:
-                insight.setInsightImpact(response);
+                insight.setInsightImpact(cleanResponse);
                 break;
             case PREVENTION:
-                insight.setInsightPrevention(response);
+                insight.setInsightPrevention(cleanResponse);
                 break;
         }
     }
+
 
 }

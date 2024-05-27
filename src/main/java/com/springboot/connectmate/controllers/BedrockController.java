@@ -44,12 +44,10 @@ public class BedrockController {
 
     @PostMapping("/ai/createInsight")
     public ResponseEntity<InsightDTO> createInsight(
-            @RequestBody KpiDataDTO kpiDataDTO,
-            @RequestParam Double metricValue,
-            @RequestParam ConnectMetricType metricType,
-            @RequestParam String typeId) {
+            @RequestBody KpiDataDTO kpiDataDTO)
+            {
 
-        InsightDTO insight = bedrockService.createInsight(kpiDataDTO, metricValue, metricType, typeId);
+        InsightDTO insight = bedrockService.createInsight(kpiDataDTO);
         return ResponseEntity.ok(insight);
     }
 }
