@@ -41,6 +41,29 @@ public class BedrockServiceImpl implements BedrockService {
          * Adapt parameters as needed
          * Parse Bedrock response and return a DTO Insight Response
          */
+
+        /**
+         * ARMANDO: Usa los prompts del enum que hiciste, a la par de los parametros que te llegan
+         * y genera un insight con esos datos, para generarlo, una vez que tengas el prompt, solo hazlo
+         * como en la funcion de arriba llamada 'generate '
+         */
+
+        /**
+         * SAM: Parsear las respuestas y guardarlas en un DTO Insight Response,
+         * manejar los casos en los que una respuesta no venga o fallos (si aplica)
+         */
+
+        /**
+         * Gerry: Una vez que tengamos nuestro DTO Insight Response, tenemos que guardar un objeto
+         * THresholdBreachInsight en Base De Datos. Con el insight DTO y los parametros de la funcion
+         * tendrias todo lo necesario para implementarlo
+         */
+
+        /**
+         * Al final los 3 juntos, hagan un controller muy basico y prueben que todo esta funcionando correctamente
+         * El resultado correcto seria que en base de datos este un registro ThresholdBreachInsight con insights de
+         * muy buena calidad
+         */
     }
 
 }
