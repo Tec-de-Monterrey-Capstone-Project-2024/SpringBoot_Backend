@@ -1,8 +1,8 @@
 package com.springboot.connectmate.controllers;
 
-import com.springboot.connectmate.dtos.Metric.ThresholdBreachInsightDTO;
+import com.springboot.connectmate.dtos.Insight.ThresholdBreachInsightDTO;
 import com.springboot.connectmate.enums.Status;
-import com.springboot.connectmate.enums.ConnectItemType;
+import com.springboot.connectmate.enums.ConnectMetricType;
 import com.springboot.connectmate.services.ThresholdBreachInsightService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,26 +26,27 @@ public class ThresholdBreachInsightController {
         this.service = service;
     }
 
-    @GetMapping("/status/{statusString}")
-    public ResponseEntity<List<ThresholdBreachInsightDTO>> getInsightsByStatus(@PathVariable String statusString) {
-        Status status = Status.fromString(statusString);
-        return ResponseEntity.ok(service.getInsightsByStatus(status));
-    }
-
-    @GetMapping("/item/{connectItemId}")
-    public ResponseEntity<List<ThresholdBreachInsightDTO>> getInsightsByConnectItemId(@PathVariable String connectItemId) {
-        return ResponseEntity.ok(service.getInsightsByConnectItemId(connectItemId));
-    }
-
     @GetMapping
-    public ResponseEntity<List<ThresholdBreachInsightDTO>> getAllInsights() {
-        return ResponseEntity.ok(service.getAllInsights());
-    }
+    public ResponseEntity<List<ThresholdBreachInsightDTO>> getInsights(
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String connectItemId,
+            @RequestParam(required = false) String itemType) {
 
-    @GetMapping("/type/{itemType}")
-    public ResponseEntity<List<ThresholdBreachInsightDTO>> getInsightsByItemType(@PathVariable String itemType) {
-        ConnectItemType connectItemType = ConnectItemType.valueOf(itemType.toUpperCase());
-        return ResponseEntity.ok(service.getInsightsByItemType(connectItemType));
+        List<ThresholdBreachInsightDTO> insights;
+
+        if (status != null) {
+            Status statusEnum = Status.fromString(status.toUpperCase());
+            insights = service.getInsightsByStatus(statusEnum);
+        } else if (connectItemId != null) {
+            insights = service.getInsightsByConnectItemId(connectItemId);
+        } else if (itemType != null) {
+            ConnectMetricType connectItemType = ConnectMetricType.valueOf(itemType.toUpperCase());
+            insights = service.getInsightsByItemType(connectItemType);
+        } else {
+            insights = service.getAllInsights();
+        }
+
+        return ResponseEntity.ok(insights);
     }
 
 }
