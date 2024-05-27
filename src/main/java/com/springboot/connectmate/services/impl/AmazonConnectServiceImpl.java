@@ -56,6 +56,13 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
     }
 
     @Override
+    public Instance getConnectInstance(String instanceId) {
+        DescribeInstanceRequest describeInstanceRequest = new DescribeInstanceRequest().withInstanceId(instanceId);
+        DescribeInstanceResult describeInstanceResult = amazonConnectClient.describeInstance(describeInstanceRequest);
+        return describeInstanceResult.getInstance();
+    }
+
+    @Override
     public List<QueueSummary> listQueues(String instanceId) {
         ListQueuesRequest listQueuesRequest = new ListQueuesRequest().withInstanceId(instanceId);
         ListQueuesResult listQueuesResult = amazonConnectClient().listQueues(listQueuesRequest);
