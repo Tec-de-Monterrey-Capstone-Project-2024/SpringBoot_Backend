@@ -14,6 +14,7 @@ public interface AmazonConnectService {
     List<UserData> getCurrentUserData(String instanceId);
     List<AgentStatusSummary> listAgentsStatuses(String instanceId);
     List<RoutingProfileSummary> listRoutingProfiles(String instanceId);
+    List<String> getUserSecurityProfileIds(String instanceId, String userId);
 
     // Queue Services
     List<QueueSummary> listQueues(String instanceId);

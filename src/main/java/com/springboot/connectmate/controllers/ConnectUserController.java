@@ -93,4 +93,19 @@ public class ConnectUserController {
         return ResponseEntity.ok(amazonConnectService.listRoutingProfiles(instanceId));
     }
 
+    @ApiResponse(
+            responseCode = "200",
+            content = @Content(mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = String.class))),
+            description = "Get a user's security profile IDs."
+    )
+    @Operation(
+            summary = "Gets the security profile IDs of a particular user.",
+            description = "Gets the security profile IDs of a particular user by instance ID and user ID."
+    )
+    @GetMapping("/instances/{instanceId}/users/{userId}/security-profiles")
+    public ResponseEntity<List<String>> getUserSecurityProfileIds(@PathVariable(name = "instanceId") String instanceId, @PathVariable(name = "userId") String userId) {
+        return ResponseEntity.ok(amazonConnectService.getUserSecurityProfileIds(instanceId, userId));
+    }
+
 }

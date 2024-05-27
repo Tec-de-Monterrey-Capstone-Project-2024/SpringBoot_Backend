@@ -219,4 +219,15 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
                 .map(metric-> metric.toString())
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<String> getUserSecurityProfileIds(String instanceId, String userId) {
+        DescribeUserRequest request = new DescribeUserRequest()
+                .withInstanceId(instanceId)
+                .withUserId(userId);
+
+        DescribeUserResult response = amazonConnectClient.describeUser(request);
+        User user = response.getUser();
+        return user.getSecurityProfileIds();
+    }
 }
