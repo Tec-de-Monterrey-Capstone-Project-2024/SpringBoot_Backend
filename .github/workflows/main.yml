@@ -38,11 +38,6 @@ jobs:
 
     - name: Build and push Docker image to Artifact Registry
       env:
-        DB_PORT: 8080
-        DB_HOST: "34.71.134.63"
-        DB_NAME: "new_connectmate_db"
-        DB_USER: "root"
-        AWS_REGION: "us-east-1"
         GCP_REGION: "us-central1"
         GCP_AR_LOCATION: "us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/springboot-backend/connectmate"
       run: |
@@ -59,19 +54,8 @@ jobs:
         --build-arg AWS_REGION=${{ env.AWS_REGION }} \
         --no-cache ."
         
-        docker build \
-        -t ${{ env.GCP_AR_LOCATION }} \
-        --build-arg DB_PORT="${{ env.DB_PORT }}" \
-        --build-arg DB_HOST="${{ env.DB_HOST }}" \
-        --build-arg DB_NAME="${{ env.DB_NAME }}" \
-        --build-arg DB_USER="${{ env.DB_USER }}" \
-        --build-arg DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
-        --build-arg AWS_ACCESS_KEY="${{ secrets.AWS_ACCESS_KEY }}" \
-        --build-arg AWS_SECRET_KEY="${{ secrets.AWS_SECRET_KEY }}" \
-        --build-arg AWS_REGION="${{ env.AWS_REGION }}" \
-        .
-        
-
+        docker build -t ${{ env.GCP_AR_LOCATION }} --no-cache .
+      
         docker tag ${{ env.GCP_AR_LOCATION }} ${{ env.GCP_AR_LOCATION }}:$GITHUB_SHA
         docker push ${{ env.GCP_AR_LOCATION }}:$GITHUB_SHA
         docker push ${{ env.GCP_AR_LOCATION }}:latest
@@ -79,6 +63,11 @@ jobs:
 
 
     - name: Deploy to Cloud Run
+      env:
+        DB_HOST: "34.71.134.63"
+        DB_NAME: "connectmate_db"
+        DB_USER: "root"
+        AWS_REGION: "us-east-1"
       run: |
         gcloud run deploy connectmate \
           --image=us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/springboot-backend/connectmate \
