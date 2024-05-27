@@ -16,8 +16,8 @@ public enum ConnectMetricCode {
             80.0,
             "To ensure a high level of customer satisfaction by minimizing wait times."
     ),
-    ABANDONMENT_RATE(
-            "Abandonment Rate",
+    ABANDONMENT_CALL_RATE(
+            "Abandonment Call Rate",
             "The percentage of calls abandoned by customers before being answered.",
             "Crucial for understanding customer patience and service efficiency.",
             Unit.PERCENT,
@@ -93,16 +93,16 @@ public enum ConnectMetricCode {
             "The degree to which agents stick to their scheduled work times.",
             "Critical for workforce management and planning.",
             Unit.PERCENT,
-            ConnectMetricApiType.NoApi_SelfMade,
+            ConnectMetricApiType.MetricDataV2,
             95.0, // Typical industry target is 95%
             "To ensure agents are available as planned and improve service coverage."
     ),
-    VIRTUAL_FLOOR_RECONFIGURATION(
+   VIRTUAL_FLOOR_RECONFIGURATION(
             "Virtual Floor Reconfiguration",
             "The process of adjusting virtual agent floor plans to meet demand.",
             "Helps in managing and optimizing the distribution of virtual agents.",
             Unit.COUNT,
-            ConnectMetricApiType.NoApi_SelfMade,
+            ConnectMetricApiType.MetricDataV2,
             10.0, // Example value
             "To maintain an efficient and adaptable virtual agent environment."
     );
