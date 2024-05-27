@@ -75,4 +75,20 @@ public class ConnectMetricController {
         return ResponseEntity.ok(amazonConnectService.getCurrentMetrics(instanceArn));
     }
 
+    @ApiResponse(
+            responseCode = "200",
+            content = @Content(mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = String.class))),
+            description = "List of metrics for a given instance and agent fetched successfully"
+    )
+    @Operation(
+            summary = "Get all agent metrics",
+            description = "Get Amazon Connect metrics by instanceARN and agentId."
+    )
+    @GetMapping("/instances/agent-metrics")
+    public ResponseEntity<List<String>> getAgentMetrics(
+            @RequestParam(name = "instanceArn") String instanceArn, @RequestParam(name = "agentId") String agentId){
+        return ResponseEntity.ok(amazonConnectService.getAgentMetrics(instanceArn, agentId));
+    }
+
 }

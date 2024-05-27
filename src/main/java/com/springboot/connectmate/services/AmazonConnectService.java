@@ -25,5 +25,5 @@ public interface AmazonConnectService {
     List<String> getHistoricalMetricsV2(String instanceId, String queueId);
     List<String> getCurrentMetrics(String instanceId);
 
-
+    List<String> getAgentMetrics(String instanceArn, String agentId);
 }

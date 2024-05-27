@@ -208,6 +208,61 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
     }
 
     @Override
+    public List<String> getAgentMetrics(String instanceArn, String agentId) {
+
+        ThresholdV2 threshold = new ThresholdV2()
+                .withComparison("LT")
+                .withThresholdValue(20.00);
+
+        List<MetricV2> metrics = new ArrayList<>();
+        metrics.add(new MetricV2()
+                .withName("SERVICE_LEVEL")
+                .withThreshold(threshold)
+        );
+
+        metrics.add(new MetricV2()
+                .withName("ABANDONMENT_RATE")
+        );
+
+        metrics.add(new MetricV2()
+                .withName("AGENT_OCCUPANCY")
+        );
+
+        metrics.add(new MetricV2()
+                .withName("AGENT_SCHEDULE_ADHERENCE")
+        );
+
+        metrics.add(new MetricV2()
+                .withName("AVG_HANDLE_TIME")
+        );
+
+        List<FilterV2> filters = new ArrayList<>();
+
+        filters.add( new FilterV2()
+                .withFilterKey("AGENT")
+                .withFilterValues(Collections.singletonList(agentId))
+        );
+
+        ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
+        ZonedDateTime endTime = now.withSecond(0).withNano(0).minusMinutes(now.getMinute() % 5);
+        ZonedDateTime startTime = endTime.minusHours(23);
+
+        GetMetricDataV2Request getMetricDataV2Request = new GetMetricDataV2Request()
+                .withResourceArn(instanceArn)
+                .withMetrics(metrics)
+                .withFilters(filters)
+                .withEndTime(Date.from(endTime.toInstant()))
+                .withStartTime(Date.from(startTime.toInstant()));
+
+        GetMetricDataV2Result getMetricDataResult = amazonConnectClient.getMetricDataV2(getMetricDataV2Request);
+        System.out.println(getMetricDataResult.toString());
+
+        return getMetricDataResult.getMetricResults().stream()
+                .map(metricResult -> metricResult.toString())
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<String> getCurrentMetrics(String instanceId) {
 
         List<CurrentMetric> currentMetrics = new ArrayList<>();
