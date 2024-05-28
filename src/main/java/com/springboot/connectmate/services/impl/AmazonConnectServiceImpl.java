@@ -165,6 +165,11 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
     }
 
     @Override
+    public List<String> getHistoricalMetricsV2(String instanceId, String queueId) {
+        return null;
+    }
+
+    @Override
     public List<String> getQueueMetrics(String instanceArn, String queueId) {
 
         ThresholdV2 threshold = new ThresholdV2()
