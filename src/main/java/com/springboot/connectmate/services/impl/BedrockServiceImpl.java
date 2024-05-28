@@ -85,10 +85,6 @@ public class BedrockServiceImpl implements BedrockService {
             String response = callBedrockService(responseField.getPrompt(), kpiDataJson);
             populateInsight(insight, responseField, response);
         }
-        /*
-        ModelMapper modelMapper = new ModelMapper();
-        ThresholdBreachInsight thresholdBreachInsight = mapper.map(insight, ThresholdBreachInsight.class);
-        thresholdBreachInsightRepository.save(thresholdBreachInsight);*/
         return insight;
     }
 
@@ -100,7 +96,6 @@ public class BedrockServiceImpl implements BedrockService {
             throw new RuntimeException("Error al convertir KPI Data a JSON", e);
         }
     }
-
 
     private String callBedrockService(String prompt, String kpiDataJson) {
         String message = prompt + " " + kpiDataJson;
@@ -135,13 +130,12 @@ public class BedrockServiceImpl implements BedrockService {
                 .replaceAll("\\t", "")
                 .trim();
 
-
         switch (responseField) {
             case NAME:
                 String name = findTitleName("is \\\"(.*?)\\\"", cleanResponse);
                 if (name != null) {
                     insight.setInsightName(name);
-                }else {
+                } else {
                     insight.setInsightName("No name found");
                 }
                 break;

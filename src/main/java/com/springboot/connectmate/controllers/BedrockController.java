@@ -3,6 +3,9 @@ package com.springboot.connectmate.controllers;
 import com.springboot.connectmate.dtos.AmazonConnect.InsightDTO;
 import com.springboot.connectmate.dtos.AmazonConnect.KpiDataDTO;
 import com.springboot.connectmate.services.BedrockService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.modelmapper.internal.bytebuddy.build.Plugin;
 import org.springframework.ai.bedrock.titan.BedrockTitanChatClient;
 import org.springframework.ai.chat.ChatResponse;
 import org.springframework.ai.chat.messages.UserMessage;
@@ -41,7 +44,14 @@ public class BedrockController {
         return bedrockService.generate(message);
     }
 
-
+    @ApiResponse(
+            responseCode = "200",
+            description = "Insight created succesfully ."
+    )
+    @Operation (
+            summary = "Post API for the created Insights ",
+            description = "Insight Creation"
+    )
     @PostMapping("/ai/createInsight")
     public ResponseEntity<InsightDTO> createInsight(
             @RequestBody KpiDataDTO kpiDataDTO)

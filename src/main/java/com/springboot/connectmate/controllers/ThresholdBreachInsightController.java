@@ -32,7 +32,7 @@ public class ThresholdBreachInsightController {
     }
     @Operation(
             summary = "Creates a ThresholdBreachInsight record",
-            description = "Create the a   "
+            description = "Create the thresholdbreachinsight record "
     )
     @ApiResponse(
             responseCode = "200",
