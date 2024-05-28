@@ -22,8 +22,8 @@ public interface AmazonConnectService {
 
     // Metric Services
     List<String> getHistoricalMetrics(String instanceId, String queueId);
-    List<String> getHistoricalMetricsV2(String instanceId, String queueId);
+    List<String> getQueueMetrics(String instanceId, String queueId);
     List<String> getCurrentMetrics(String instanceId);
 
-
+    List<String> getAgentMetrics(String instanceArn, String agentId);
 }
