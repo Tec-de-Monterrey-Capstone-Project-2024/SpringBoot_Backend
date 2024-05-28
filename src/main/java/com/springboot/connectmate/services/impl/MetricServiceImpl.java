@@ -52,19 +52,19 @@ public class MetricServiceImpl implements MetricService {
 
     @Override
     public List<String> getHistoricalMetricsV2(String instanceArn, String queueId) {
-        // Implementar lógica para obtener las métricas históricas
+        // Implement logic to fetch historical metrics
         return Collections.emptyList();
     }
 
     @Override
     public List<String> getHistoricalMetrics(String instanceId, String queueId) {
-        // Implementar lógica para obtener las métricas históricas
+        // Implement logic to fetch historical metrics
         return Collections.emptyList();
     }
 
     @Override
     public List<String> getCurrentMetrics(String instanceArn) {
-        // Implementar lógica para obtener las métricas actuales
+        // Implement logic to fetch current metrics
         return Collections.emptyList();
     }
 }
