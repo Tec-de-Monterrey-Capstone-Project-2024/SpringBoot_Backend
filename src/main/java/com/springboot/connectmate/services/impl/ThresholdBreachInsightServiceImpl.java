@@ -19,19 +19,19 @@ import java.util.stream.Collectors;
 public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsightService {
 
     private final ThresholdBreachInsightRepository repository;
-    private final ModelMapper modelMapper;
+    private final ModelMapper mapper;
 
     @Autowired
-    public ThresholdBreachInsightServiceImpl(ThresholdBreachInsightRepository repository, ModelMapper modelMapper) {
+    public ThresholdBreachInsightServiceImpl(ThresholdBreachInsightRepository repository, ModelMapper mapper) {
         this.repository = repository;
-        this.modelMapper = modelMapper;
+        this.mapper = mapper;
     }
 
     @Override
     public List<ThresholdBreachInsightDTO> getInsightsByStatus(Status status) {
         List<ThresholdBreachInsight> insights = repository.findByStatus(status);
         return insights.stream()
-                .map(this::convertToDTO)
+                .map(insight -> mapper.map(insight, ThresholdBreachInsightDTO.class))
                 .collect(Collectors.toList());
     }
 
@@ -39,15 +39,15 @@ public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsight
     public List<ThresholdBreachInsightDTO> getInsightsByConnectItemId(String connectItemId) {
         List<ThresholdBreachInsight> insights = repository.findByConnectItemId(connectItemId);
         return insights.stream()
-                .map(this::convertToDTO)
+                .map(insight -> mapper.map(insight, ThresholdBreachInsightDTO.class))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<ThresholdBreachInsightDTO> getAllInsights(){
+    public List<ThresholdBreachInsightDTO> getAllInsights() {
         List<ThresholdBreachInsight> insights = repository.findAll();
         return insights.stream()
-                .map(this::convertToDTO)
+                .map(insight -> mapper.map(insight, ThresholdBreachInsightDTO.class))
                 .collect(Collectors.toList());
     }
 
@@ -55,7 +55,7 @@ public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsight
     public List<ThresholdBreachInsightDTO> getInsightsByItemType(ConnectMetricType connectMetricType) {
         List<ThresholdBreachInsight> insights = repository.findByConnectItemType(connectMetricType);
         return insights.stream()
-                .map(this::convertToDTO)
+                .map(insight -> mapper.map(insight, ThresholdBreachInsightDTO.class))
                 .collect(Collectors.toList());
     }
 
@@ -63,16 +63,9 @@ public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsight
     public ThresholdBreachInsightDTO updateStatus(Long id, UpdateStatusDTO updateStatusDTO) {
         ThresholdBreachInsight insight = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("ThresholdBreachInsight", "id", id));
-
-        Status newStatus = Status.valueOf(updateStatusDTO.getStatus().toUpperCase());
-        insight.setStatus(newStatus);
-
-        ThresholdBreachInsight updatedInsight = repository.save(insight);
-        return convertToDTO(updatedInsight);
-    }
-
-    private ThresholdBreachInsightDTO convertToDTO(ThresholdBreachInsight insight) {
-        return modelMapper.map(insight, ThresholdBreachInsightDTO.class);
+        insight.setStatus(Status.valueOf(updateStatusDTO.getStatus()));
+        repository.save(insight);
+        return mapper.map(insight, ThresholdBreachInsightDTO.class);
     }
 }
 
