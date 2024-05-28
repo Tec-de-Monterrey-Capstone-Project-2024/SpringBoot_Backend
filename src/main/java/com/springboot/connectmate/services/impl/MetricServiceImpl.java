@@ -1,7 +1,8 @@
 package com.springboot.connectmate.services.impl;
 
-
 import com.springboot.connectmate.dtos.Metric.MetricDTO;
+import com.springboot.connectmate.dtos.Update.UpdateThresholdMetricDTO;
+import com.springboot.connectmate.enums.ConnectMetricCode;
 import com.springboot.connectmate.models.Metric;
 import com.springboot.connectmate.repositories.MetricRepository;
 import com.springboot.connectmate.services.MetricService;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
-
+import java.util.Optional;
 
 @Service
 public class MetricServiceImpl implements MetricService {
@@ -25,7 +26,6 @@ public class MetricServiceImpl implements MetricService {
         this.mapper = mapper;
     }
 
-
     @Override
     public List<Metric> getAllAmazonConnectMetrics() {
         return metricRepository.findAll();
@@ -33,6 +33,38 @@ public class MetricServiceImpl implements MetricService {
 
     @Override
     public List<MetricDTO> getAllConnectMateMetrics() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public Metric updateThresholds(String code, UpdateThresholdMetricDTO updateThresholdMetricDTO) {
+        Optional<Metric> optionalMetric = metricRepository.findById(ConnectMetricCode.valueOf(code));
+        if (optionalMetric.isPresent()) {
+            Metric metric = optionalMetric.get();
+            metric.setMinimumThresholdValue(updateThresholdMetricDTO.getMinimumThresholdValue());
+            metric.setMaximumThresholdValue(updateThresholdMetricDTO.getMaximumThresholdValue());
+            metric.setTargetValue(updateThresholdMetricDTO.getTargetValue());
+            return metricRepository.save(metric);
+        } else {
+            throw new RuntimeException("Metric not found with code: " + code);
+        }
+    }
+
+    @Override
+    public List<String> getHistoricalMetricsV2(String instanceArn, String queueId) {
+        // Implementar lógica para obtener las métricas históricas
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<String> getHistoricalMetrics(String instanceId, String queueId) {
+        // Implementar lógica para obtener las métricas históricas
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<String> getCurrentMetrics(String instanceArn) {
+        // Implementar lógica para obtener las métricas actuales
         return Collections.emptyList();
     }
 }
