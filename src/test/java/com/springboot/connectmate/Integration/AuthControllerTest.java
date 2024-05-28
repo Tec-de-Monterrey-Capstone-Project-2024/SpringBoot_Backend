@@ -7,6 +7,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -32,12 +33,6 @@ public class AuthControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @BeforeEach
-    @AfterEach
-    void setup(){
-        userRepository.deleteAll();
-    }
-
     @Test
     public void givenUserRegistrationForm_whenRegisterUser_thenReturnSaveUser() throws Exception {
         // given - precondition or setup
@@ -60,5 +55,8 @@ public class AuthControllerTest {
                         is(registerUserFormDTO.getEmail())))
                 .andExpect(jsonPath("$.instanceId",
                         is(registerUserFormDTO.getInstanceId())));
+
+        // Delete the user created
+        userRepository.deleteById(registerUserFormDTO.getFirebaseId());
     }
 }
