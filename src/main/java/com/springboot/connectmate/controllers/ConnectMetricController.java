@@ -2,6 +2,7 @@ package com.springboot.connectmate.controllers;
 
 import com.springboot.connectmate.dtos.Update.UpdateThresholdMetricDTO;
 import com.springboot.connectmate.models.Metric;
+import com.springboot.connectmate.services.AmazonConnectService;
 import com.springboot.connectmate.services.MetricService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -23,10 +24,12 @@ import java.util.List;
 )
 public class ConnectMetricController {
 
+    private final AmazonConnectService amazonConnectService;
     private final MetricService metricService;
 
     @Autowired
-    public ConnectMetricController(MetricService metricService) {
+    public ConnectMetricController(AmazonConnectService amazonConnectService, MetricService metricService) {
+        this.amazonConnectService = amazonConnectService;
         this.metricService = metricService;
     }
 
@@ -45,7 +48,7 @@ public class ConnectMetricController {
             @RequestParam(name = "instanceArn") String instanceArn,
             @RequestParam(name = "queueId") String queueId
     ){
-        return ResponseEntity.ok(metricService.getHistoricalMetricsV2(instanceArn, queueId));
+        return ResponseEntity.ok(amazonConnectService.getHistoricalMetricsV2(instanceArn, queueId));
     }
 
     @ApiResponse(
@@ -58,7 +61,7 @@ public class ConnectMetricController {
     public ResponseEntity<List<String>> getHistoricalMetrics(
             @PathVariable(name = "instanceId") String instanceId,
             @PathVariable(name = "queueId") String queueId) {
-        return ResponseEntity.ok(metricService.getHistoricalMetrics(instanceId, queueId));
+        return ResponseEntity.ok(amazonConnectService.getHistoricalMetrics(instanceId, queueId));
     }
 
     @ApiResponse(
@@ -74,7 +77,7 @@ public class ConnectMetricController {
     @GetMapping("/instances/current-metrics")
     public ResponseEntity<List<String>> getCurrentMetrics(
             @RequestParam(name = "instanceArn") String instanceArn){
-        return ResponseEntity.ok(metricService.getCurrentMetrics(instanceArn));
+        return ResponseEntity.ok(amazonConnectService.getCurrentMetrics(instanceArn));
     }
 
     @PatchMapping("/{code}/thresholds")
