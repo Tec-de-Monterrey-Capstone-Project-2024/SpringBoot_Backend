@@ -3,7 +3,6 @@ package com.springboot.connectmate.services.impl;
 import com.springboot.connectmate.dtos.Insight.ThresholdBreachInsightDTO;
 import com.springboot.connectmate.enums.Status;
 import com.springboot.connectmate.enums.ConnectMetricType;
-
 import com.springboot.connectmate.models.ThresholdBreachInsight;
 import com.springboot.connectmate.repositories.ThresholdBreachInsightRepository;
 import com.springboot.connectmate.services.ThresholdBreachInsightService;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
 import java.util.stream.Collectors;
 
 @Service
@@ -23,6 +21,7 @@ public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsight
     @Autowired
     public ThresholdBreachInsightServiceImpl(ThresholdBreachInsightRepository repository, ModelMapper modelMapper) {
         this.repository = repository;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -57,31 +56,8 @@ public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsight
                 .collect(Collectors.toList());
     }
 
-
     private ThresholdBreachInsightDTO convertToDTO(ThresholdBreachInsight insight) {
-        ThresholdBreachInsightDTO dto = new ThresholdBreachInsightDTO();
-        dto.setId(insight.getId());
-
-        if (insight.getMetricCode() != null) {
-            dto.setMetricCode(String.valueOf(insight.getMetricCode().getCode())); // Converting enum to String
-        }
-
-        dto.setConnectItemId(insight.getConnectItemId());
-        dto.setConnectItemType(insight.getConnectItemType().getName());
-        dto.setValue(insight.getValue());
-        dto.setOccurredAt(insight.getOccurredAt().toString());
-        dto.setStatus(insight.getStatus().name());
-        dto.setInsightName(insight.getInsightName());
-        dto.setInsightSummary(insight.getInsightSummary());
-        dto.setInsightDescription(insight.getInsightDescription());
-        dto.setInsightActions(insight.getInsightActions());
-        dto.setInsightCategory(insight.getInsightCategory().name());
-        dto.setInsightSeverity(insight.getInsightSeverity().name());
-        dto.setInsightRootCause(insight.getInsightRootCause());
-        dto.setInsightImpact(insight.getInsightImpact());
-        dto.setInsightPrevention(insight.getInsightPrevention());
-
-        return dto;
+        return modelMapper.map(insight, ThresholdBreachInsightDTO.class);
     }
 }
 
