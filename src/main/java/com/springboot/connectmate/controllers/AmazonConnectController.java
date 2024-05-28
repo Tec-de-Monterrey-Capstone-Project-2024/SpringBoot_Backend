@@ -32,7 +32,7 @@ public class AmazonConnectController {
     @ApiResponse(
             responseCode = "200",
             content = @Content(mediaType = "application/json",
-                               array = @ArraySchema(schema = @Schema(implementation = InstanceSummary.class))),
+                    array = @ArraySchema(schema = @Schema(implementation = InstanceSummary.class))),
             description = "List of instances fetched successfully."
     )
     @Operation(
@@ -42,6 +42,21 @@ public class AmazonConnectController {
     @GetMapping("/instances")
     public ResponseEntity<List<InstanceSummary>> listConnectInstances() {
         return ResponseEntity.ok(amazonConnectService.listConnectInstances());
+    }
+
+    @ApiResponse(
+            responseCode = "200",
+            content = @Content(mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = Instance.class))),
+            description = "Instance fetched successfully."
+    )
+    @Operation(
+            summary = "Get Instance By Id",
+            description = "Get instance details by Id for an specific Amazon region with a given AWS account"
+    )
+    @GetMapping("/instances/{instanceId}")
+    public ResponseEntity<Instance> getConnectInstance(@PathVariable(name = "instanceId") String instanceId) {
+        return ResponseEntity.ok(amazonConnectService.getConnectInstance(instanceId));
     }
 
 }
