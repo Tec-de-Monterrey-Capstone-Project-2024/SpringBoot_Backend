@@ -33,7 +33,11 @@ public class MetricServiceImpl implements MetricService {
 
     @Override
     public List<MetricDTO> getAllConnectMateMetrics() {
-        return Collections.emptyList();
+        // Assuming a need to convert Metric entities to DTOs
+        List<Metric> metrics = metricRepository.findAll();
+        return metrics.stream()
+                .map(metric -> mapper.map(metric, MetricDTO.class))
+                .toList();
     }
 
     @Override
@@ -52,19 +56,16 @@ public class MetricServiceImpl implements MetricService {
 
     @Override
     public List<String> getHistoricalMetricsV2(String instanceArn, String queueId) {
-        // Implement logic to fetch historical metrics
         return Collections.emptyList();
     }
 
     @Override
     public List<String> getHistoricalMetrics(String instanceId, String queueId) {
-        // Implement logic to fetch historical metrics
         return Collections.emptyList();
     }
 
     @Override
     public List<String> getCurrentMetrics(String instanceArn) {
-        // Implement logic to fetch current metrics
         return Collections.emptyList();
     }
 }
