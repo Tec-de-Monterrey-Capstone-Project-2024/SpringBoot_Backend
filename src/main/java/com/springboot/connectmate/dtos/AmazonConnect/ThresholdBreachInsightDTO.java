@@ -1,9 +1,6 @@
 package com.springboot.connectmate.dtos.AmazonConnect;
 
-import com.springboot.connectmate.enums.ConnectMetricType;
-import com.springboot.connectmate.enums.InsightPerformance;
-import com.springboot.connectmate.enums.InsightSeverity;
-import com.springboot.connectmate.enums.Status;
+import com.springboot.connectmate.enums.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -24,5 +21,5 @@ public class ThresholdBreachInsightDTO {
     private LocalDateTime occurredAt;
     private Status status;
     private Double value;
-    private String metricCode;
+    private ConnectMetricCode metricCode;
 }
