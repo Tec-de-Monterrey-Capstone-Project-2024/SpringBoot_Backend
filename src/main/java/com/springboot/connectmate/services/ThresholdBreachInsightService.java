@@ -1,5 +1,8 @@
 package com.springboot.connectmate.services;
 
-public interface ThresholdBreachInsightService {
+import com.springboot.connectmate.enums.Status;
+import com.springboot.connectmate.models.ThresholdBreachInsight;
 
+public interface ThresholdBreachInsightService {
+    ThresholdBreachInsight updateStatus(Long id, Status status);
 }
