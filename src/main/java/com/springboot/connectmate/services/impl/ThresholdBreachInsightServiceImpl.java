@@ -1,6 +1,7 @@
 package com.springboot.connectmate.services.impl;
 
 import com.springboot.connectmate.dtos.AmazonConnect.InsightDTO;
+import com.springboot.connectmate.dtos.AmazonConnect.ThresholdBreachInsightDTO;
 import com.springboot.connectmate.enums.*;
 import com.springboot.connectmate.exceptions.ResourceNotFoundException;
 import com.springboot.connectmate.models.Metric;
@@ -38,28 +39,30 @@ public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsight
     }
 
 
-    /*
+    @Override
     @Transactional
-    public ThresholdBreachInsight generateAndSaveInsight(InsightDTO insight, Double metricValue, ConnectMetricType metricType, String typeId) {
+    public ThresholdBreachInsight generateAndSaveInsight(ThresholdBreachInsightDTO dto, InsightDTO insight) {
 
         Metric metric = new Metric();
+        metric.setCode(dto.getMetricCode());
+
         ThresholdBreachInsight thresholdBreachInsight = new ThresholdBreachInsight();
         thresholdBreachInsight.setMetricCode(metric);
-        thresholdBreachInsight.setConnectItemId(typeId);
-        thresholdBreachInsight.setConnectItemType(metricType);
-        thresholdBreachInsight.setValue(metricValue);
-        thresholdBreachInsight.setOccurredAt(LocalDateTime.now());
-        thresholdBreachInsight.setStatus(Status.TO_DO);
-        thresholdBreachInsight.setInsightName(insight.getInsightName());
-        thresholdBreachInsight.setInsightSummary(insight.getInsightSummary());
-        thresholdBreachInsight.setInsightDescription(insight.getInsightDescription());
-        thresholdBreachInsight.setInsightActions(insight.getInsightActions());
-        thresholdBreachInsight.setInsightCategory(InsightPerformance.valueOf(insight.getInsightCategory().toUpperCase()));
-        thresholdBreachInsight.setInsightSeverity(InsightSeverity.LOW);
-        thresholdBreachInsight.setInsightRootCause(insight.getInsightRootCause());
-        thresholdBreachInsight.setInsightImpact(insight.getInsightImpact());
-        thresholdBreachInsight.setInsightPrevention(insight.getInsightPrevention());
+        thresholdBreachInsight.setConnectItemId(dto.getConnectItemId());
+        thresholdBreachInsight.setConnectItemType(dto.getConnectItemType());
+        thresholdBreachInsight.setValue(dto.getValue());
+        thresholdBreachInsight.setOccurredAt(dto.getOccurredAt() != null ? dto.getOccurredAt() : LocalDateTime.now());
+        thresholdBreachInsight.setStatus(dto.getStatus());
+        thresholdBreachInsight.setInsightName(dto.getInsightName());
+        thresholdBreachInsight.setInsightSummary(dto.getInsightSummary());
+        thresholdBreachInsight.setInsightDescription(dto.getInsightDescription());
+        thresholdBreachInsight.setInsightActions(dto.getInsightActions());
+        thresholdBreachInsight.setInsightCategory(dto.getInsightCategory());
+        thresholdBreachInsight.setInsightSeverity(dto.getInsightSeverity());
+        thresholdBreachInsight.setInsightRootCause(dto.getInsightRootCause());
+        thresholdBreachInsight.setInsightImpact(dto.getInsightImpact());
+        thresholdBreachInsight.setInsightPrevention(dto.getInsightPrevention());
 
         return thresholdBreachInsightRepository.save(thresholdBreachInsight);
-    }*/
+    }
 }

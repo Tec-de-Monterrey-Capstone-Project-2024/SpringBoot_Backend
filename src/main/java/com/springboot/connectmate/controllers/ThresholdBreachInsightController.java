@@ -4,8 +4,7 @@ import com.springboot.connectmate.dtos.AmazonConnect.InsightDTO;
 import com.springboot.connectmate.dtos.AmazonConnect.InsightStatusUpdateDTO;
 import com.springboot.connectmate.dtos.AmazonConnect.KpiDataDTO;
 import com.springboot.connectmate.dtos.AmazonConnect.ThresholdBreachInsightDTO;
-import com.springboot.connectmate.enums.ConnectMetricType;
-import com.springboot.connectmate.enums.Status;
+import com.springboot.connectmate.enums.*;
 import com.springboot.connectmate.models.ThresholdBreachInsight;
 import com.springboot.connectmate.services.BedrockService;
 import com.springboot.connectmate.services.ThresholdBreachInsightService;
@@ -53,26 +52,48 @@ public class ThresholdBreachInsightController {
         return ResponseEntity.ok("Status updated successfully");
     }
 
+    @Operation(
+            summary = "Creates a ThresholdBreachInsight record",
+            description = "Create the a   "
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Insight created successfully"
+    )
 
-    /*
     @PostMapping("/generateAndSaveInsight")
-    public ResponseEntity<ThresholdBreachInsight> generateAndSaveInsight(
-            @RequestBody ThresholdBreachInsightDTO dto,
+    public ResponseEntity<String> generateAndSaveInsight(
+            @RequestBody KpiDataDTO kpiDataDTO,
             @RequestParam Double metricValue,
             @RequestParam ConnectMetricType metricType,
-            @RequestParam String typeId) {
+            @RequestParam String typeId,
+            @RequestParam ConnectMetricCode metricCode,
+            @RequestParam Status status) {
 
-        // Call the BedrockService to get the insight
-        InsightDTO insight = bedrockService.createInsight(dto);
+        InsightDTO insight = bedrockService.createInsight(kpiDataDTO);
 
-        // Fill in additional details from the request parameters
+        ThresholdBreachInsightDTO dto = new ThresholdBreachInsightDTO();
         dto.setValue(metricValue);
         dto.setConnectItemType(metricType);
         dto.setConnectItemId(typeId);
+        dto.setMetricCode(metricCode);
+        dto.setStatus(status);
 
-        // Generate and save the insight
+        dto.setInsightName(insight.getInsightName());
+        dto.setInsightSummary(insight.getInsightSummary());
+        dto.setInsightDescription(insight.getInsightDescription());
+        dto.setInsightActions(insight.getInsightActions());
+        dto.setInsightSeverity(InsightSeverity.valueOf(insight.getInsightCategory()));
+        dto.setInsightCategory(InsightPerformance.valueOf(insight.getInsightPerformance()));
+        dto.setInsightRootCause(insight.getInsightRootCause());
+        dto.setInsightImpact(insight.getInsightImpact());
+        dto.setInsightPrevention(insight.getInsightPrevention());
+
+
         ThresholdBreachInsight savedInsight = thresholdBreachInsightService.generateAndSaveInsight(dto, insight);
-        return ResponseEntity.ok(savedInsight);
-    }*/
+
+        return ResponseEntity.ok("Insight created successfully");
+    }
+
 
 }

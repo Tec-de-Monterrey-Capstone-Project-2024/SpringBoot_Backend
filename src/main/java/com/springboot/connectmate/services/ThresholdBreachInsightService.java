@@ -10,6 +10,6 @@ import com.springboot.connectmate.models.ThresholdBreachInsight;
 public interface ThresholdBreachInsightService {
     void updateInsightStatus(Long id, Status newStatus);
 
-    //ThresholdBreachInsight generateAndSaveInsight(ThresholdBreachInsightDTO dto, InsightDTO insight);
+    ThresholdBreachInsight generateAndSaveInsight(ThresholdBreachInsightDTO dto, InsightDTO insight);
 
 }

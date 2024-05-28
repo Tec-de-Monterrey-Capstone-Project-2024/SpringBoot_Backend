@@ -157,21 +157,21 @@ public class BedrockServiceImpl implements BedrockService {
                 insight.setInsightActions(cleanResponse);
                 break;
             case CATEGORY:
-                List<String> performance= Arrays.asList("CRITICAL", "UNSATISFACTORY", "BELOW_EXPECTATIONS", "EXCEEDS_EXPECTATIONS","OUTSTANDING","PIONEERING");
-                String foundPerformance = findInJson(cleanResponse, performance);
-                if (foundPerformance != null) {
-                    insight.setInsightCategory(foundPerformance);
+                List<String> category = Arrays.asList("LOW", "MEDIUM", "HIGH");
+                String categoryFound = findInJson(cleanResponse, category);
+                if (categoryFound != null) {
+                    insight.setInsightCategory(categoryFound);
                 } else {
                     insight.setInsightCategory("Unknown");
                 }
                 break;
-            case SEVERITY:
-                List<String> severity = Arrays.asList("LOW", "MEDIUM", "HIGH");
-                String severityFound = findInJson(cleanResponse, severity);
-                if (severityFound != null) {
-                    insight.setInsightSeverity(severityFound);
+            case PERFORMANCE:
+                List<String> performance= Arrays.asList("CRITICAL", "UNSATISFACTORY", "BELOW_EXPECTATIONS", "EXCEEDS_EXPECTATIONS", "OUTSTANDING", "PIONEERING");
+                String foundPerformance = findInJson(cleanResponse, performance);
+                if (foundPerformance != null) {
+                    insight.setInsightPerformance(foundPerformance);
                 } else {
-                    insight.setInsightSeverity("Unknown");
+                    insight.setInsightPerformance("Unknown");
                 }
                 break;
             case ROOT_CAUSE:
