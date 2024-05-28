@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-
 @RequestMapping("/api/auth/users")
 @Tag(
         name = "Authentication REST API",
@@ -39,7 +38,7 @@ public class AuthController {
             summary = "Register User REST API",
             description = "Register User REST API is used to register a new user in the system "
     )
-    @PostMapping("register")
+    @PostMapping("/register")
     public ResponseEntity<UserResponseDTO> register(@Valid @RequestBody RegisterUserFormDTO registerUserFormDTO){
         return new ResponseEntity<>(authService.registerUser(registerUserFormDTO), HttpStatus.CREATED);
     }
@@ -52,7 +51,7 @@ public class AuthController {
             summary = "Login User REST API",
             description = "Login User REST API is used to retrieve the user information by Firebase ID"
     )
-    @GetMapping("login/{firebaseId}")
+    @GetMapping("/login/{firebaseId}")
     public ResponseEntity<UserResponseDTO> login(@PathVariable(name = "firebaseId") String firebaseId){
         return ResponseEntity.ok(userService.getUserByFirebaseId(firebaseId));
 
