@@ -80,6 +80,16 @@ public class ConnectMetricController {
         return ResponseEntity.ok(amazonConnectService.getCurrentMetrics(instanceArn));
     }
 
+    @ApiResponse(
+            responseCode = "200",
+            content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = Metric.class)),
+            description = "Thresholds updated successfully"
+    )
+    @Operation(
+            summary = "Update thresholds",
+            description = "Update the thresholds for a given metric by code."
+    )
     @PatchMapping("/{code}/thresholds")
     public ResponseEntity<Metric> updateThresholds(
             @PathVariable(name = "code") String code,
