@@ -63,9 +63,11 @@ public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsight
     public ThresholdBreachInsightDTO updateStatus(Long id, UpdateStatusDTO updateStatusDTO) {
         ThresholdBreachInsight insight = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("ThresholdBreachInsight", "id", id));
-        insight.setStatus(Status.valueOf(updateStatusDTO.getStatus()));
-        repository.save(insight);
-        return mapper.map(insight, ThresholdBreachInsightDTO.class);
+
+        insight.setStatus( updateStatusDTO.getStatus() );
+        ThresholdBreachInsight updatedInsight = repository.save(insight);
+
+        return mapper.map(updatedInsight, ThresholdBreachInsightDTO.class);
     }
 }
 
