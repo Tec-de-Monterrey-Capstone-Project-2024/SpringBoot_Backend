@@ -1,7 +1,7 @@
 package com.springboot.connectmate.controllers;
 
 import com.amazonaws.services.connect.model.*;
-import com.amazonaws.services.connect.model.Queue;
+import com.springboot.connectmate.dtos.AmazonConnect.UserRoleDTO;
 import com.springboot.connectmate.services.AmazonConnectService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -104,8 +104,9 @@ public class ConnectUserController {
             description = "Gets the security profile IDs of a particular user by instance ID and user ID."
     )
     @GetMapping("/instances/{instanceId}/users/{userId}/security-profiles")
-    public ResponseEntity<List<String>> getUserSecurityProfileIds(@PathVariable(name = "instanceId") String instanceId, @PathVariable(name = "userId") String userId) {
-        return ResponseEntity.ok(amazonConnectService.getUserSecurityProfileIds(instanceId, userId));
+    public ResponseEntity<List<UserRoleDTO>> getUserSecurityProfileIds(@PathVariable(name = "instanceId") String instanceId, @PathVariable(name = "userId") String userId) {
+        List<UserRoleDTO> securityProfileIds = amazonConnectService.getUserSecurityProfileIds(instanceId, userId);
+        return ResponseEntity.ok(securityProfileIds);
     }
 
 }

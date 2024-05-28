@@ -3,6 +3,7 @@ package com.springboot.connectmate.services.impl;
 import com.amazonaws.services.connect.AmazonConnect;
 import com.amazonaws.services.connect.model.*;
 import com.amazonaws.services.connect.model.Queue;
+import com.springboot.connectmate.dtos.AmazonConnect.UserRoleDTO;
 import com.springboot.connectmate.services.AmazonConnectService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -226,13 +227,32 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
     }
 
     @Override
-    public List<String> getUserSecurityProfileIds(String instanceId, String userId) {
+    public List<UserRoleDTO> getUserSecurityProfileIds(String instanceId, String userId) {
         DescribeUserRequest request = new DescribeUserRequest()
                 .withInstanceId(instanceId)
                 .withUserId(userId);
 
         DescribeUserResult response = amazonConnectClient.describeUser(request);
         User user = response.getUser();
-        return user.getSecurityProfileIds();
+
+        List<String> securityProfileIds = user.getSecurityProfileIds();
+        List<UserRoleDTO> userRoles = new ArrayList<>();
+
+        for (String roleId : securityProfileIds) {
+            DescribeSecurityProfileRequest securityProfileRequest = new DescribeSecurityProfileRequest()
+                    .withInstanceId(instanceId)
+                    .withSecurityProfileId(roleId);
+
+            DescribeSecurityProfileResult securityProfileResult = amazonConnectClient.describeSecurityProfile(securityProfileRequest);
+            SecurityProfile securityProfile = securityProfileResult.getSecurityProfile();
+
+            // Assuming there's a method or attribute in SecurityProfile class to get the role name
+            // Replace getRoleName() with the correct method or attribute
+            String roleName = securityProfile.getSecurityProfileName();
+
+            userRoles.add(new UserRoleDTO(roleId, roleName));
+        }
+
+        return userRoles;
     }
 }
