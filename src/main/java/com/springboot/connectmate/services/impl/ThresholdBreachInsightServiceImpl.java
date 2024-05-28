@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsightService {
 
     private final ThresholdBreachInsightRepository repository;
+    private final ModelMapper modelMapper;
 
     @Autowired
     public ThresholdBreachInsightServiceImpl(ThresholdBreachInsightRepository repository, ModelMapper modelMapper) {
