@@ -3,7 +3,7 @@ package com.springboot.connectmate.services.impl;
 import com.amazonaws.services.connect.AmazonConnect;
 import com.amazonaws.services.connect.model.*;
 import com.amazonaws.services.connect.model.Queue;
-import com.springboot.connectmate.dtos.AmazonConnect.*;
+import com.springboot.connectmate.dtos.AmazonConnect.UserRoleDTO;
 import com.springboot.connectmate.services.AmazonConnectService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -320,31 +320,32 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
     }
 
     @Override
-    public Map<String, ConnectQueueInfoDTO> getQueueUserCounts(String instanceId) {
-        List<ConnectCurrentUserDataDTO> userDataList = getCurrentUserData(instanceId);
-        Map<String, ConnectQueueInfoDTO> queueInfoMap = new HashMap<>();
+    public List<UserRoleDTO> getUserSecurityProfileIds(String instanceId, String userId) {
+        DescribeUserRequest request = new DescribeUserRequest()
+                .withInstanceId(instanceId)
+                .withUserId(userId);
 
-        List<ConnectQueueDTO> allQueues = listQueues(instanceId);
-        if (allQueues != null) {
-            for (ConnectQueueDTO queue : allQueues) {
-                queueInfoMap.put(queue.getId(), new ConnectQueueInfoDTO());
-            }
+        DescribeUserResult response = amazonConnectClient.describeUser(request);
+        User user = response.getUser();
+
+        List<String> securityProfileIds = user.getSecurityProfileIds();
+        List<UserRoleDTO> userRoles = new ArrayList<>();
+
+        for (String roleId : securityProfileIds) {
+            DescribeSecurityProfileRequest securityProfileRequest = new DescribeSecurityProfileRequest()
+                    .withInstanceId(instanceId)
+                    .withSecurityProfileId(roleId);
+
+            DescribeSecurityProfileResult securityProfileResult = amazonConnectClient.describeSecurityProfile(securityProfileRequest);
+            SecurityProfile securityProfile = securityProfileResult.getSecurityProfile();
+
+            // Assuming there's a method or attribute in SecurityProfile class to get the role name
+            // Replace getRoleName() with the correct method or attribute
+            String roleName = securityProfile.getSecurityProfileName();
+
+            userRoles.add(new UserRoleDTO(roleId, roleName));
         }
 
-        if (userDataList != null) {
-            for (ConnectCurrentUserDataDTO userData : userDataList) {
-                String userId = userData.getUserId();
-                for (ConnectContactDTO contact : userData.getContacts()) {
-                    String queueId = contact.getQueueId();
-                    queueInfoMap.putIfAbsent(queueId, new ConnectQueueInfoDTO());
-
-                    queueInfoMap.get(queueId).getUsers().add(userId);
-
-                    queueInfoMap.get(queueId).setContactCount(queueInfoMap.get(queueId).getContactCount() + 1);
-                }
-            }
-        }
-
-        return queueInfoMap;
+        return userRoles;
     }
 }
