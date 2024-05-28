@@ -145,8 +145,6 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
         Filters filters = new Filters()
                 .withChannels(Channel.VOICE)
                 .withQueues(queueId);
-        
-
 
         ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
         ZonedDateTime endTime = now.withSecond(0).withNano(0).minusMinutes(now.getMinute() % 5);
@@ -167,7 +165,7 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
     }
 
     @Override
-    public List<String> getHistoricalMetricsV2(String instanceArn, String queueId) {
+    public List<String> getQueueMetrics(String instanceArn, String queueId) {
 
         ThresholdV2 threshold = new ThresholdV2()
                 .withComparison("LT")
@@ -178,15 +176,36 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
                 .withName("SERVICE_LEVEL")
                 .withThreshold(threshold)
         );
+
+        metrics.add(new MetricV2()
+                .withName("ABANDONMENT_RATE")
+        );
+
+        metrics.add(new MetricV2()
+                .withName("AGENT_SCHEDULE_ADHERENCE")
+        );
+
+        metrics.add(new MetricV2()
+                .withName("AVG_HANDLE_TIME")
+        );
+
+        metrics.add(new MetricV2()
+                .withName("AVG_AFTER_CONTACT_WORK_TIME")
+        );
+
+        metrics.add(new MetricV2()
+                .withName("AVG_RESOLUTION_TIME")
+        );
+
+        metrics.add(new MetricV2()
+                .withName("AVG_QUEUE_ANSWER_TIME")
+        );
+
         List<FilterV2> filters = new ArrayList<>();
 
         filters.add( new FilterV2()
                 .withFilterKey("QUEUE")
-                .withFilterValues(Collections.singletonList("f0813607-af92-4a36-91e6-630ababb643c"))
-        );
-        filters.add( new FilterV2()
-                .withFilterKey("AGENT")
-                .withFilterValues(Collections.singletonList("ed1ad50d-2ffc-44ad-a565-71f13ad991a5"))
+                .withFilterValues(Collections.singletonList(queueId))
         );
 
         ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
@@ -194,11 +213,62 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
         ZonedDateTime startTime = endTime.minusHours(23);
 
         GetMetricDataV2Request getMetricDataV2Request = new GetMetricDataV2Request()
-                .withResourceArn("arn:aws:connect:us-east-1:674530197385:instance/7c78bd60-4a9f-40e5-b461-b7a0dfaad848")
+                .withResourceArn(instanceArn)
                 .withMetrics(metrics)
                 .withFilters(filters)
                 .withStartTime(Date.from(startTime.toInstant()))
                 .withEndTime(Date.from(endTime.toInstant()));
+
+        GetMetricDataV2Result getMetricDataResult = amazonConnectClient.getMetricDataV2(getMetricDataV2Request);
+        System.out.println(getMetricDataResult.toString());
+
+        return getMetricDataResult.getMetricResults().stream()
+                .map(metricResult -> metricResult.toString())
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> getAgentMetrics(String instanceArn, String agentId) {
+
+        List<MetricV2> metrics = new ArrayList<>();
+
+        metrics.add(new MetricV2()
+                .withName("ABANDONMENT_RATE")
+        );
+
+        metrics.add(new MetricV2()
+                .withName("AGENT_OCCUPANCY")
+        );
+
+        metrics.add(new MetricV2()
+                .withName("AGENT_SCHEDULE_ADHERENCE")
+        );
+
+        metrics.add(new MetricV2()
+                .withName("AVG_HANDLE_TIME")
+        );
+
+        metrics.add(new MetricV2()
+                .withName("AVG_AFTER_CONTACT_WORK_TIME")
+        );
+
+        List<FilterV2> filters = new ArrayList<>();
+
+        filters.add( new FilterV2()
+                .withFilterKey("AGENT")
+                .withFilterValues(Collections.singletonList(agentId))
+        );
+
+        ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
+        ZonedDateTime endTime = now.withSecond(0).withNano(0).minusMinutes(now.getMinute() % 5);
+        ZonedDateTime startTime = endTime.minusHours(23);
+
+        GetMetricDataV2Request getMetricDataV2Request = new GetMetricDataV2Request()
+                .withResourceArn(instanceArn)
+                .withMetrics(metrics)
+                .withFilters(filters)
+                .withEndTime(Date.from(endTime.toInstant()))
+                .withStartTime(Date.from(startTime.toInstant()));
 
         GetMetricDataV2Result getMetricDataResult = amazonConnectClient.getMetricDataV2(getMetricDataV2Request);
         System.out.println(getMetricDataResult.toString());
