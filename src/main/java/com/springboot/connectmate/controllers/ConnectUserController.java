@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.springboot.connectmate.dtos.AmazonConnect.UserRoleDTO;
 
 import java.util.*;
 
@@ -91,6 +92,24 @@ public class ConnectUserController {
     @GetMapping("/instances/{instanceId}/routing-profiles")
     public ResponseEntity<List<RoutingProfileSummary>> getRoutingProfiles(@PathVariable(name = "instanceId") String instanceId) {
         return ResponseEntity.ok(amazonConnectService.listRoutingProfiles(instanceId));
+    }
+
+    @ApiResponse(
+            responseCode = "200",
+            content = @Content(mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = String.class))),
+            description = "Get a user's security profile IDs."
+    )
+
+    @Operation(
+            summary = "Gets the security profile IDs of a particular user.",
+            description = "Gets the security profile IDs of a particular user by instance ID and user ID."
+    )
+
+    @GetMapping("/instances/{instanceId}/users/{userId}/security-profiles")
+    public ResponseEntity<List<UserRoleDTO>> getUserSecurityProfileIds(@PathVariable(name = "instanceId") String instanceId, @PathVariable(name = "userId") String userId) {
+        List<UserRoleDTO> securityProfileIds = amazonConnectService.getUserSecurityProfileIds(instanceId, userId);
+        return ResponseEntity.ok(securityProfileIds);
     }
 
 }
