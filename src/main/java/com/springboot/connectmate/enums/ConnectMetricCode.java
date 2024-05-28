@@ -7,6 +7,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ConnectMetricCode {
+
     SERVICE_LEVEL(
             "Service Level",
             "The percentage of calls answered within 20 seconds",

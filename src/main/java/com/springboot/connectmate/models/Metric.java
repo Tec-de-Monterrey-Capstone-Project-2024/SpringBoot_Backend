@@ -8,18 +8,16 @@ import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
-@Data // Lombok annotation to create all the getters, setters, equals, hash, and toString methods for us
-@AllArgsConstructor // Lombok annotation to create a constructor with all the arguments
-@NoArgsConstructor // Lombok annotation to create a constructor with no arguments
-
-// Metric entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table( name = "metric" )
+@Table(name = "metric")
 public class Metric {
 
     @Id
     @Enumerated(EnumType.STRING)
-    @Column(name = "code", nullable = false)
+    @Column(name = "code", nullable = false, length = 50) // Ajusta la longitud según sea necesario
     private ConnectMetricCode code;
 
     @Column(name = "minimum_threshold_value", nullable = true)
@@ -33,5 +31,4 @@ public class Metric {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "metricCode", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ThresholdBreachInsight> thresholdBreachInsights;
-
 }
