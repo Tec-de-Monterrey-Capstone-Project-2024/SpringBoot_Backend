@@ -1,9 +1,11 @@
 package com.springboot.connectmate.services.impl;
 
 import com.springboot.connectmate.dtos.Insight.ThresholdBreachInsightDTO;
+import com.springboot.connectmate.dtos.Insight.UpdateStatusDTO;
 import com.springboot.connectmate.enums.Status;
 import com.springboot.connectmate.enums.ConnectMetricType;
 import com.springboot.connectmate.models.ThresholdBreachInsight;
+import com.springboot.connectmate.exceptions.ResourceNotFoundException;
 import com.springboot.connectmate.repositories.ThresholdBreachInsightRepository;
 import com.springboot.connectmate.services.ThresholdBreachInsightService;
 import org.modelmapper.ModelMapper;
@@ -55,6 +57,18 @@ public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsight
         return insights.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public ThresholdBreachInsightDTO updateStatus(Long id, UpdateStatusDTO updateStatusDTO) {
+        ThresholdBreachInsight insight = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("ThresholdBreachInsight", "id", id));
+
+        Status newStatus = Status.valueOf(updateStatusDTO.getStatus().toUpperCase());
+        insight.setStatus(newStatus);
+
+        ThresholdBreachInsight updatedInsight = repository.save(insight);
+        return convertToDTO(updatedInsight);
     }
 
     private ThresholdBreachInsightDTO convertToDTO(ThresholdBreachInsight insight) {

@@ -1,6 +1,7 @@
 package com.springboot.connectmate.controllers;
 
 import com.springboot.connectmate.dtos.Insight.ThresholdBreachInsightDTO;
+import com.springboot.connectmate.dtos.Insight.UpdateStatusDTO;
 import com.springboot.connectmate.enums.Status;
 import com.springboot.connectmate.enums.ConnectMetricType;
 import com.springboot.connectmate.services.ThresholdBreachInsightService;
@@ -48,5 +49,13 @@ public class ThresholdBreachInsightController {
 
         return ResponseEntity.ok(insights);
     }
+
+
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<ThresholdBreachInsightDTO> updateInsightStatus(@PathVariable Long id, @RequestBody UpdateStatusDTO updateStatusDTO) {
+        ThresholdBreachInsightDTO updatedInsight = service.updateStatus(id, updateStatusDTO);
+        return ResponseEntity.ok(updatedInsight);
+    }
+
 
 }
