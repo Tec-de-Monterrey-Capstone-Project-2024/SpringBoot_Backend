@@ -7,6 +7,7 @@ import java.util.List;
 public interface AmazonConnectService {
     // General Services
     List<InstanceSummary> listConnectInstances();
+    Instance getConnectInstance(String instanceId);
 
     // User Services
     List<UserSummary> listUsers(String instanceId);
