@@ -15,6 +15,12 @@ import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+
 @Service
 public class BedrockServiceImpl implements BedrockService {
 
@@ -98,6 +104,26 @@ public class BedrockServiceImpl implements BedrockService {
         return generate(message);
     }
 
+    private String findTitleName(String patternString, String input) {
+        Pattern pattern = Pattern.compile(patternString);
+        Matcher matcher = pattern.matcher(input);
+        if (matcher.find()) {
+            return matcher.group(1);
+        } else {
+            System.out.println("No match found in: " + input);
+            return null;
+        }
+    }
+
+    private String findInJson(String json, List<String> words) {
+        for (String word : words) {
+            if (json.contains(word)) {
+                return word;
+            }
+        }
+        return null;
+    }
+
     private void populateInsight(InsightDTO insight, ResponseField responseField, String response) {
         String cleanResponse = response.replaceAll("Generation\\{assistantMessage=AssistantMessage\\{content='", "")
                 .replaceAll("', properties=\\{\\}, messageType=ASSISTANT\\}, chatGenerationMetadata=null\\}", "")
@@ -108,7 +134,10 @@ public class BedrockServiceImpl implements BedrockService {
 
         switch (responseField) {
             case NAME:
-                insight.setInsightName(cleanResponse);
+                String name = findTitleName("is \\\"(.*?)\\\"", cleanResponse);
+                if (name != null) {
+                    insight.setInsightName(name);
+                }
                 break;
             case SUMMARY:
                 insight.setInsightSummary(cleanResponse);
@@ -120,10 +149,14 @@ public class BedrockServiceImpl implements BedrockService {
                 insight.setInsightActions(cleanResponse);
                 break;
             case CATEGORY:
-                insight.setInsightCategory(cleanResponse);
+                List<String> category = Arrays.asList("LOW", "MEDIUM", "HIGH");
+                String categoryFound = findInJson(cleanResponse, category);
+                insight.setInsightCategory(categoryFound);
                 break;
             case PERFORMANCE:
-                insight.setInsightPerformance(cleanResponse);
+                List<String> performance= Arrays.asList("CRITICAL", "UNSATISFACTORY", "BELOW_EXPECTATIONS", "EXCEEDS_EXPECTATIONS","OUTSTANDING","PIONEERING");
+                String foundPerformance = findInJson(cleanResponse, performance);
+                insight.setInsightPerformance(foundPerformance);
                 break;
             case ROOT_CAUSE:
                 insight.setInsightRootCause(cleanResponse);
