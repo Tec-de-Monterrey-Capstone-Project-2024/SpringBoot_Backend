@@ -9,15 +9,15 @@ import lombok.Getter;
 public enum ConnectMetricCode {
     SERVICE_LEVEL(
             "Service Level",
-            "The percentage of calls answered within 20 seconds.",
+            "The percentage of calls answered within 20 seconds",
             "Important for assessing the efficiency and responsiveness of the service team.",
             Unit.PERCENT,
             ConnectMetricApiType.MetricDataV2,
-            80.0, // Typical target is 80% or higher
+            80.0,
             "To ensure a high level of customer satisfaction by minimizing wait times."
     ),
-    ABANDONMENT_RATE(
-            "Abandonment Rate",
+    ABANDONMENT_CALL_RATE(
+            "Abandonment Call Rate",
             "The percentage of calls abandoned by customers before being answered.",
             "Crucial for understanding customer patience and service efficiency.",
             Unit.PERCENT,
@@ -58,7 +58,7 @@ public enum ConnectMetricCode {
             "Indicates the effectiveness of agents in resolving issues quickly.",
             Unit.PERCENT,
             ConnectMetricApiType.MetricDataV2,
-            72.5, // Typical target is 70-75%
+            70.0, // Typical target is 70-75%
             "To improve customer satisfaction by resolving issues promptly."
     ),
     AGENTS_AFTER_CONTACT_WORK(
@@ -76,7 +76,7 @@ public enum ConnectMetricCode {
             "Reflects the system's capacity to handle calls.",
             Unit.COUNT,
             ConnectMetricApiType.NoApi_SelfMade,
-            0.0, // If all slots are active, it indicates high call volume
+            100.0, // Example value
             "To ensure the system can handle the call volume effectively."
     ),
     AVERAGE_RESOLUTION_TIME(
@@ -93,17 +93,16 @@ public enum ConnectMetricCode {
             "The degree to which agents stick to their scheduled work times.",
             "Critical for workforce management and planning.",
             Unit.PERCENT,
-            ConnectMetricApiType.NoApi_SelfMade,
+            ConnectMetricApiType.MetricDataV2,
             95.0, // Typical industry target is 95%
             "To ensure agents are available as planned and improve service coverage."
     ),
-    //
     VIRTUAL_FLOOR_RECONFIGURATION(
             "Virtual Floor Reconfiguration",
             "The process of adjusting virtual agent floor plans to meet demand.",
             "Helps in managing and optimizing the distribution of virtual agents.",
             Unit.COUNT,
-            ConnectMetricApiType.NoApi_SelfMade,
+            ConnectMetricApiType.MetricDataV2,
             10.0, // Example value
             "To maintain an efficient and adaptable virtual agent environment."
     );

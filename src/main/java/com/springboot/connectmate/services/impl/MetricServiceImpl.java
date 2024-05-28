@@ -35,4 +35,9 @@ public class MetricServiceImpl implements MetricService {
     public List<MetricDTO> getAllConnectMateMetrics() {
         return Collections.emptyList();
     }
+
+    @Override
+    public List<Metric> getAllMetrics() {
+        return null;
+    }
 }
