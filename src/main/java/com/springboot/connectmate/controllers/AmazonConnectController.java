@@ -59,3 +59,4 @@ public class AmazonConnectController {
         return ResponseEntity.ok(amazonConnectService.getConnectInstance(instanceId));
     }
 
+}
