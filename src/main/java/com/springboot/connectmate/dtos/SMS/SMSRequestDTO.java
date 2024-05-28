@@ -11,6 +11,15 @@ import lombok.Data;
         description = "Data Transfer Object (DTO) for Request Body for send SMS messages"
 )
 public class SMSRequestDTO {
+    @Schema(
+            description = "The content of message to be sent",
+            example = "This is a simple email sent using Spring Boot."
+    )
     private String message;
+
+    @Schema(
+            description = "The phone number of the receiver",
+            example = "55 4884 5612"
+    )
     private String phoneNumber;
 }
