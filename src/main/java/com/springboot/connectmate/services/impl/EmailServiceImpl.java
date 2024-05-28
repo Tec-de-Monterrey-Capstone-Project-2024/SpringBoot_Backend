@@ -2,6 +2,7 @@ package com.springboot.connectmate.services.impl;
 
 import com.springboot.connectmate.services.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -50,10 +51,12 @@ public class EmailServiceImpl implements EmailService {
             context.setVariables(variables);
             String htmlContent = templateEngine.process(template, context);
             helper.setText(htmlContent, true);
+            helper.addInline("logoImage", new ClassPathResource("static/logoImage.jpeg"));
 
             mailSender.send(mimeMessage);
         } catch (MessagingException e) {
-            e.printStackTrace(); // Handle the exception based on your needs
+            e.printStackTrace(); //handle exception, sí sí era default comment ok meper
+            System.out.println("nada se mando alv");
         }
     }
 }
