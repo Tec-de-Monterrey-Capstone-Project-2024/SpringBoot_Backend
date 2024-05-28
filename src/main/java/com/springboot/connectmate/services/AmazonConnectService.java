@@ -1,6 +1,8 @@
 package com.springboot.connectmate.services;
 
 import com.amazonaws.services.connect.model.*;
+import com.springboot.connectmate.dtos.AmazonConnect.ConnectAgentMetricDTO;
+import com.springboot.connectmate.dtos.AmazonConnect.ConnectQueueMetricDTO;
 
 import java.util.List;
 
@@ -22,8 +24,7 @@ public interface AmazonConnectService {
 
     // Metric Services
     List<String> getHistoricalMetrics(String instanceId, String queueId);
-    List<String> getHistoricalMetricsV2(String instanceId, String queueId);
     List<String> getCurrentMetrics(String instanceId);
-
-
+    ConnectQueueMetricDTO getQueueMetrics(String instanceId, String queueId);
+    ConnectAgentMetricDTO getAgentMetrics(String instanceArn, String agentId);
 }
