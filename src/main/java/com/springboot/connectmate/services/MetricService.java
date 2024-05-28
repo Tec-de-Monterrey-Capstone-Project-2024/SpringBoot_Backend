@@ -10,4 +10,5 @@ public interface MetricService {
     List<Metric> getAllAmazonConnectMetrics();
     List<MetricDTO> getAllConnectMateMetrics();
 
+    List<Metric> getAllMetrics();
 }
