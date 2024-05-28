@@ -8,6 +8,7 @@ import com.springboot.connectmate.enums.ConnectMetricType;
 import com.springboot.connectmate.enums.ResponseField;
 import com.springboot.connectmate.models.Metric;
 import com.springboot.connectmate.services.BedrockService;
+
 import org.springframework.ai.bedrock.titan.BedrockTitanChatClient;
 import org.springframework.ai.chat.ChatResponse;
 import org.springframework.ai.chat.messages.UserMessage;
@@ -15,7 +16,6 @@ import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -77,6 +77,7 @@ public class BedrockServiceImpl implements BedrockService {
          */
     }
 
+
     @Override
     public InsightDTO createInsight(KpiDataDTO kpiDataDTO) {
         String kpiDataJson = generateKpiDataJson(kpiDataDTO);
@@ -86,7 +87,10 @@ public class BedrockServiceImpl implements BedrockService {
             String response = callBedrockService(responseField.getPrompt(), kpiDataJson);
             populateInsight(insight, responseField, response);
         }
-
+        /* 
+        ModelMapper modelMapper = new ModelMapper();
+        ThresholdBreachInsight thresholdBreachInsight = mapper.map(insight, ThresholdBreachInsight.class);
+        thresholdBreachInsightRepository.save(thresholdBreachInsight);*/
         return insight;
     }
 
@@ -98,6 +102,7 @@ public class BedrockServiceImpl implements BedrockService {
             throw new RuntimeException("Error al convertir KPI Data a JSON", e);
         }
     }
+
 
     private String callBedrockService(String prompt, String kpiDataJson) {
         String message = prompt + " " + kpiDataJson;
@@ -132,11 +137,14 @@ public class BedrockServiceImpl implements BedrockService {
                 .replaceAll("\\t", "")
                 .trim();
 
+
         switch (responseField) {
             case NAME:
                 String name = findTitleName("is \\\"(.*?)\\\"", cleanResponse);
                 if (name != null) {
                     insight.setInsightName(name);
+                }else {
+                    insight.setInsightName("No name found");
                 }
                 break;
             case SUMMARY:
@@ -149,14 +157,22 @@ public class BedrockServiceImpl implements BedrockService {
                 insight.setInsightActions(cleanResponse);
                 break;
             case CATEGORY:
-                List<String> category = Arrays.asList("LOW", "MEDIUM", "HIGH");
-                String categoryFound = findInJson(cleanResponse, category);
-                insight.setInsightCategory(categoryFound);
-                break;
-            case PERFORMANCE:
                 List<String> performance= Arrays.asList("CRITICAL", "UNSATISFACTORY", "BELOW_EXPECTATIONS", "EXCEEDS_EXPECTATIONS","OUTSTANDING","PIONEERING");
                 String foundPerformance = findInJson(cleanResponse, performance);
-                insight.setInsightPerformance(foundPerformance);
+                if (foundPerformance != null) {
+                    insight.setInsightCategory(foundPerformance);
+                } else {
+                    insight.setInsightCategory("Unknown");
+                }
+                break;
+            case SEVERITY:
+                List<String> severity = Arrays.asList("LOW", "MEDIUM", "HIGH");
+                String severityFound = findInJson(cleanResponse, severity);
+                if (severityFound != null) {
+                    insight.setInsightSeverity(severityFound);
+                } else {
+                    insight.setInsightSeverity("Unknown");
+                }
                 break;
             case ROOT_CAUSE:
                 insight.setInsightRootCause(cleanResponse);
@@ -169,6 +185,5 @@ public class BedrockServiceImpl implements BedrockService {
                 break;
         }
     }
-
 
 }
