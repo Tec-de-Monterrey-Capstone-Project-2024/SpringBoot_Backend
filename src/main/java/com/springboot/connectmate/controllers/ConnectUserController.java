@@ -1,7 +1,6 @@
 package com.springboot.connectmate.controllers;
 
 import com.amazonaws.services.connect.model.*;
-import com.amazonaws.services.connect.model.Queue;
 import com.springboot.connectmate.services.AmazonConnectService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
+
 
 @RestController
 @RequestMapping("/api/amazon-connect")

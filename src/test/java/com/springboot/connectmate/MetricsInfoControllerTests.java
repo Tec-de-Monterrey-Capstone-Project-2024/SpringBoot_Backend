@@ -1,9 +1,14 @@
 package com.springboot.connectmate;
 
+import com.amazonaws.services.connect.model.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.springboot.connectmate.dtos.User.RegisterUserFormDTO;
+import com.springboot.connectmate.dtos.User.UserResponseDTO;
 import com.springboot.connectmate.enums.Status;
+import com.springboot.connectmate.repositories.MetricRepository;
+import com.springboot.connectmate.repositories.UserRepository;
 import com.springboot.connectmate.services.impl.AmazonConnectServiceImpl;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
@@ -20,7 +25,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Random;
 
-/*
+
 @SpringBootTest
 @AutoConfigureMockMvc
 public class MetricsInfoControllerTests {
@@ -29,6 +34,12 @@ public class MetricsInfoControllerTests {
 
     @Autowired
     private AmazonConnectServiceImpl amazonConnectServices = new AmazonConnectServiceImpl(new ModelMapper());
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private MetricRepository metricRepository;
 
     private final static Random numberGenerator = new Random();
 
@@ -65,15 +76,16 @@ public class MetricsInfoControllerTests {
     @Test
     public void addValidThresholdBreachForAgent() throws Exception {
         // Create user (firebase and connectmate, dummy data, no verification (no integrity))
-        Users u = new Users();
-        u.setConnectId(generateDummyAgentConnectId());
+        RegisterUserFormDTO u = new RegisterUserFormDTO();
+        u.setInstanceId(generateDummyAgentConnectId());
         u.setFirebaseId(RandomStringUtils.randomAlphabetic(28));
+        u.setEmail("example@gmail.com");
+
 
         // Debug
-        System.out.println("Amazon Connect ID: " + u.getConnectId());
+        // System.out.println("Amazon Connect ID: " + u.getConnectId());
         System.out.println("      Firebase ID: " + u.getFirebaseId());
 
-        Users savedUser = usersRepository.save(u);
 
         // Create metric (dummy data)
         MetricsInfo m = new MetricsInfo();
@@ -116,8 +128,6 @@ public class MetricsInfoControllerTests {
 
     }
 
-     */
-    /*
     private static String objectToJSON(Object object) throws JsonProcessingException {
         ObjectMapper om = new ObjectMapper();
 
@@ -126,5 +136,5 @@ public class MetricsInfoControllerTests {
 
         return om.writeValueAsString(object);
     }
+     */
 }
-*/

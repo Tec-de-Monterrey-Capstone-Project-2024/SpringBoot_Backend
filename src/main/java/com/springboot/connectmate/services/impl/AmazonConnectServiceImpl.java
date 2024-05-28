@@ -7,7 +7,6 @@ import com.amazonaws.services.connect.AmazonConnect;
 import com.amazonaws.services.connect.AmazonConnectClientBuilder;
 import com.amazonaws.services.connect.model.*;
 import com.amazonaws.services.connect.model.Queue;
-import com.springboot.connectmate.dtos.AmazonConnect.ConnectUserDataDTO;
 import com.springboot.connectmate.services.AmazonConnectService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +57,7 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
     @Override
     public Instance getConnectInstance(String instanceId) {
         DescribeInstanceRequest describeInstanceRequest = new DescribeInstanceRequest().withInstanceId(instanceId);
-        DescribeInstanceResult describeInstanceResult = amazonConnectClient.describeInstance(describeInstanceRequest);
+        DescribeInstanceResult describeInstanceResult = amazonConnectClient().describeInstance(describeInstanceRequest);
         return describeInstanceResult.getInstance();
     }
 
