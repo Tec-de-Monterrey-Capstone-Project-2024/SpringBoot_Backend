@@ -1,5 +1,6 @@
 package com.springboot.connectmate.dtos.Insight;
 
+import com.springboot.connectmate.enums.ConnectMetricCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +15,7 @@ public class ThresholdBreachInsightDTO {
     private Long id;
 
     @Schema(description = "Metric code associated with the insight", example = "INSTANCE")
-    private String metricCode;
+    private ConnectMetricCode metricCode;
 
     @Schema(description = "Identifier of the Connect item", example = "1")
     private String connectItemId;

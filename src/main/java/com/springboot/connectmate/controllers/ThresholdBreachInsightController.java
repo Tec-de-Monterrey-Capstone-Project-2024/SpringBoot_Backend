@@ -23,11 +23,11 @@ import java.util.List;
 )
 public class ThresholdBreachInsightController {
 
-    private final ThresholdBreachInsightService service;
+    private final ThresholdBreachInsightService thresholdBreachInsightService;
 
     @Autowired
-    public ThresholdBreachInsightController(ThresholdBreachInsightService service) {
-        this.service = service;
+    public ThresholdBreachInsightController(ThresholdBreachInsightService thresholdBreachInsightService) {
+        this.thresholdBreachInsightService = thresholdBreachInsightService;
     }
 
 
@@ -43,21 +43,19 @@ public class ThresholdBreachInsightController {
             @RequestParam(required = false) String connectItemId,
             @RequestParam(required = false) String itemType) {
 
-        List<ThresholdBreachInsightDTO> insights;
 
         if (status != null) {
             Status statusEnum = Status.fromString(status.toUpperCase());
-            insights = service.getInsightsByStatus(statusEnum);
+            return ResponseEntity.ok(thresholdBreachInsightService.getInsightsByStatus(statusEnum));
         } else if (connectItemId != null) {
-            insights = service.getInsightsByConnectItemId(connectItemId);
+            return ResponseEntity.ok(thresholdBreachInsightService.getInsightsByConnectItemId(connectItemId));
         } else if (itemType != null) {
             ConnectMetricType connectItemType = ConnectMetricType.valueOf(itemType.toUpperCase());
-            insights = service.getInsightsByItemType(connectItemType);
+            return ResponseEntity.ok(thresholdBreachInsightService.getInsightsByItemType(connectItemType));
         } else {
-            insights = service.getAllInsights();
+            return ResponseEntity.ok(thresholdBreachInsightService.getAllInsights());
         }
 
-        return ResponseEntity.ok(insights);
     }
 
 
@@ -69,8 +67,8 @@ public class ThresholdBreachInsightController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PatchMapping("/{id}/status")
-    public ResponseEntity<ThresholdBreachInsightDTO> updateInsightStatus(@PathVariable Long id, @RequestBody UpdateStatusDTO updateStatusDTO) {
-        ThresholdBreachInsightDTO updatedInsight = service.updateStatus(id, updateStatusDTO);
+    public ResponseEntity<String> updateInsightStatus(@PathVariable Long id, @RequestBody UpdateStatusDTO updateStatusDTO) {
+        String updatedInsight = thresholdBreachInsightService.updateStatus(id, updateStatusDTO);
         return ResponseEntity.ok(updatedInsight);
     }
 
