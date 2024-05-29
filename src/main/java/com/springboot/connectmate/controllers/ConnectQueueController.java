@@ -2,6 +2,9 @@ package com.springboot.connectmate.controllers;
 
 import com.amazonaws.services.connect.model.*;
 import com.amazonaws.services.connect.model.Queue;
+import com.springboot.connectmate.dtos.AmazonConnect.ConnectCurrentUserDataDTO;
+import com.springboot.connectmate.dtos.AmazonConnect.ConnectQueueDTO;
+import com.springboot.connectmate.dtos.AmazonConnect.ConnectQueueInfoDTO;
 import com.springboot.connectmate.services.AmazonConnectService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -33,7 +36,6 @@ public class ConnectQueueController {
         this.amazonConnectService = amazonConnectService;
     }
 
-
     @ApiResponse(
             responseCode = "200",
             content = @Content(mediaType = "application/json",
@@ -45,7 +47,7 @@ public class ConnectQueueController {
             description = "Get Amazon Connect queues by instance ID"
     )
     @GetMapping("/instances/{instanceId}/queues")
-    public ResponseEntity<List<QueueSummary>> listQueues(@PathVariable(name = "instanceId") String instanceId) {
+    public ResponseEntity<List<ConnectQueueDTO>> listQueues(@PathVariable(name = "instanceId") String instanceId) {
         return ResponseEntity.ok(amazonConnectService.listQueues(instanceId));
     }
 
@@ -67,7 +69,7 @@ public class ConnectQueueController {
     @ApiResponse(
             responseCode = "200",
             content = @Content(mediaType = "application/json",
-                    array = @ArraySchema(schema = @Schema(implementation = UserData.class))),
+                    array = @ArraySchema(schema = @Schema(implementation = ConnectCurrentUserDataDTO.class))),
             description = "List of all current data of agents, queues, and contacts."
     )
     @Operation(
@@ -75,15 +77,14 @@ public class ConnectQueueController {
             description = "Get the current data of agents, queues, and contacts by instance ID"
     )
     @GetMapping("/instances/{instanceId}/current-user-data")
-    public ResponseEntity<List<UserData>> getCurrentUserData(@PathVariable(name = "instanceId") String instanceId) {
+    public ResponseEntity<List<ConnectCurrentUserDataDTO>> getCurrentUserData(@PathVariable(name = "instanceId") String instanceId) {
         return ResponseEntity.ok(amazonConnectService.getCurrentUserData(instanceId));
     }
-
 
     @ApiResponse(
             responseCode = "200",
             content = @Content(mediaType = "application/json",
-                    array = @ArraySchema(schema = @Schema(implementation = Map.class))),
+                    array = @ArraySchema(schema = @Schema(implementation = ConnectQueueInfoDTO.class))),
             description = "Get all the users and contact info for all the queues."
     )
     @Operation(
@@ -91,30 +92,7 @@ public class ConnectQueueController {
             description = "Gets the users and contacts of all queues."
     )
     @GetMapping("/instances/{instanceId}/queue-users")
-    public Map<String, Map<String, Object>> queueUserCounts(@PathVariable(name = "instanceId") String instanceId) {
-        // Move to a Service
-        ResponseEntity<List<UserData>> response = getCurrentUserData(instanceId);
-        List<UserData> userDataList = response.getBody();
-        Map<String, Map<String, Object>> queueInfo = new HashMap<>();
-
-        if (userDataList != null) {
-            for (UserData userData : userDataList) {
-                String userId = userData.getUser().getId();
-                for (AgentContactReference contact : userData.getContacts()) {
-                    String queueId = contact.getQueue().getId();
-                    queueInfo.putIfAbsent(queueId, new HashMap<>());
-                    queueInfo.get(queueId).putIfAbsent("users", new HashSet<>());
-                    queueInfo.get(queueId).putIfAbsent("contactCount", 0);
-
-                    Set<String> users = (Set<String>) queueInfo.get(queueId).get("users");
-                    users.add(userId);
-
-                    int count = (int) queueInfo.get(queueId).get("contactCount");
-                    queueInfo.get(queueId).put("contactCount", count + 1);
-                }
-            }
-        }
-
-        return queueInfo;
+    public ResponseEntity<Map<String, ConnectQueueInfoDTO>> queueUserCounts(@PathVariable(name = "instanceId") String instanceId) {
+        return ResponseEntity.ok(amazonConnectService.getQueueUserCounts(instanceId));
     }
 }
