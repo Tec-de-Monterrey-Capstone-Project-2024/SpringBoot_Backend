@@ -1,7 +1,7 @@
 package com.springboot.connectmate.services;
 
 import com.amazonaws.services.connect.model.*;
-import com.springboot.connectmate.dtos.AmazonConnect.UserRoleDTO;
+import com.springboot.connectmate.dtos.AmazonConnect.ConnectSecurityProfileDTO;
 
 import java.util.List;
 import java.util.Map;
@@ -17,7 +17,7 @@ public interface AmazonConnectService {
     List<ConnectCurrentUserDataDTO> getCurrentUserData(String instanceId);
     List<AgentStatusSummary> listAgentsStatuses(String instanceId);
     List<RoutingProfileSummary> listRoutingProfiles(String instanceId);
-    List<UserRoleDTO> getUserSecurityProfileIds(String instanceId, String userId);
+    List<ConnectSecurityProfileDTO> getUserSecurityProfileIds(String instanceId, String userId);
 
     // Queue Services
     List<ConnectQueueDTO> listQueues(String instanceId);

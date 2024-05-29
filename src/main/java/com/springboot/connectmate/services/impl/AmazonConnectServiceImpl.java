@@ -3,7 +3,7 @@ package com.springboot.connectmate.services.impl;
 import com.amazonaws.services.connect.AmazonConnect;
 import com.amazonaws.services.connect.model.*;
 import com.amazonaws.services.connect.model.Queue;
-import com.springboot.connectmate.dtos.AmazonConnect.UserRoleDTO;
+import com.springboot.connectmate.dtos.AmazonConnect.ConnectSecurityProfileDTO;
 import com.springboot.connectmate.services.AmazonConnectService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -320,7 +320,8 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
     }
 
     @Override
-    public List<UserRoleDTO> getUserSecurityProfileIds(String instanceId, String userId) {
+    public List<ConnectSecurityProfileDTO> getUserSecurityProfileIds(String instanceId, String userId) {
+        // Get the User
         DescribeUserRequest request = new DescribeUserRequest()
                 .withInstanceId(instanceId)
                 .withUserId(userId);
@@ -329,9 +330,11 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
         User user = response.getUser();
 
         List<String> securityProfileIds = user.getSecurityProfileIds();
-        List<UserRoleDTO> userRoles = new ArrayList<>();
+        List<ConnectSecurityProfileDTO> userRoles = new ArrayList<>();
 
+        // Iterate over the security profile ids of the user
         for (String roleId : securityProfileIds) {
+            // Describe the security profile
             DescribeSecurityProfileRequest securityProfileRequest = new DescribeSecurityProfileRequest()
                     .withInstanceId(instanceId)
                     .withSecurityProfileId(roleId);
@@ -339,11 +342,7 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
             DescribeSecurityProfileResult securityProfileResult = amazonConnectClient.describeSecurityProfile(securityProfileRequest);
             SecurityProfile securityProfile = securityProfileResult.getSecurityProfile();
 
-            // Assuming there's a method or attribute in SecurityProfile class to get the role name
-            // Replace getRoleName() with the correct method or attribute
-            String roleName = securityProfile.getSecurityProfileName();
-
-            userRoles.add(new UserRoleDTO(roleId, roleName));
+            userRoles.add(mapper.map(securityProfile, ConnectSecurityProfileDTO.class));
         }
 
         return userRoles;
