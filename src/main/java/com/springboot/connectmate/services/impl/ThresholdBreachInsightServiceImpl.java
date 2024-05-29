@@ -33,24 +33,11 @@ public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsight
 
         Metric metric = new Metric();
         metric.setCode(dto.getMetricCode());
+        ThresholdBreachInsight thresholdBreachInsight = mapper.map(dto, ThresholdBreachInsight.class);
+            thresholdBreachInsight.setMetricCode(metric);
+            thresholdBreachInsight.setOccurredAt(dto.getOccurredAt() != null ? dto.getOccurredAt() : LocalDateTime.now());
+        ThresholdBreachInsight savedInsight = thresholdBreachInsightRepository.save(thresholdBreachInsight);
 
-        ThresholdBreachInsight thresholdBreachInsight = new ThresholdBreachInsight();
-        thresholdBreachInsight.setMetricCode(metric);
-        thresholdBreachInsight.setConnectItemId(dto.getConnectItemId());
-        thresholdBreachInsight.setConnectItemType(dto.getConnectItemType());
-        thresholdBreachInsight.setValue(dto.getValue());
-        thresholdBreachInsight.setOccurredAt(dto.getOccurredAt() != null ? dto.getOccurredAt() : LocalDateTime.now());
-        thresholdBreachInsight.setStatus(dto.getStatus());
-        thresholdBreachInsight.setInsightName(dto.getInsightName());
-        thresholdBreachInsight.setInsightSummary(dto.getInsightSummary());
-        thresholdBreachInsight.setInsightDescription(dto.getInsightDescription());
-        thresholdBreachInsight.setInsightActions(dto.getInsightActions());
-        thresholdBreachInsight.setInsightCategory(dto.getInsightCategory());
-        thresholdBreachInsight.setInsightSeverity(dto.getInsightSeverity());
-        thresholdBreachInsight.setInsightRootCause(dto.getInsightRootCause());
-        thresholdBreachInsight.setInsightImpact(dto.getInsightImpact());
-        thresholdBreachInsight.setInsightPrevention(dto.getInsightPrevention());
-
-        return thresholdBreachInsightRepository.save(thresholdBreachInsight);
+        return savedInsight;
     }
 }
