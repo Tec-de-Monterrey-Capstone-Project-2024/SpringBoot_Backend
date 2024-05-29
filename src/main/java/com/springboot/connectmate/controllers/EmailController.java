@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 public class EmailController {
 
@@ -22,6 +25,12 @@ public class EmailController {
             @RequestParam String subject,
             @RequestParam String body) {
         emailService.sendSimpleEmail(toEmail, subject, body);
+
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("title", subject);
+        variables.put("message", body);
+
+        emailService.sendAlertEmail(toEmail, subject, "alert-template", variables);
         return "Email sent successfully!";
     }
 }
