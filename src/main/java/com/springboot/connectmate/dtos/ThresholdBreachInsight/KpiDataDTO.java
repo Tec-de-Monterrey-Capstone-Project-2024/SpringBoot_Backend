@@ -1,4 +1,4 @@
-package com.springboot.connectmate.dtos.AmazonConnect;
+package com.springboot.connectmate.dtos.ThresholdBreachInsight;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

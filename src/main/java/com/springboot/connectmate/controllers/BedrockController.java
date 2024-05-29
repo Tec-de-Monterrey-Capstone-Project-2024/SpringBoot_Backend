@@ -1,19 +1,14 @@
 package com.springboot.connectmate.controllers;
 
-import com.springboot.connectmate.dtos.AmazonConnect.InsightDTO;
-import com.springboot.connectmate.dtos.AmazonConnect.KpiDataDTO;
+import com.springboot.connectmate.dtos.ThresholdBreachInsight.InsightDTO;
+import com.springboot.connectmate.dtos.ThresholdBreachInsight.KpiDataDTO;
 import com.springboot.connectmate.services.BedrockService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import org.modelmapper.internal.bytebuddy.build.Plugin;
 import org.springframework.ai.bedrock.titan.BedrockTitanChatClient;
-import org.springframework.ai.chat.ChatResponse;
-import org.springframework.ai.chat.messages.UserMessage;
-import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Flux;
 
 import java.util.Map;
 

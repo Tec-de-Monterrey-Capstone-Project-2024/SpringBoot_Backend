@@ -1,9 +1,8 @@
 package com.springboot.connectmate.controllers;
 
 
-import com.springboot.connectmate.dtos.AmazonConnect.InsightDTO;
-import com.springboot.connectmate.dtos.AmazonConnect.KpiDataDTO;
-import com.springboot.connectmate.dtos.AmazonConnect.ThresholdBreachInsightDTO;
+import com.springboot.connectmate.dtos.ThresholdBreachInsight.InsightDTO;
+import com.springboot.connectmate.dtos.ThresholdBreachInsight.KpiDataDTO;
 import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachInsightDetailDTO;
 import com.springboot.connectmate.enums.ConnectMetricType;
 import com.springboot.connectmate.enums.*;
@@ -15,9 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -59,7 +56,8 @@ public class ThresholdBreachInsightController {
 
         InsightDTO insight = bedrockService.createInsight(kpiDataDTO);
 
-        ThresholdBreachInsightDTO dto = new ThresholdBreachInsightDTO();
+
+        ThresholdBreachInsightDetailDTO dto = new ThresholdBreachInsightDetailDTO();
         dto.setValue(metricValue);
         dto.setConnectItemType(metricType);
         dto.setConnectItemId(typeId);
