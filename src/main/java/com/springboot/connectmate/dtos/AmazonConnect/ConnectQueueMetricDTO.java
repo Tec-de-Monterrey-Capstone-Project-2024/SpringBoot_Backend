@@ -13,18 +13,18 @@ public class ConnectQueueMetricDTO {
             description = "Abandonment rate of the queue",
             example = "90"
     )
-    private double abandonmentRate;
+    private Double abandonmentRate;
     @Schema(
             description = "Average Handle Time of the queue.",
             example = "20"
     )
-    private double avgHandleTime;
+    private Double avgHandleTime;
 
     @Schema(
             description = "Average After Contact Work Time of the queue.",
             example = "135"
     )
-    private double avgAfterContactWorkTime;
+    private Double avgAfterContactWorkTime;
 
     @Schema(
             description = "Average Resolution Time of the queue.",
@@ -36,11 +36,11 @@ public class ConnectQueueMetricDTO {
             description = "Average Queue Answer Time of the queue.",
             example = "10"
     )
-    private double avgQueueAnswerTime;
+    private Double avgQueueAnswerTime;
 
     @Schema(
             description = "Service Level of the queue.",
             example = "90"
     )
-    private double serviceLevel;
+    private Double serviceLevel;
 }

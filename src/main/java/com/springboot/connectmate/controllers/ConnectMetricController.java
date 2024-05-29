@@ -40,10 +40,10 @@ public class ConnectMetricController {
             summary = "Get all queue metrics of a particular queue.",
             description = "Get Amazon Connect queue metrics by instance ID and queue ID."
     )
-    @GetMapping("/instances/queue-metrics")
+    @GetMapping("/instances/{instanceArn}/queue/{queueId}/metrics")
     public ResponseEntity<ConnectQueueMetricDTO> getQueueMetrics(
-            @RequestParam(name = "instanceArn") String instanceArn,
-            @RequestParam(name = "queueId") String queueId
+            @PathVariable(name = "instanceArn") String instanceArn,
+            @PathVariable(name = "queueId") String queueId
     ){
         return ResponseEntity.ok(amazonConnectService.getQueueMetrics(instanceArn, queueId));
     }
@@ -87,9 +87,10 @@ public class ConnectMetricController {
             summary = "Get all agent metrics",
             description = "Get Amazon Connect metrics by instanceARN and agentId."
     )
-    @GetMapping("/instances/agent-metrics")
+    @GetMapping("/instances/{instanceArn}/agent/{agentId}/metrics")
     public ResponseEntity<ConnectAgentMetricDTO> getAgentMetrics(
-            @RequestParam(name = "instanceArn") String instanceArn, @RequestParam(name = "agentId") String agentId){
+            @PathVariable(name = "instanceArn") String instanceArn,
+            @PathVariable(name = "agentId") String agentId) {
         return ResponseEntity.ok(amazonConnectService.getAgentMetrics(instanceArn, agentId));
     }
 
