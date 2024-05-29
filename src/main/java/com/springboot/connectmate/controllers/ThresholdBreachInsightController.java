@@ -4,11 +4,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import com.springboot.connectmate.dtos.Insight.ThresholdBreachInsightDTO;
-import com.springboot.connectmate.dtos.Insight.UpdateStatusDTO;
+import com.springboot.connectmate.dtos.Insight.UpdateStatusFormDTO;
 import com.springboot.connectmate.enums.Status;
 import com.springboot.connectmate.enums.ConnectMetricType;
 import com.springboot.connectmate.services.ThresholdBreachInsightService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,22 +40,19 @@ public class ThresholdBreachInsightController {
     })
     @GetMapping
     public ResponseEntity<List<ThresholdBreachInsightDTO>> getInsights(
-            @RequestParam(required = false) String status,
-            @RequestParam(required = false) String connectItemId,
-            @RequestParam(required = false) String itemType) {
+            @RequestParam(name = "status", required = false) Status status,
+            @RequestParam(name = "connectItemId", required = false) String connectItemId,
+            @RequestParam(name = "itemType", required = false) ConnectMetricType itemType) {
 
 
-        if (status != null) {
-            Status statusEnum = Status.fromString(status.toUpperCase());
-            return ResponseEntity.ok(thresholdBreachInsightService.getInsightsByStatus(statusEnum));
-        } else if (connectItemId != null) {
+        if (status != null)
+            return ResponseEntity.ok(thresholdBreachInsightService.getInsightsByStatus(status));
+        else if (connectItemId != null)
             return ResponseEntity.ok(thresholdBreachInsightService.getInsightsByConnectItemId(connectItemId));
-        } else if (itemType != null) {
-            ConnectMetricType connectItemType = ConnectMetricType.valueOf(itemType.toUpperCase());
-            return ResponseEntity.ok(thresholdBreachInsightService.getInsightsByItemType(connectItemType));
-        } else {
+        else if (itemType != null)
+            return ResponseEntity.ok(thresholdBreachInsightService.getInsightsByItemType(itemType));
+        else
             return ResponseEntity.ok(thresholdBreachInsightService.getAllInsights());
-        }
 
     }
 
@@ -62,13 +60,16 @@ public class ThresholdBreachInsightController {
     @Operation(summary = "Update the status of an insight", description = "Update the status of a ThresholdBreachInsight by its ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Status updated successfully"),
-            @ApiResponse(responseCode = "404", description = "Insight not found"),
+            @ApiResponse(responseCode = "304", description = "Status not modified"),
             @ApiResponse(responseCode = "400", description = "Invalid status value"),
+            @ApiResponse(responseCode = "404", description = "Insight not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    @PatchMapping("/{id}/status")
-    public ResponseEntity<String> updateInsightStatus(@PathVariable Long id, @RequestBody UpdateStatusDTO updateStatusDTO) {
-        String updatedInsight = thresholdBreachInsightService.updateStatus(id, updateStatusDTO);
+    @PatchMapping("/{thresholdId}/status")
+    public ResponseEntity<String> updateInsightStatus(
+            @PathVariable(name = "thresholdId") Long thresholdId,
+            @Valid @RequestBody UpdateStatusFormDTO updateStatusFormDTO) {
+        String updatedInsight = thresholdBreachInsightService.updateStatus(thresholdId, updateStatusFormDTO);
         return ResponseEntity.ok(updatedInsight);
     }
 

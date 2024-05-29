@@ -1,6 +1,7 @@
 package com.springboot.connectmate.dtos.Insight;
 
-import com.springboot.connectmate.enums.ConnectMetricCode;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.springboot.connectmate.enums.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,52 +12,106 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ThresholdBreachInsightDTO {
 
-    @Schema(description = "Unique identifier of the insight", example = "1")
+    @Schema(
+            description = "Unique identifier of the insight",
+            example = "1"
+    )
     private Long id;
 
-    @Schema(description = "Metric code associated with the insight", example = "INSTANCE")
+    @Schema(
+            description = "Metric code associated with the insight",
+            examples = {"SERVICE_LEVEL", "ABANDONMENT_RATE", "AVERAGE_SPEED_ANSWER",  "AVERAGE_HANDLE_TIME",
+                        "OCCUPANCY", "FIRST_CONTACT_RESOLUTION", "AGENTS_AFTER_CONTACT_WORK", "SLOTS_ACTIVE",
+                        "AVERAGE_RESOLUTION_TIME", "SCHEDULE_ADHERENCE", "VIRTUAL_FLOOR_RECONFIGURATION"}
+    )
     private ConnectMetricCode metricCode;
 
-    @Schema(description = "Identifier of the Connect item", example = "1")
+    @Schema(
+            description = "Identifier of the Connect item",
+            example = "1"
+    )
     private String connectItemId;
 
-    @Schema(description = "Type of the Connect item", example = "AGENT")
-    private String connectItemType;
+    @Schema(
+            description = "Type of the Connect item",
+            examples = {"AGENT", "QUEUE", "INSTANCE"}
+    )
+    private ConnectMetricType connectItemType;
 
-    @Schema(description = "Value of the metric", example = "95.5")
+    @Schema(
+            description = "Value of the metric",
+            example = "95.5"
+    )
     private Double value;
 
-    @Schema(description = "Timestamp when the insight occurred", example = "2023-05-26T15:30:00Z")
+    @Schema(
+            description = "Timestamp when the insight occurred",
+            type = "Timestamp",
+            pattern = "EEE MMM dd HH:mm:ss zzz yyyy",
+            example = "Fri May 03 17:29:27 CST 2024"
+    )
+    @JsonFormat(pattern = "EEE MMM dd HH:mm:ss zzz yyyy")
     private String occurredAt;
 
-    @Schema(description = "Status of the insight", example = "TO_DO")
-    private String status;
+    @Schema(
+            description = "Status of the insight",
+            examples = {"TO_DO", "IN_PROGRESS", "DONE"}
+    )
+    private Status status;
 
-    @Schema(description = "Name of the insight", example = "Average answer speed")
+    @Schema(
+            description = "Name of the insight",
+            example = "Average answer speed"
+    )
     private String insightName;
 
-    @Schema(description = "Summary of the insight", example = "The average answer speed the threshold.")
+    @Schema(
+            description = "Summary of the insight",
+            example = "The average answer speed the threshold."
+    )
     private String insightSummary;
 
-    @Schema(description = "Description of the insight", example = "Detailed description of the insight")
+    @Schema(
+            description = "Description of the insight",
+            example = "Detailed description of the insight"
+    )
     private String insightDescription;
 
-    @Schema(description = "Recommended actions for the insight", example = "Increase agent availability")
+    @Schema(
+            description = "Recommended actions for the insight",
+            example = "Increase agent availability"
+    )
     private String insightActions;
 
-    @Schema(description = "Category of the insight's performance", example = "CRITICAL")
-    private String insightCategory;
+    @Schema(
+            description = "Category of the insight's performance",
+            examples = {"CRITICAL", "UNSATISFACTORY", "BELOW_EXPECTATIONS",  "EXCEEDS_EXPECTATIONS",
+                        "OUTSTANDING", "PIONEERING", "UNKNOWN"}
+    )
+    private InsightPerformance insightCategory;
 
-    @Schema(description = "Severity level of the insight", example = "HIGH")
-    private String insightSeverity;
+    @Schema(
+            description = "Severity level of the insight",
+            examples = {"LOW", "MEDIUM", "HIGH",  "CRITICAL", "UNKNOWN"}
+    )
+    private InsightSeverity insightSeverity;
 
-    @Schema(description = "Root cause of the insight", example = "Improve Average Answer speed")
+    @Schema(
+            description = "Root cause of the insight",
+            example = "Improve Average Answer speed"
+    )
     private String insightRootCause;
 
-    @Schema(description = "Impact of the insight", example = "Longer wait times for customers")
+    @Schema(
+            description = "Impact of the insight",
+            example = "Longer wait times for customers"
+    )
     private String insightImpact;
 
-    @Schema(description = "Prevention measures for the insight", example = "Take actions to improve average answer speed")
+    @Schema(
+            description = "Prevention measures for the insight",
+            example = "Take actions to improve average answer speed"
+    )
     private String insightPrevention;
 }
 
