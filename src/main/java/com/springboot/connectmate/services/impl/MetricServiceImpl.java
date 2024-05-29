@@ -2,6 +2,9 @@ package com.springboot.connectmate.services.impl;
 
 
 import com.springboot.connectmate.dtos.Metric.MetricDTO;
+import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachInsightDetailDTO;
+import com.springboot.connectmate.enums.ConnectMetricCode;
+import com.springboot.connectmate.exceptions.ResourceNotFoundException;
 import com.springboot.connectmate.models.Metric;
 import com.springboot.connectmate.repositories.MetricRepository;
 import com.springboot.connectmate.services.MetricService;
@@ -11,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -33,6 +37,29 @@ public class MetricServiceImpl implements MetricService {
 
     @Override
     public List<MetricDTO> getAllConnectMateMetrics() {
-        return Collections.emptyList();
+        List<Metric> metrics = metricRepository.findAll();
+        return metrics.stream()
+                .map(metric -> mapper.map(metric, MetricDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public MetricDTO getConnectMateMetricByCode(ConnectMetricCode code) {
+        Metric metric = metricRepository.findById(code)
+                .orElseThrow(() -> new ResourceNotFoundException("Metric", "code", code.toString()));
+        return mapper.map(metricRepository.findById(code), MetricDTO.class);
+    }
+
+    @Override
+    public MetricDTO setThresholdsAndTarget(ConnectMetricCode code, Double minThreshold, Double maxThreshold, Double targetValue) {
+        Metric metric = metricRepository.findById(code)
+                .orElseThrow(() -> new ResourceNotFoundException("Metric", "code", code.toString()));
+
+        // TODO: Set upper and lower bounds of metrics
+        metric.setMinimumThresholdValue(minThreshold);
+        metric.setMaximumThresholdValue(maxThreshold);
+        metric.setTargetValue(targetValue != null ? targetValue : code.getDefaultTargetValue());
+        metricRepository.save(metric);
+        return mapper.map(metric, MetricDTO.class);
     }
 }
