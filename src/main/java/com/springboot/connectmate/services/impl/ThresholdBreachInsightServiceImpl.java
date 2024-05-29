@@ -1,7 +1,7 @@
 package com.springboot.connectmate.services.impl;
 
 import com.springboot.connectmate.dtos.Insight.ThresholdBreachInsightDTO;
-import com.springboot.connectmate.dtos.Insight.UpdateStatusDTO;
+import com.springboot.connectmate.dtos.Insight.UpdateStatusFormDTO;
 import com.springboot.connectmate.enums.ConnectMetricCode;
 import com.springboot.connectmate.enums.Status;
 import com.springboot.connectmate.enums.ConnectMetricType;
@@ -80,11 +80,11 @@ public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsight
     }
 
     @Override
-    public String updateStatus(Long id, UpdateStatusDTO updateStatusDTO) {
+    public String updateStatus(Long id, UpdateStatusFormDTO updateStatusFormDTO) {
         ThresholdBreachInsight insight = thresholdBreachInsightRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("ThresholdBreachInsight", "id", id));
 
-        insight.setStatus( updateStatusDTO.getStatus() );
+        insight.setStatus( updateStatusFormDTO.getStatus() );
         ThresholdBreachInsight updatedInsight = thresholdBreachInsightRepository.save(insight);
 
         return "Status updated successfully";
