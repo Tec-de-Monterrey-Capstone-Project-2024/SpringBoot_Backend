@@ -42,11 +42,14 @@ public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsight
         Metric metric = new Metric();
         metric.setCode(dto.getMetricCode());
         ThresholdBreachInsight thresholdBreachInsight = mapper.map(dto, ThresholdBreachInsight.class);
-            thresholdBreachInsight.setMetricCode(metric);
-            thresholdBreachInsight.setOccurredAt(dto.getOccurredAt() != null ? dto.getOccurredAt() : LocalDateTime.now());
+        thresholdBreachInsight.setMetricCode(metric);
+        thresholdBreachInsight.setOccurredAt(dto.getOccurredAt() != null ? dto.getOccurredAt() : LocalDateTime.now());
         ThresholdBreachInsight savedInsight = thresholdBreachInsightRepository.save(thresholdBreachInsight);
 
         return savedInsight;
+    }
+
+    @Override
     public ThresholdBreachInsight getInsightByMetricCodeAndConnectItemId(Metric metric, String connectItemId) {
         return thresholdBreachInsightRepository.findByMetricCodeAndConnectItemId(metric, connectItemId)
                 .orElseThrow(() -> new ResourceNotFoundException(
