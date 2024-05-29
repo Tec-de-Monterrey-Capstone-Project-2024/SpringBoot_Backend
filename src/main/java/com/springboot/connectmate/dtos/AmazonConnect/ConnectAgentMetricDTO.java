@@ -13,22 +13,22 @@ public class ConnectAgentMetricDTO {
             description = "Abandonment rate of the agent",
             example = "90"
     )
-    private double abandonmentRate;
+    private Double abandonmentRate;
     @Schema(
             description = "Average Handle Time of the agent.",
             example = "20"
     )
-    private double avgHandleTime;
+    private Double avgHandleTime;
 
     @Schema(
             description = "Average After Contact Work Time of the agent.",
             example = "135"
     )
-    private double avgAfterContactWorkTime;
+    private Double avgAfterContactWorkTime;
 
     @Schema(
             description = "Occupancy of the agent.",
             example = "120"
     )
-    private double agentOccupancy;
+    private Double agentOccupancy;
 }

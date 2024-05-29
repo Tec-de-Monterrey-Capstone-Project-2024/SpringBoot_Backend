@@ -3,12 +3,13 @@ package com.springboot.connectmate.services.impl;
 import com.amazonaws.services.connect.AmazonConnect;
 import com.amazonaws.services.connect.model.*;
 import com.amazonaws.services.connect.model.Queue;
-import com.springboot.connectmate.dtos.AmazonConnect.ConnectAgentMetricDTO;
-import com.springboot.connectmate.dtos.AmazonConnect.ConnectQueueMetricDTO;
+import com.springboot.connectmate.dtos.AmazonConnect.*;
 import com.springboot.connectmate.services.AmazonConnectService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -45,11 +46,11 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
     }
 
     @Override
-    public List<QueueSummary> listQueues(String instanceId) {
+    public List<ConnectQueueDTO> listQueues(String instanceId) {
         ListQueuesRequest listQueuesRequest = new ListQueuesRequest().withInstanceId(instanceId);
         ListQueuesResult listQueuesResult = amazonConnectClient.listQueues(listQueuesRequest);
         return listQueuesResult.getQueueSummaryList().stream()
-                .map(queue -> mapper.map(queue, QueueSummary.class))
+                .map(queue -> mapper.map(queue, ConnectQueueDTO.class))
                 .collect(Collectors.toList());
     }
 
@@ -91,10 +92,10 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
     }
 
     @Override
-    public List<UserData> getCurrentUserData(String instanceId) {
+    public List<ConnectCurrentUserDataDTO> getCurrentUserData(String instanceId) {
         UserDataFilters userDataFilters = new UserDataFilters()
                 .withQueues(listQueues(instanceId).stream()
-                        .map(QueueSummary::getId)
+                        .map(ConnectQueueDTO::getId)
                         .collect(Collectors.toList()));
 
         GetCurrentUserDataRequest getCurrentUserDataRequest = new GetCurrentUserDataRequest()
@@ -103,7 +104,25 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
 
         GetCurrentUserDataResult getCurrentUserDataResult = amazonConnectClient.getCurrentUserData(getCurrentUserDataRequest);
 
-        return getCurrentUserDataResult.getUserDataList();
+        return getCurrentUserDataResult.getUserDataList().stream()
+                .map(userData -> {
+                    ConnectCurrentUserDataDTO currentDto = new ConnectCurrentUserDataDTO();
+                    currentDto.setUserId(userData.getUser().getId());
+                    currentDto.setStatusName(userData.getStatus().getStatusName());
+
+                    List<ConnectContactDTO> contactDTOs = userData.getContacts().stream()
+                            .map(contact -> {
+                                ConnectContactDTO contactDTO = new ConnectContactDTO();
+                                contactDTO.setContactId(contact.getContactId());
+                                contactDTO.setQueueId(contact.getQueue().getId());
+                                return contactDTO;
+                            })
+                            .collect(Collectors.toList());
+
+                    currentDto.setContacts(contactDTOs);
+                    return currentDto;
+                })
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -255,7 +274,7 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
 
         List<FilterV2> filters = new ArrayList<>();
 
-        filters.add( new FilterV2()
+        filters.add(new FilterV2()
                 .withFilterKey("AGENT")
                 .withFilterValues(Collections.singletonList(agentId))
         );
@@ -298,5 +317,34 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
         return getCurrentMetricDataResult.getMetricResults().stream()
                 .map(metric-> metric.toString())
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Map<String, ConnectQueueInfoDTO> getQueueUserCounts(String instanceId) {
+        List<ConnectCurrentUserDataDTO> userDataList = getCurrentUserData(instanceId);
+        Map<String, ConnectQueueInfoDTO> queueInfoMap = new HashMap<>();
+
+        List<ConnectQueueDTO> allQueues = listQueues(instanceId);
+        if (allQueues != null) {
+            for (ConnectQueueDTO queue : allQueues) {
+                queueInfoMap.put(queue.getId(), new ConnectQueueInfoDTO());
+            }
+        }
+
+        if (userDataList != null) {
+            for (ConnectCurrentUserDataDTO userData : userDataList) {
+                String userId = userData.getUserId();
+                for (ConnectContactDTO contact : userData.getContacts()) {
+                    String queueId = contact.getQueueId();
+                    queueInfoMap.putIfAbsent(queueId, new ConnectQueueInfoDTO());
+
+                    queueInfoMap.get(queueId).getUsers().add(userId);
+
+                    queueInfoMap.get(queueId).setContactCount(queueInfoMap.get(queueId).getContactCount() + 1);
+                }
+            }
+        }
+
+        return queueInfoMap;
     }
 }
