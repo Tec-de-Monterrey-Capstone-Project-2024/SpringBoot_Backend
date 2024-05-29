@@ -4,6 +4,9 @@ import com.amazonaws.services.connect.model.Unit;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Getter
 @AllArgsConstructor
 public enum ConnectMetricCode {
@@ -13,9 +16,24 @@ public enum ConnectMetricCode {
             "Important for assessing the efficiency and responsiveness of the service team.",
             Unit.PERCENT,
             ConnectMetricApiType.MetricDataV2,
-            80.0, // Typical target is 80% or higher
-            "To ensure a high level of customer satisfaction by minimizing wait times."
-    ),
+            80.0,
+            100.0,
+            0.0,
+            "To ensure a high level of customer satisfaction by minimizing wait times.",
+            Arrays.asList(ConnectMetricType.QUEUE)
+    );
+
+    private final String name;
+    private final String description;
+    private final String additionalInfo;
+    private final Unit units;
+    private final ConnectMetricApiType apiType;
+    private final Double defaultTargetValue;
+    private final Double upperBound;
+    private final Double lowerBound;
+    private final String rationale;
+    private final List<ConnectMetricType> metricTypes;
+    /*
     ABANDONMENT_RATE(
             "Abandonment Rate",
             "The percentage of calls abandoned by customers before being answered.",
@@ -107,12 +125,7 @@ public enum ConnectMetricCode {
             10.0, // Example value
             "To maintain an efficient and adaptable virtual agent environment."
     );
+    */
 
-    private final String name;
-    private final String description;
-    private final String additionalInfo;
-    private final Unit units;
-    private final ConnectMetricApiType apiType;
-    private final Double defaultTargetValue;
-    private final String rationale;
+
 }
