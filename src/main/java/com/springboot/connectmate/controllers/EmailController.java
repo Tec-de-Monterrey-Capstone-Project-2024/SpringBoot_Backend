@@ -6,9 +6,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @RestController
 public class EmailController {
 
@@ -20,17 +17,11 @@ public class EmailController {
     }
 
     @GetMapping("/sendEmail")
-    public void sendEmail() {
-        String toEmail = "zzentenofedericoo@gmail.com";
-        String subject = "Alert Notification";
-        String template = "alert-template"; // This corresponds to alert-template.html
-        //To make any changes or to add variables we need to do it in a Map
-        //Depending on what variables are on the template, we pass it in the map
-        //For testing im using sendEmail endpoint
-        Map<String, Object> variables = new HashMap<>();
-        variables.put("title", "Urgent Alert"); //Dummmy variables for testing
-        variables.put("message", "This is an urgent alert message.");
-
-        emailService.sendAlertEmail(toEmail, subject, template, variables);
+    public String sendEmail(
+            @RequestParam String toEmail,
+            @RequestParam String subject,
+            @RequestParam String body) {
+        emailService.sendSimpleEmail(toEmail, subject, body);
+        return "Email sent successfully!";
     }
 }
