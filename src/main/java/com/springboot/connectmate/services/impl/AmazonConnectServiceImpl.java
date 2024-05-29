@@ -3,6 +3,7 @@ package com.springboot.connectmate.services.impl;
 import com.amazonaws.services.connect.AmazonConnect;
 import com.amazonaws.services.connect.model.*;
 import com.amazonaws.services.connect.model.Queue;
+import com.springboot.connectmate.dtos.AmazonConnect.ConnectSecurityProfileDTO;
 import com.springboot.connectmate.services.AmazonConnectService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -225,5 +226,34 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
         return getCurrentMetricDataResult.getMetricResults().stream()
                 .map(metric-> metric.toString())
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ConnectSecurityProfileDTO> getUserSecurityProfileIds(String instanceId, String userId) {
+        // Get the User
+        DescribeUserRequest request = new DescribeUserRequest()
+                .withInstanceId(instanceId)
+                .withUserId(userId);
+
+        DescribeUserResult response = amazonConnectClient.describeUser(request);
+        User user = response.getUser();
+
+        List<String> securityProfileIds = user.getSecurityProfileIds();
+        List<ConnectSecurityProfileDTO> userRoles = new ArrayList<>();
+
+        // Iterate over the security profile ids of the user
+        for (String roleId : securityProfileIds) {
+            // Describe the security profile
+            DescribeSecurityProfileRequest securityProfileRequest = new DescribeSecurityProfileRequest()
+                    .withInstanceId(instanceId)
+                    .withSecurityProfileId(roleId);
+
+            DescribeSecurityProfileResult securityProfileResult = amazonConnectClient.describeSecurityProfile(securityProfileRequest);
+            SecurityProfile securityProfile = securityProfileResult.getSecurityProfile();
+
+            userRoles.add(mapper.map(securityProfile, ConnectSecurityProfileDTO.class));
+        }
+
+        return userRoles;
     }
 }
