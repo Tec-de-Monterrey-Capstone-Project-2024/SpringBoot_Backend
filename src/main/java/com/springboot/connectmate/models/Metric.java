@@ -2,15 +2,15 @@ package com.springboot.connectmate.models;
 
 import com.springboot.connectmate.enums.ConnectMetricCode;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Set;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@Setter
+@AllArgsConstructor // Lombok annotation to create a constructor with all the arguments
+@NoArgsConstructor // Lombok annotation to create a constructor with no arguments
 @Entity
 @Table(name = "metric")
 public class Metric {
