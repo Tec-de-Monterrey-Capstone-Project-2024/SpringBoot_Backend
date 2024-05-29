@@ -1,11 +1,10 @@
 package com.springboot.connectmate.services.impl;
 import com.amazonaws.services.connect.model.Statistic;
 import com.amazonaws.services.connect.model.Unit;
-import com.springboot.connectmate.dtos.AmazonConnect.KpiDataDTO;
+import com.springboot.connectmate.dtos.ThresholdBreachInsight.KpiDataDTO;
 import com.springboot.connectmate.enums.ConnectMetricCode;
 import com.springboot.connectmate.enums.ConnectMetricType;
 import com.springboot.connectmate.enums.Status;
-import com.springboot.connectmate.models.Metric;
 import com.springboot.connectmate.services.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -39,7 +38,6 @@ public class TestServiceImpl implements TestService {
         }
     }
 
-
     private KpiDataDTO generateRandomKpiDataDTO(Long id) {
         KpiDataDTO dto = new KpiDataDTO();
         dto.setId(id);
@@ -53,7 +51,7 @@ public class TestServiceImpl implements TestService {
         dto.setMinimumThresholdValue(random.nextDouble(50) + 50);
         dto.setMaximumThresholdValue(random.nextDouble(50) + 100);
         dto.setTargetValue(random.nextDouble(50) + 75);
-        dto.setCurrentValue(random.nextDouble(50) + 60); 
+        dto.setCurrentValue(random.nextDouble(50) + 60);
         dto.setBreachOccurred(random.nextBoolean());
         return dto;
     }
