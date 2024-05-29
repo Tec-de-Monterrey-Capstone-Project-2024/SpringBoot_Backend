@@ -2,13 +2,14 @@ package com.springboot.connectmate.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Setter;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data // Lombok annotation to create all the getters, setters, equals, hash, and toString methods for us
-@AllArgsConstructor // Lombok annotation to create a constructor with all the arguments
-@NoArgsConstructor // Lombok annotation to create a constructor with no arguments
-
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(
         name = "user",

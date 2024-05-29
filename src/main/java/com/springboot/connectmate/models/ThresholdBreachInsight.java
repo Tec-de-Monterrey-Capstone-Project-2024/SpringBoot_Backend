@@ -5,15 +5,14 @@ import com.springboot.connectmate.enums.InsightPerformance;
 import com.springboot.connectmate.enums.InsightSeverity;
 import com.springboot.connectmate.enums.Status;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Data // Lombok annotation to create all the getters, setters, equals, hash, and toString methods for us
-@AllArgsConstructor // Lombok annotation to create a constructor with all the arguments
-@NoArgsConstructor // Lombok annotation to create a constructor with no arguments
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 
 @Entity
 @Table(
