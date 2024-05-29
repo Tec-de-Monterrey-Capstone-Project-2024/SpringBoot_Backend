@@ -4,12 +4,11 @@ import com.amazonaws.services.connect.AmazonConnect;
 import com.amazonaws.services.connect.model.*;
 import com.amazonaws.services.connect.model.Queue;
 import com.springboot.connectmate.dtos.AmazonConnect.*;
+import com.springboot.connectmate.dtos.AmazonConnect.ConnectSecurityProfileDTO;
 import com.springboot.connectmate.services.AmazonConnectService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -27,7 +26,6 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
         this.amazonConnectClient = amazonConnectClient;
         this.mapper = mapper;
     }
-
 
     @Override
     public List<InstanceSummary> listConnectInstances() {
@@ -346,5 +344,30 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
         }
 
         return queueInfoMap;
+    }
+
+    public List<ConnectSecurityProfileDTO> getUserSecurityProfileIds (String instanceId, String userId){
+        DescribeUserRequest request = new DescribeUserRequest()
+                .withInstanceId(instanceId)
+                .withUserId(userId);
+
+        DescribeUserResult response = amazonConnectClient.describeUser(request);
+        User user = response.getUser();
+
+        List<String> securityProfileIds = user.getSecurityProfileIds();
+        List<ConnectSecurityProfileDTO> userRoles = new ArrayList<>();
+
+        for (String roleId : securityProfileIds) {
+            DescribeSecurityProfileRequest securityProfileRequest = new DescribeSecurityProfileRequest()
+                    .withInstanceId(instanceId)
+                    .withSecurityProfileId(roleId);
+
+            DescribeSecurityProfileResult securityProfileResult = amazonConnectClient.describeSecurityProfile(securityProfileRequest);
+            SecurityProfile securityProfile = securityProfileResult.getSecurityProfile();
+
+            userRoles.add(mapper.map(securityProfile, ConnectSecurityProfileDTO.class));
+        }
+
+        return userRoles;
     }
 }
