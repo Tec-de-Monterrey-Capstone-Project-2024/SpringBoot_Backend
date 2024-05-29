@@ -3,7 +3,6 @@ package com.springboot.connectmate.services.impl;
 import com.amazonaws.services.connect.AmazonConnect;
 import com.amazonaws.services.connect.model.*;
 import com.amazonaws.services.connect.model.Queue;
-import com.springboot.connectmate.dtos.AmazonConnect.*;
 import com.springboot.connectmate.dtos.AmazonConnect.ConnectSecurityProfileDTO;
 import com.springboot.connectmate.services.AmazonConnectService;
 import org.modelmapper.ModelMapper;
@@ -357,7 +356,9 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
         List<String> securityProfileIds = user.getSecurityProfileIds();
         List<ConnectSecurityProfileDTO> userRoles = new ArrayList<>();
 
+        // Iterate over the security profile ids of the user
         for (String roleId : securityProfileIds) {
+            // Describe the security profile
             DescribeSecurityProfileRequest securityProfileRequest = new DescribeSecurityProfileRequest()
                     .withInstanceId(instanceId)
                     .withSecurityProfileId(roleId);
