@@ -3,7 +3,7 @@ package com.springboot.connectmate.services.impl;
 import com.amazonaws.services.connect.AmazonConnect;
 import com.amazonaws.services.connect.model.*;
 import com.amazonaws.services.connect.model.Queue;
-import com.springboot.connectmate.dtos.AmazonConnect.ConnectSecurityProfileDTO;
+import com.springboot.connectmate.dtos.AmazonConnect.*;
 import com.springboot.connectmate.services.AmazonConnectService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

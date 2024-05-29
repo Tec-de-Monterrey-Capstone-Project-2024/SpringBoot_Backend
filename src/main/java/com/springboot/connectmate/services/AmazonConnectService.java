@@ -1,7 +1,12 @@
 package com.springboot.connectmate.services;
 
 import com.amazonaws.services.connect.model.*;
+import com.springboot.connectmate.dtos.AmazonConnect.ConnectCurrentUserDataDTO;
 import com.springboot.connectmate.dtos.AmazonConnect.ConnectSecurityProfileDTO;
+import com.springboot.connectmate.dtos.AmazonConnect.ConnectQueueDTO;
+import com.springboot.connectmate.dtos.AmazonConnect.ConnectQueueMetricDTO;
+import com.springboot.connectmate.dtos.AmazonConnect.ConnectAgentMetricDTO;
+import com.springboot.connectmate.dtos.AmazonConnect.ConnectQueueInfoDTO;
 
 import java.util.List;
 import java.util.Map;
