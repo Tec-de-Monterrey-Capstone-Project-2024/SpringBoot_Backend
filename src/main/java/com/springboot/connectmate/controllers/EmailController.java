@@ -21,15 +21,15 @@ public class EmailController {
 
     @GetMapping("/sendEmail")
     public void sendEmail() {
-        String toEmail = "zzentenofedericoo@gmail.com";
+        String toEmail = "Jose.aram.mendez@gmail.com";
         String subject = "Alert Notification";
         String template = "alert-template"; // This corresponds to alert-template.html
         //To make any changes or to add variables we need to do it in a Map
         //Depending on what variables are on the template, we pass it in the map
         //For testing im using sendEmail endpoint
         Map<String, Object> variables = new HashMap<>();
-        variables.put("title", "Urgent Alert"); //Dummmy variables for testing
-        variables.put("message", "This is an urgent alert message.");
+        variables.put("title", "Urgent Alert TEST "); //Dummmy variables for testing
+        variables.put("message", "This is an urgent alert message. (Falta mejorar el css)");
 
         emailService.sendAlertEmail(toEmail, subject, template, variables);
     }
