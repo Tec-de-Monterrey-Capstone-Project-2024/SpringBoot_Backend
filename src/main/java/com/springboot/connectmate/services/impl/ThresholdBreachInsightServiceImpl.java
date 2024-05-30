@@ -1,7 +1,6 @@
 package com.springboot.connectmate.services.impl;
 
 import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachInsightDetailDTO;
-import com.springboot.connectmate.enums.ConnectMetricCode;
 import com.springboot.connectmate.enums.ConnectMetricType;
 import com.springboot.connectmate.enums.Status;
 import com.springboot.connectmate.exceptions.ResourceNotFoundException;
@@ -64,12 +63,13 @@ public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsight
     }
 
     @Override
-    public List<ThresholdBreachInsightDetailDTO> getInsightsByItemType(ConnectMetricType connectItemType) {
-        List<ThresholdBreachInsight> insights = thresholdBreachInsightRepository.findByConnectItemType(connectItemType);
-        return insights.stream()
-                .map(insight -> mapper.map(insight, ThresholdBreachInsightDetailDTO.class))
-                .collect(Collectors.toList());
+    public ThresholdBreachInsightDetailDTO getInsightById(Long id) {
+        ThresholdBreachInsight insight = thresholdBreachInsightRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("ThresholdBreachInsight", "id", id));
+        return mapper.map(insight, ThresholdBreachInsightDetailDTO.class);
     }
+
+
 
     @Override
     public String updateStatus(Long id, Status status) {
@@ -79,4 +79,14 @@ public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsight
         thresholdBreachInsightRepository.save(insight);
         return "Status updated successfully";
     }
+
+    @Override
+    public List<ThresholdBreachInsightDetailDTO> getInsightsByItemType(ConnectMetricType connectItemType) {
+        List<ThresholdBreachInsight> insights = thresholdBreachInsightRepository.findByConnectItemType(connectItemType);
+        return insights.stream()
+                .map(insight -> mapper.map(insight, ThresholdBreachInsightDetailDTO.class))
+                .collect(Collectors.toList());
+    }
+
+
 }
