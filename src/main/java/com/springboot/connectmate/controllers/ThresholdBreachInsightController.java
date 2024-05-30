@@ -92,8 +92,8 @@ public class ThresholdBreachInsightController {
     @GetMapping
     public ResponseEntity<List<ThresholdBreachInsightGenericDTO>> getInsights(
             @RequestParam(name = "connectItemId", required = false) String connectItemId,
-            @RequestParam(name = "itemType", required = false) ConnectMetricType itemType) {
-
+            @RequestParam(name = "itemType", required = false) ConnectMetricType itemType)
+    {
 
         if (connectItemId != null)
             return ResponseEntity.ok(thresholdBreachInsightService.getInsightsByConnectItemId(connectItemId));
@@ -116,6 +116,8 @@ public class ThresholdBreachInsightController {
 
         return ResponseEntity.ok(insights);
     }
+
+
 
     @Operation(summary = "Update the status of an insight", description = "Update the status of a ThresholdBreachInsight by its ID.")
     @ApiResponses(value = {
@@ -144,4 +146,17 @@ public class ThresholdBreachInsightController {
         String updatedInsight = thresholdBreachInsightService.updateStatus(thresholdId, approvedStatus);
         return ResponseEntity.ok(updatedInsight);
     }
+
+    @Operation(summary = "Get insight by ID", description = "Retrieve a specific ThresholdBreachInsight by its ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Insight retrieved successfully"),
+            @ApiResponse(responseCode = "404", description = "Insight not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<ThresholdBreachInsightDetailDTO> getInsightById(@PathVariable Long id) {
+        ThresholdBreachInsightDetailDTO insight = thresholdBreachInsightService.getInsightById(id);
+        return ResponseEntity.ok(insight);
+    }
+
 }

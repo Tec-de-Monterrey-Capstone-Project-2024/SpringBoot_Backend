@@ -18,8 +18,9 @@ public interface ThresholdBreachInsightService {
     ThresholdBreachInsight generateAndSaveInsight(ThresholdBreachInsightDetailDTO dto, InsightDTO insight);
     ThresholdBreachInsight getInsightByMetricCodeAndConnectItemId(Metric metric, String connectItemId);
 
-    // Get all insights (filter also)
+    // Get Insights (filter also)
     List<ThresholdBreachInsightGenericDTO> getAllInsights();
+    ThresholdBreachInsightDetailDTO getInsightById(Long id);
     List<ThresholdBreachInsightGenericDTO> getInsightsByStatus(Status status);
     List<ThresholdBreachInsightGenericDTO> getInsightsByConnectItemId(String connectItemId);
     List<ThresholdBreachInsightGenericDTO> getInsightsByItemType(ConnectMetricType connectItemType);

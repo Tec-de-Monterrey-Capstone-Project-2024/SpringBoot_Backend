@@ -135,6 +135,7 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
     }
 
     // Metric Service Implementations
+    // Not Yet Functional
     @Override
     public List<String> getHistoricalMetrics(String instanceId, String queueId) {
 
