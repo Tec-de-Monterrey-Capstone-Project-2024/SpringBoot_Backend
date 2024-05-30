@@ -2,9 +2,11 @@ package com.springboot.connectmate.services.impl;
 
 import com.springboot.connectmate.services.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class EmailServiceImpl implements EmailService {
@@ -26,4 +28,28 @@ public class EmailServiceImpl implements EmailService {
 
         mailSender.send(message);
     }
+
+    /*
+    @Override
+    public void sendAlertEmail(String toEmail, String subject, String template, Map<String, Object> variables) {
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+            helper.setTo(toEmail);
+            helper.setSubject(subject);
+            helper.setFrom("connectmate.alertsystem@gmail.com");
+
+            Context context = new Context();
+            context.setVariables(variables);
+            String htmlContent = templateEngine.process(template, context);
+            helper.setText(htmlContent, true);
+            helper.addInline("logoImage", new ClassPathResource("static/logoImage.jpeg"));
+
+            mailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            e.printStackTrace(); //handle exception, sí sí era default comment ok meper
+            System.out.println("nada se mando alv");
+        }
+    }
+    */
 }
