@@ -8,6 +8,7 @@ import com.springboot.connectmate.models.Metric;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 
 public interface ThresholdBreachInsightService {
@@ -17,7 +18,7 @@ public interface ThresholdBreachInsightService {
                                                   ThresholdBreachFieldsDTO thresholdBreachData,
                                                   InsightFieldsDTO insightData
     );
-    ThresholdBreachInsight getInsightByMetricCodeAndConnectItemId(Metric metric, String connectItemId);
+    Optional<ThresholdBreachInsight> getInsightByMetricCodeAndConnectItemId(Metric metric, String connectItemId);
 
     // Get Insights (filter also)
     List<ThresholdBreachInsightGenericDTO> getAllInsights();

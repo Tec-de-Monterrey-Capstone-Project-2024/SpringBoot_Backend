@@ -20,7 +20,7 @@ public enum ConnectMetricCode {
             100.0,
             0.0,
             "To ensure a high level of customer satisfaction by minimizing wait times.",
-            Arrays.asList(ConnectMetricType.QUEUE)
+            Arrays.asList(ConnectMetricType.INSTANCE, ConnectMetricType.QUEUE, ConnectMetricType.AGENT)
     ),
     ABANDONMENT_RATE(
             "Abandonment Rate",

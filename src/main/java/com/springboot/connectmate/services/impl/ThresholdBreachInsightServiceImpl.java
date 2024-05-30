@@ -55,12 +55,8 @@ public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsight
     }
 
     @Override
-    public ThresholdBreachInsight getInsightByMetricCodeAndConnectItemId(Metric metric, String connectItemId) {
-        return thresholdBreachInsightRepository.findByMetricCodeAndConnectItemId(metric, connectItemId)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "ThresholdBreachInsight",
-                        metric.getCode().toString(),
-                        connectItemId));
+    public Optional<ThresholdBreachInsight> getInsightByMetricCodeAndConnectItemId(Metric metric, String connectItemId) {
+        return thresholdBreachInsightRepository.findByMetricCodeAndConnectItemId(metric, connectItemId);
     }
 
     @Override

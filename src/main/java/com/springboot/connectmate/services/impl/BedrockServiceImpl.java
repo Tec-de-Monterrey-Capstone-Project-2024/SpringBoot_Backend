@@ -4,10 +4,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springboot.connectmate.dtos.ThresholdBreachInsight.InsightFieldsDTO;
 import com.springboot.connectmate.dtos.ThresholdBreachInsight.KPIDataContextDTO;
+import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachFieldsDTO;
 import com.springboot.connectmate.enums.ConnectMetricType;
 import com.springboot.connectmate.enums.ResponseField;
 import com.springboot.connectmate.models.Metric;
 import com.springboot.connectmate.services.BedrockService;
+import com.springboot.connectmate.services.EmailService;
+import com.springboot.connectmate.services.SnsService;
+import com.springboot.connectmate.services.ThresholdBreachInsightService;
 import org.springframework.ai.bedrock.titan.BedrockTitanChatClient;
 import org.springframework.ai.chat.ChatResponse;
 import org.springframework.ai.chat.messages.UserMessage;
@@ -15,8 +19,11 @@ import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,10 +31,21 @@ import java.util.regex.Pattern;
 public class BedrockServiceImpl implements BedrockService {
 
     private final BedrockTitanChatClient bedrockTitanChatClient;
+    private final ThresholdBreachInsightService thresholdBreachInsightService;
+    private final EmailService emailService;
+    private final SnsService snsService;
     private final ObjectMapper objectMapper;
 
-    public BedrockServiceImpl(BedrockTitanChatClient bedrockTitanChatClient, ObjectMapper objectMapper) {
+    public BedrockServiceImpl(
+            BedrockTitanChatClient bedrockTitanChatClient,
+            ThresholdBreachInsightService thresholdBreachInsightService,
+            EmailService emailService,
+            SnsService snsService,
+            ObjectMapper objectMapper) {
         this.bedrockTitanChatClient = bedrockTitanChatClient;
+        this.thresholdBreachInsightService = thresholdBreachInsightService;
+        this.emailService = emailService;
+        this.snsService = snsService;
         this.objectMapper = objectMapper;
     }
 
@@ -45,8 +63,48 @@ public class BedrockServiceImpl implements BedrockService {
     }
 
     @Override
-    public void generateInsight(Metric metric, Double metricValue, ConnectMetricType metricType, String typeId) {
+    public void generateInsight(
+            Metric metric,
+            ThresholdBreachFieldsDTO thresholdBreachFields,
+            String typeName) {
 
+        // Construct the KPI Data Context Object
+        KPIDataContextDTO kpiDataContext = new KPIDataContextDTO(
+                metric.getCode().getName(),
+                metric.getCode().getDescription(),
+                metric.getCode().getAdditionalInfo(),
+                typeName,
+                metric.getMinimumThresholdValue(),
+                metric.getMaximumThresholdValue(),
+                metric.getTargetValue(),
+                thresholdBreachFields.getValue(),
+                thresholdBreachFields.getConnectItemType().getName(),
+                thresholdBreachFields.getConnectItemType().getAdditionalInfo()
+
+        );
+
+        // Call the Bedrock service to create an Insight Fields Object with the data context
+        InsightFieldsDTO insightFields = createInsight(kpiDataContext);
+
+        // Save the ThresholdBreachInsight Record to the database
+        thresholdBreachInsightService.generateAndSaveInsight(metric, thresholdBreachFields, insightFields);
+
+        // Send an Alert Email
+        // TODO: Get the email from the user's profile
+        String toEmail = "jose.aram.mendez@gmail.com";
+        String subject = "ConnectMate Alert Notification";
+        String template = "alert-template"; // This corresponds to alert-template.html
+        //To make any changes or to add variables we need to do it in a Map
+        //Depending on what variables are on the template, we pass it in the map
+        //For testing im using sendEmail endpoint
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("title", insightFields.getInsightName());
+        variables.put("message", insightFields.getInsightSummary());
+        emailService.sendAlertEmail(toEmail, subject, template, variables);
+
+        // Send an Alert SNS Message
+        // TODO: Get the phone number from the user's profile
+        snsService.sendSms("+523525231067", "ConnectMate Alert Notification: " + insightFields.getInsightName());
     }
 
     /**
@@ -118,12 +176,15 @@ public class BedrockServiceImpl implements BedrockService {
 
         switch (responseField) {
             case NAME:
+                insight.setInsightName(cleanResponse);
+                /*
                 String name = findTitleName("is \\\"(.*?)\\\"", cleanResponse);
                 if (name != null) {
                     insight.setInsightName(name);
                 } else {
                     insight.setInsightName("No name found");
                 }
+                 */
                 break;
             case SUMMARY:
                 insight.setInsightSummary(cleanResponse);

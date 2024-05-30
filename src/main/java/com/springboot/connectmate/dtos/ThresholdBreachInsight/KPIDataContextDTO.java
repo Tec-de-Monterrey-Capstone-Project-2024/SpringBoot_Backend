@@ -1,77 +1,78 @@
 package com.springboot.connectmate.dtos.ThresholdBreachInsight;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Schema(
         name = "KPIDataContextDTO",
         description = "DTO for the kpi prompt"
 )
 public class KPIDataContextDTO {
+
     @Schema(
-            description = "ID for the metric",
-            example = "1"
-    )
-    private Long id;
-    @Schema(
-            description = "Name for the metric",
-            example = "SERVICE_LEVEL"
+            description = "Name for the metric (name of the code)",
+            example = "Service Level"
     )
     private String metric;
+
     @Schema(
             description = "Description of the metric",
             example = "The percentage of contacts answered within a specified timeframe."
     )
-    private String description;
+    private String metric_description;
+
     @Schema(
-            description = "Indicates if the metric has a positive upside",
-            example = "false"
+            description = "Additional information for the metric",
+            example = "Indicates the speed and efficiency of the call handling process."
     )
-    private boolean hasPositiveUpside;
+    private String metric_additional_info;
+
     @Schema(
-            description = "Indicates if the metric belongs to the user",
-            example = "true"
+            description = "Name of the connect item (instance, queue, agent) to which the metric belongs + id",
+            example = "Agent 1"
     )
-    private boolean belongsToUser;
-    @Schema(
-            description = "Indicates if the metric belongs to the queue",
-            example = "true"
-    )
-    private boolean belongsToQueue;
-    @Schema(
-            description = "Unit of the metric",
-            example = "PERCENT"
-    )
-    private String unit;
-    @Schema(
-            description = "Statistic type of the metric",
-            example = "AVG"
-    )
-    private String statistic;
+    private String belongs_to;
+
     @Schema(
             description = "Minimum threshold value for the metric",
             example = "70"
     )
-    private Double minimumThresholdValue;
+
+    private Double minimum_thresholdValue;
+
     @Schema(
             description = "Maximum threshold value for the metric",
             example = "90"
     )
-    private Double maximumThresholdValue;
+    private Double maximum_thresholdValue;
+
     @Schema(
             description = "Target value for the metric",
             example = "85"
     )
-    private Double targetValue;
+    private Double target_value;
+
     @Schema(
             description = "Current value for the metric",
             example = "65"
     )
-    private Double currentValue;
+    private Double current_value;
+
     @Schema(
-            description = "Indicates if a breach occurred for the metric",
-            example = "true"
+            description = "Type of Metric (Agent, Queue, Instance)",
+            example = "2021-08-25T10:15:30"
     )
-    private boolean breachOccurred;
+    private String metric_type;
+
+    @Schema(
+            description = "Additional information for the metric ()",
+            example = "The percentage of contacts answered within a specified timeframe."
+    )
+    private String metric_type_additional_info;
+
 }

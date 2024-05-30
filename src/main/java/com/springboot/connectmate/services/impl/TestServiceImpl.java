@@ -39,7 +39,9 @@ public class TestServiceImpl implements TestService {
     }
 
     private KPIDataContextDTO generateRandomKpiDataDTO(Long id) {
+        /*
         KPIDataContextDTO dto = new KPIDataContextDTO();
+
         dto.setId(id);
         dto.setMetric(randomEnum(ConnectMetricCode.class).name());
         dto.setDescription("Randomly generated metric description.");
@@ -53,7 +55,9 @@ public class TestServiceImpl implements TestService {
         dto.setTargetValue(random.nextDouble(50) + 75);
         dto.setCurrentValue(random.nextDouble(50) + 60);
         dto.setBreachOccurred(random.nextBoolean());
-        return dto;
+
+         */
+        return new KPIDataContextDTO();
     }
 
     private <T extends Enum<?>> T randomEnum(Class<T> enumClass) {

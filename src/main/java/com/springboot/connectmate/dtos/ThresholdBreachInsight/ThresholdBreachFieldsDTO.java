@@ -2,11 +2,13 @@ package com.springboot.connectmate.dtos.ThresholdBreachInsight;
 
 import com.springboot.connectmate.enums.ConnectMetricType;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Data
+@AllArgsConstructor
 @Schema(
         name = "ThresholdBreachFieldsDTO",
         description = "DTO for the Threshold Breach Fields"
