@@ -1,6 +1,6 @@
 package com.springboot.connectmate.controllers;
 
-
+import com.corundumstudio.socketio.SocketIOClient;
 import com.springboot.connectmate.dtos.ThresholdBreachInsight.InsightDTO;
 import com.springboot.connectmate.dtos.ThresholdBreachInsight.KpiDataDTO;
 import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachInsightDetailDTO;
@@ -9,7 +9,10 @@ import com.springboot.connectmate.enums.ConnectMetricType;
 import com.springboot.connectmate.enums.*;
 import com.springboot.connectmate.models.ThresholdBreachInsight;
 import com.springboot.connectmate.services.BedrockService;
+import com.springboot.connectmate.services.SocketService;
 import com.springboot.connectmate.services.ThresholdBreachInsightService;
+import io.socket.client.IO;
+import io.socket.client.Socket;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
@@ -31,11 +35,20 @@ import java.util.Map;
 public class ThresholdBreachInsightController {
 
     private final ThresholdBreachInsightService thresholdBreachInsightService;
+
+    private final SocketService socketService;
+
     private final BedrockService bedrockService;
 
+    private final Socket socketClient = IO.socket(URI.create("ws://localhost:8085?connectItemType=INSTANCE&username=Server"));
+
+
     @Autowired
-    public ThresholdBreachInsightController(ThresholdBreachInsightService thresholdBreachInsightService, BedrockService bedrockService) {
+    public ThresholdBreachInsightController(ThresholdBreachInsightService thresholdBreachInsightService,
+                                            SocketService socketService,
+                                            BedrockService bedrockService) {
         this.thresholdBreachInsightService = thresholdBreachInsightService;
+        this.socketService = socketService;
         this.bedrockService = bedrockService;
     }
     @Operation(
@@ -76,8 +89,8 @@ public class ThresholdBreachInsightController {
         dto.setInsightImpact(insight.getInsightImpact());
         dto.setInsightPrevention(insight.getInsightPrevention());
 
-
         ThresholdBreachInsight savedInsight = thresholdBreachInsightService.generateAndSaveInsight(dto, insight);
+        socketService.sendInsight((SocketIOClient) socketClient, savedInsight);
 
         return ResponseEntity.ok("Insight created successfully");
     }
@@ -149,9 +162,10 @@ public class ThresholdBreachInsightController {
 
     @CrossOrigin
     @GetMapping("/status/{metricType}")
-    public ResponseEntity<List<ThresholdBreachInsightDetailDTO>> getInsights(
+    public ResponseEntity<List<ThresholdBreachInsightGenericDTO>> getInsights(
             @PathVariable(name = "metricType") ConnectMetricType metricType
     ){
+
         return ResponseEntity.ok(thresholdBreachInsightService.getInsightsByItemType(metricType));
     }
     

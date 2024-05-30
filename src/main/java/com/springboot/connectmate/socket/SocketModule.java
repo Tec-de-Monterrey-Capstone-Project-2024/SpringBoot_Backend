@@ -23,13 +23,13 @@ public class SocketModule {
 
         server.addConnectListener(this.onConnected());
         server.addDisconnectListener(this.onDisconnected());
-        server.addEventListener("new_insight", ThresholdBreachInsight.class, this.onChatReceived());
+        server.addEventListener("add_insight", ThresholdBreachInsight.class, this.onChatReceived());
     }
 
     private DataListener<ThresholdBreachInsight> onChatReceived() {
         return (senderClient, data, ackSender) -> {
             log.info(data.toString());
-            socketService.saveInsight(senderClient, data);
+            senderClient.getNamespace().getBroadcastOperations().sendEvent("add_insight", data);
         };
     }
 
