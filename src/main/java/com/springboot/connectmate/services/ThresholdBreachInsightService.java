@@ -15,6 +15,7 @@ public interface ThresholdBreachInsightService {
     List<ThresholdBreachInsightDetailDTO> getInsightsByStatus(Status status);
     List<ThresholdBreachInsightDetailDTO> getInsightsByConnectItemId(String connectItemId);
     List<ThresholdBreachInsightDetailDTO> getInsightsByItemType(ConnectMetricType connectItemType);
+    ThresholdBreachInsight saveInsight(ThresholdBreachInsightDetailDTO insight);
+    ThresholdBreachInsight saveInsight(ThresholdBreachInsight insight);
     String updateStatus(Long id, Status status);
-
 }

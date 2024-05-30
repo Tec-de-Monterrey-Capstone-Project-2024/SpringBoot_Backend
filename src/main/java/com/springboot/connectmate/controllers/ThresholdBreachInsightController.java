@@ -83,4 +83,12 @@ public class ThresholdBreachInsightController {
         String updatedInsight = thresholdBreachInsightService.updateStatus(thresholdId, approvedStatus);
         return ResponseEntity.ok(updatedInsight);
     }
+
+    @CrossOrigin
+    @GetMapping("/status/{metricType}")
+    public ResponseEntity<List<ThresholdBreachInsightDetailDTO>> getInsights(
+            @PathVariable(name = "metricType") ConnectMetricType metricType
+    ){
+        return ResponseEntity.ok(thresholdBreachInsightService.getInsightsByItemType(metricType));
+    }
 }

@@ -79,4 +79,14 @@ public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsight
         thresholdBreachInsightRepository.save(insight);
         return "Status updated successfully";
     }
+
+    public ThresholdBreachInsight saveInsight(ThresholdBreachInsightDetailDTO insightDTO){
+        ThresholdBreachInsight insight = mapper.map(insightDTO, ThresholdBreachInsight.class);
+
+        return thresholdBreachInsightRepository.save(insight);
+    }
+
+    public ThresholdBreachInsight saveInsight(ThresholdBreachInsight insight){
+        return thresholdBreachInsightRepository.save(insight);
+    }
 }
