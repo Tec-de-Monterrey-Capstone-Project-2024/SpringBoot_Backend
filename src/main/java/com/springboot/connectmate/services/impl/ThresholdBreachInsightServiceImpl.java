@@ -123,13 +123,4 @@ public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsight
         return "Status updated successfully";
     }
 
-    @Override
-    public List<ThresholdBreachInsightDetailDTO> getInsightsByItemType(ConnectMetricType connectItemType) {
-        List<ThresholdBreachInsight> insights = thresholdBreachInsightRepository.findByConnectItemType(connectItemType);
-        return insights.stream()
-                .map(insight -> mapper.map(insight, ThresholdBreachInsightDetailDTO.class))
-                .collect(Collectors.toList());
-    }
-
-
 }
