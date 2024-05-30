@@ -2,6 +2,7 @@ package com.springboot.connectmate.services.impl;
 
 import com.springboot.connectmate.dtos.ThresholdBreachInsight.InsightDTO;
 import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachInsightDetailDTO;
+import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachInsightGenericDTO;
 import com.springboot.connectmate.enums.ConnectMetricType;
 import com.springboot.connectmate.enums.Status;
 import com.springboot.connectmate.exceptions.ResourceNotFoundException;
@@ -15,7 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -64,35 +67,51 @@ public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsight
     }
 
     @Override
-    public List<ThresholdBreachInsightDetailDTO> getAllInsights() {
+    public List<ThresholdBreachInsightGenericDTO> getAllInsights() {
         List<ThresholdBreachInsight> insights = thresholdBreachInsightRepository.findAll();
         return insights.stream()
-                .map(insight -> mapper.map(insight, ThresholdBreachInsightDetailDTO.class))
+                .map(insight -> mapper.map(insight, ThresholdBreachInsightGenericDTO.class))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<ThresholdBreachInsightDetailDTO> getInsightsByStatus(Status status) {
+    public List<ThresholdBreachInsightGenericDTO> getInsightsByStatus(Status status) {
         List<ThresholdBreachInsight> insights = thresholdBreachInsightRepository.findByStatus(status);
         return insights.stream()
-                .map(insight -> mapper.map(insight, ThresholdBreachInsightDetailDTO.class))
+                .map(insight -> mapper.map(insight, ThresholdBreachInsightGenericDTO.class))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<ThresholdBreachInsightDetailDTO> getInsightsByConnectItemId(String connectItemId) {
+    public List<ThresholdBreachInsightGenericDTO> getInsightsByConnectItemId(String connectItemId) {
         List<ThresholdBreachInsight> insights = thresholdBreachInsightRepository.findByConnectItemId(connectItemId);
         return insights.stream()
-                .map(insight -> mapper.map(insight, ThresholdBreachInsightDetailDTO.class))
+                .map(insight -> mapper.map(insight, ThresholdBreachInsightGenericDTO.class))
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public List<ThresholdBreachInsightDetailDTO> getInsightsByItemType(ConnectMetricType connectItemType) {
+    @Override  
+    public List<ThresholdBreachInsightGenericDTO> getInsightsByItemType(ConnectMetricType connectItemType) {
         List<ThresholdBreachInsight> insights = thresholdBreachInsightRepository.findByConnectItemType(connectItemType);
         return insights.stream()
-                .map(insight -> mapper.map(insight, ThresholdBreachInsightDetailDTO.class))
+                .map(insight -> mapper.map(insight, ThresholdBreachInsightGenericDTO.class))
                 .collect(Collectors.toList());
+    }
+  
+    @Override
+    public ThresholdBreachInsightDetailDTO getInsightById(Long id) {
+        ThresholdBreachInsight insight = thresholdBreachInsightRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("ThresholdBreachInsight", "id", id));
+        return mapper.map(insight, ThresholdBreachInsightDetailDTO.class);
+    }
+  
+    @Override
+    public Map<Status, List<ThresholdBreachInsightGenericDTO>> getInsightsByStatus() {
+        return Arrays.stream(Status.values())
+                .collect(Collectors.toMap(
+                        status -> status,
+                        this::getInsightsByStatus
+                ));
     }
 
     @Override
@@ -103,4 +122,5 @@ public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsight
         thresholdBreachInsightRepository.save(insight);
         return "Status updated successfully";
     }
+
 }
