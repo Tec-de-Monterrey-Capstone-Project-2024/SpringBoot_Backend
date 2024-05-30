@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/threshold-breach-insights")
@@ -81,30 +82,40 @@ public class ThresholdBreachInsightController {
         return ResponseEntity.ok("Insight created successfully");
     }
 
-    @Operation(summary = "Get insights by status, connectItemId, or itemType", description = "Retrieve insights based on the provided parameters. If no parameters are provided, all insights are returned.")
+    @Operation(summary = "Get insights by type or type id", description = "Retrieve insights based on the provided parameters. If no parameters are provided, all insights are returned.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successful operation"),
-            @ApiResponse(responseCode = "400", description = "Invalid parameter"),
+            @ApiResponse(responseCode = "200", description = "Insights retrieved successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid status value"),
+            @ApiResponse(responseCode = "404", description = "Status not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping
     public ResponseEntity<List<ThresholdBreachInsightGenericDTO>> getInsights(
-            @RequestParam(name = "status", required = false) Status status,
             @RequestParam(name = "connectItemId", required = false) String connectItemId,
             @RequestParam(name = "itemType", required = false) ConnectMetricType itemType) {
 
 
-        if (status != null)
-            return ResponseEntity.ok(thresholdBreachInsightService.getInsightsByStatus(status));
-        else if (connectItemId != null)
+        if (connectItemId != null)
             return ResponseEntity.ok(thresholdBreachInsightService.getInsightsByConnectItemId(connectItemId));
         else if (itemType != null)
             return ResponseEntity.ok(thresholdBreachInsightService.getInsightsByItemType(itemType));
         else
             return ResponseEntity.ok(thresholdBreachInsightService.getAllInsights());
-
     }
 
+    @Operation(summary = "Get insights by status", description = "Retrieve insights based on their status type")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful operation"),
+            @ApiResponse(responseCode = "400", description = "Invalid parameter"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    @GetMapping("/by-status")
+    public ResponseEntity< Map<Status, List<ThresholdBreachInsightGenericDTO>> > getInsightsByStatus() {
+        Map<Status, List<ThresholdBreachInsightGenericDTO>> insights =
+                thresholdBreachInsightService.getInsightsByStatus();
+
+        return ResponseEntity.ok(insights);
+    }
 
     @Operation(summary = "Update the status of an insight", description = "Update the status of a ThresholdBreachInsight by its ID.")
     @ApiResponses(value = {

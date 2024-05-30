@@ -16,7 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -94,6 +96,15 @@ public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsight
         return insights.stream()
                 .map(insight -> mapper.map(insight, ThresholdBreachInsightGenericDTO.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Map<Status, List<ThresholdBreachInsightGenericDTO>> getInsightsByStatus() {
+        return Arrays.stream(Status.values())
+                .collect(Collectors.toMap(
+                        status -> status,
+                        this::getInsightsByStatus
+                ));
     }
 
     @Override

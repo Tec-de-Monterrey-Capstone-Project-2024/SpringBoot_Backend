@@ -9,6 +9,7 @@ import com.springboot.connectmate.enums.Status;
 import com.springboot.connectmate.models.Metric;
 
 import java.util.List;
+import java.util.Map;
 
 
 public interface ThresholdBreachInsightService {
@@ -22,6 +23,9 @@ public interface ThresholdBreachInsightService {
     List<ThresholdBreachInsightGenericDTO> getInsightsByStatus(Status status);
     List<ThresholdBreachInsightGenericDTO> getInsightsByConnectItemId(String connectItemId);
     List<ThresholdBreachInsightGenericDTO> getInsightsByItemType(ConnectMetricType connectItemType);
+
+    // Get All Insights by Status
+    Map<Status, List<ThresholdBreachInsightGenericDTO>> getInsightsByStatus();
 
     // Update the status of the insight
     String updateStatus(Long id, Status status);
