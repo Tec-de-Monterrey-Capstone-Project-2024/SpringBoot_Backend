@@ -3,6 +3,8 @@ package com.springboot.connectmate.services.impl;
 import com.amazonaws.services.connect.AmazonConnect;
 import com.amazonaws.services.connect.model.*;
 import com.amazonaws.services.connect.model.Queue;
+import com.springboot.connectmate.dtos.AmazonConnect.*;
+import com.springboot.connectmate.dtos.AmazonConnect.ConnectSecurityProfileDTO;
 import com.springboot.connectmate.services.AmazonConnectService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +27,6 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
         this.mapper = mapper;
     }
 
-
     @Override
     public List<InstanceSummary> listConnectInstances() {
         ListInstancesRequest listInstancesRequest = new ListInstancesRequest();
@@ -43,11 +44,11 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
     }
 
     @Override
-    public List<QueueSummary> listQueues(String instanceId) {
+    public List<ConnectQueueDTO> listQueues(String instanceId) {
         ListQueuesRequest listQueuesRequest = new ListQueuesRequest().withInstanceId(instanceId);
         ListQueuesResult listQueuesResult = amazonConnectClient.listQueues(listQueuesRequest);
         return listQueuesResult.getQueueSummaryList().stream()
-                .map(queue -> mapper.map(queue, QueueSummary.class))
+                .map(queue -> mapper.map(queue, ConnectQueueDTO.class))
                 .collect(Collectors.toList());
     }
 
@@ -88,12 +89,11 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
         return describeUserResult.getUser();
     }
 
-
     @Override
-    public List<UserData> getCurrentUserData(String instanceId) {
+    public List<ConnectCurrentUserDataDTO> getCurrentUserData(String instanceId) {
         UserDataFilters userDataFilters = new UserDataFilters()
                 .withQueues(listQueues(instanceId).stream()
-                        .map(QueueSummary::getId)
+                        .map(ConnectQueueDTO::getId)
                         .collect(Collectors.toList()));
 
         GetCurrentUserDataRequest getCurrentUserDataRequest = new GetCurrentUserDataRequest()
@@ -102,7 +102,25 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
 
         GetCurrentUserDataResult getCurrentUserDataResult = amazonConnectClient.getCurrentUserData(getCurrentUserDataRequest);
 
-        return getCurrentUserDataResult.getUserDataList();
+        return getCurrentUserDataResult.getUserDataList().stream()
+                .map(userData -> {
+                    ConnectCurrentUserDataDTO currentDto = new ConnectCurrentUserDataDTO();
+                    currentDto.setUserId(userData.getUser().getId());
+                    currentDto.setStatusName(userData.getStatus().getStatusName());
+
+                    List<ConnectContactDTO> contactDTOs = userData.getContacts().stream()
+                            .map(contact -> {
+                                ConnectContactDTO contactDTO = new ConnectContactDTO();
+                                contactDTO.setContactId(contact.getContactId());
+                                contactDTO.setQueueId(contact.getQueue().getId());
+                                return contactDTO;
+                            })
+                            .collect(Collectors.toList());
+
+                    currentDto.setContacts(contactDTOs);
+                    return currentDto;
+                })
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -117,6 +135,7 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
     }
 
     // Metric Service Implementations
+    // Not Yet Functional
     @Override
     public List<String> getHistoricalMetrics(String instanceId, String queueId) {
 
@@ -144,8 +163,6 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
         Filters filters = new Filters()
                 .withChannels(Channel.VOICE)
                 .withQueues(queueId);
-        
-
 
         ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
         ZonedDateTime endTime = now.withSecond(0).withNano(0).minusMinutes(now.getMinute() % 5);
@@ -166,7 +183,7 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
     }
 
     @Override
-    public List<String> getHistoricalMetricsV2(String instanceArn, String queueId) {
+    public ConnectQueueMetricDTO getQueueMetrics(String instanceArn, String queueId) {
 
         ThresholdV2 threshold = new ThresholdV2()
                 .withComparison("LT")
@@ -177,15 +194,36 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
                 .withName("SERVICE_LEVEL")
                 .withThreshold(threshold)
         );
+
+        metrics.add(new MetricV2()
+                .withName("ABANDONMENT_RATE")
+        );
+
+        metrics.add(new MetricV2()
+                .withName("AGENT_SCHEDULE_ADHERENCE")
+        );
+
+        metrics.add(new MetricV2()
+                .withName("AVG_HANDLE_TIME")
+        );
+
+        metrics.add(new MetricV2()
+                .withName("AVG_AFTER_CONTACT_WORK_TIME")
+        );
+
+        metrics.add(new MetricV2()
+                .withName("AVG_RESOLUTION_TIME")
+        );
+
+        metrics.add(new MetricV2()
+                .withName("AVG_QUEUE_ANSWER_TIME")
+        );
+
         List<FilterV2> filters = new ArrayList<>();
 
         filters.add( new FilterV2()
                 .withFilterKey("QUEUE")
-                .withFilterValues(Collections.singletonList("f0813607-af92-4a36-91e6-630ababb643c"))
-        );
-        filters.add( new FilterV2()
-                .withFilterKey("AGENT")
-                .withFilterValues(Collections.singletonList("ed1ad50d-2ffc-44ad-a565-71f13ad991a5"))
+                .withFilterValues(Collections.singletonList(queueId))
         );
 
         ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
@@ -193,7 +231,7 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
         ZonedDateTime startTime = endTime.minusHours(23);
 
         GetMetricDataV2Request getMetricDataV2Request = new GetMetricDataV2Request()
-                .withResourceArn("arn:aws:connect:us-east-1:674530197385:instance/7c78bd60-4a9f-40e5-b461-b7a0dfaad848")
+                .withResourceArn(instanceArn)
                 .withMetrics(metrics)
                 .withFilters(filters)
                 .withStartTime(Date.from(startTime.toInstant()))
@@ -202,9 +240,64 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
         GetMetricDataV2Result getMetricDataResult = amazonConnectClient.getMetricDataV2(getMetricDataV2Request);
         System.out.println(getMetricDataResult.toString());
 
-        return getMetricDataResult.getMetricResults().stream()
-                .map(metricResult -> metricResult.toString())
-                .collect(Collectors.toList());
+        ConnectQueueMetricDTO metricsDTO = new ConnectQueueMetricDTO();
+        metricsDTO.setAbandonmentRate(getMetricDataResult.getMetricResults().get(0).getCollections().get(0).getValue());
+        metricsDTO.setAvgHandleTime(getMetricDataResult.getMetricResults().get(0).getCollections().get(1).getValue());
+        metricsDTO.setAvgAfterContactWorkTime(getMetricDataResult.getMetricResults().get(0).getCollections().get(2).getValue());
+        metricsDTO.setAvgResolutionTime(getMetricDataResult.getMetricResults().get(0).getCollections().get(3).getValue());
+        metricsDTO.setAvgQueueAnswerTime(getMetricDataResult.getMetricResults().get(0).getCollections().get(4).getValue());
+        metricsDTO.setServiceLevel(getMetricDataResult.getMetricResults().get(0).getCollections().get(5).getValue());
+        return metricsDTO;
+    }
+
+    @Override
+    public ConnectAgentMetricDTO getAgentMetrics(String instanceArn, String agentId) {
+
+        List<MetricV2> metrics = new ArrayList<>();
+
+        metrics.add(new MetricV2()
+                .withName("ABANDONMENT_RATE")
+        );
+
+        metrics.add(new MetricV2()
+                .withName("AGENT_OCCUPANCY")
+        );
+
+        metrics.add(new MetricV2()
+                .withName("AVG_HANDLE_TIME")
+        );
+
+        metrics.add(new MetricV2()
+                .withName("AVG_AFTER_CONTACT_WORK_TIME")
+        );
+
+        List<FilterV2> filters = new ArrayList<>();
+
+        filters.add(new FilterV2()
+                .withFilterKey("AGENT")
+                .withFilterValues(Collections.singletonList(agentId))
+        );
+
+        ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
+        ZonedDateTime endTime = now.withSecond(0).withNano(0).minusMinutes(now.getMinute() % 5);
+        ZonedDateTime startTime = endTime.minusHours(23);
+
+        GetMetricDataV2Request getMetricDataV2Request = new GetMetricDataV2Request()
+                .withResourceArn(instanceArn)
+                .withMetrics(metrics)
+                .withFilters(filters)
+                .withEndTime(Date.from(endTime.toInstant()))
+                .withStartTime(Date.from(startTime.toInstant()));
+
+        GetMetricDataV2Result getMetricDataResult = amazonConnectClient.getMetricDataV2(getMetricDataV2Request);
+        System.out.println(getMetricDataResult.toString());
+
+        ConnectAgentMetricDTO metricsDTO = new ConnectAgentMetricDTO();
+        metricsDTO.setAbandonmentRate(getMetricDataResult.getMetricResults().get(0).getCollections().get(0).getValue());
+        metricsDTO.setAvgHandleTime(getMetricDataResult.getMetricResults().get(0).getCollections().get(1).getValue());
+        metricsDTO.setAvgAfterContactWorkTime(getMetricDataResult.getMetricResults().get(0).getCollections().get(2).getValue());
+        metricsDTO.setAgentOccupancy(getMetricDataResult.getMetricResults().get(0).getCollections().get(3).getValue());
+        return metricsDTO;
     }
 
     @Override
@@ -215,8 +308,6 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
                 .withName(CurrentMetricName.AGENTS_AVAILABLE)
         );
 
-
-
         GetCurrentMetricDataRequest getCurrentMetricDataRequest = new GetCurrentMetricDataRequest()
                 .withInstanceId(instanceId)
                 .withCurrentMetrics();
@@ -225,5 +316,59 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
         return getCurrentMetricDataResult.getMetricResults().stream()
                 .map(metric-> metric.toString())
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Map<String, ConnectQueueInfoDTO> getQueueUserCounts(String instanceId) {
+        List<ConnectCurrentUserDataDTO> userDataList = getCurrentUserData(instanceId);
+        Map<String, ConnectQueueInfoDTO> queueInfoMap = new HashMap<>();
+
+        List<ConnectQueueDTO> allQueues = listQueues(instanceId);
+        if (allQueues != null) {
+            for (ConnectQueueDTO queue : allQueues) {
+                queueInfoMap.put(queue.getId(), new ConnectQueueInfoDTO());
+            }
+        }
+
+        if (userDataList != null) {
+            for (ConnectCurrentUserDataDTO userData : userDataList) {
+                String userId = userData.getUserId();
+                for (ConnectContactDTO contact : userData.getContacts()) {
+                    String queueId = contact.getQueueId();
+                    queueInfoMap.putIfAbsent(queueId, new ConnectQueueInfoDTO());
+
+                    queueInfoMap.get(queueId).getUsers().add(userId);
+
+                    queueInfoMap.get(queueId).setContactCount(queueInfoMap.get(queueId).getContactCount() + 1);
+                }
+            }
+        }
+
+        return queueInfoMap;
+    }
+
+    public List<ConnectSecurityProfileDTO> getUserSecurityProfileIds (String instanceId, String userId){
+        DescribeUserRequest request = new DescribeUserRequest()
+                .withInstanceId(instanceId)
+                .withUserId(userId);
+
+        DescribeUserResult response = amazonConnectClient.describeUser(request);
+        User user = response.getUser();
+
+        List<String> securityProfileIds = user.getSecurityProfileIds();
+        List<ConnectSecurityProfileDTO> userRoles = new ArrayList<>();
+
+        for (String roleId : securityProfileIds) {
+            DescribeSecurityProfileRequest securityProfileRequest = new DescribeSecurityProfileRequest()
+                    .withInstanceId(instanceId)
+                    .withSecurityProfileId(roleId);
+
+            DescribeSecurityProfileResult securityProfileResult = amazonConnectClient.describeSecurityProfile(securityProfileRequest);
+            SecurityProfile securityProfile = securityProfileResult.getSecurityProfile();
+
+            userRoles.add(mapper.map(securityProfile, ConnectSecurityProfileDTO.class));
+        }
+
+        return userRoles;
     }
 }

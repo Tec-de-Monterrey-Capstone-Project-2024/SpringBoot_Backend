@@ -1,5 +1,7 @@
 package com.springboot.connectmate.controllers;
 
+import com.springboot.connectmate.dtos.AmazonConnect.ConnectAgentMetricDTO;
+import com.springboot.connectmate.dtos.AmazonConnect.ConnectQueueMetricDTO;
 import com.springboot.connectmate.services.AmazonConnectService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -31,19 +33,19 @@ public class ConnectMetricController {
     @ApiResponse(
             responseCode = "200",
             content = @Content(mediaType = "application/json",
-                    array = @ArraySchema(schema = @Schema(implementation = String.class))),
-            description = "List of historical metrics for a given instance fetched successfully."
+                    array = @ArraySchema(schema = @Schema(implementation = ConnectQueueMetricDTO.class))),
+            description = "List of metrics for a given queue and instance fetched successfully."
     )
     @Operation(
-            summary = "Get all historical metrics",
-            description = "Get Amazon Connect historical metrics by instance ID (maximum 24 hours)"
+            summary = "Get all queue metrics of a particular queue.",
+            description = "Get Amazon Connect queue metrics by instance ID and queue ID."
     )
-    @GetMapping("/instances/historical-metrics")
-    public ResponseEntity<List<String>> getHistoricalMetricsV2(
+    @GetMapping("/instances/queue-metrics")
+    public ResponseEntity<ConnectQueueMetricDTO> getQueueMetrics(
             @RequestParam(name = "instanceArn") String instanceArn,
             @RequestParam(name = "queueId") String queueId
     ){
-        return ResponseEntity.ok(amazonConnectService.getHistoricalMetricsV2(instanceArn, queueId));
+        return ResponseEntity.ok(amazonConnectService.getQueueMetrics(instanceArn, queueId));
     }
 
     @ApiResponse(
@@ -73,6 +75,23 @@ public class ConnectMetricController {
     public ResponseEntity<List<String>> getCurrentMetrics(
             @RequestParam(name = "instanceArn") String instanceArn){
         return ResponseEntity.ok(amazonConnectService.getCurrentMetrics(instanceArn));
+    }
+
+    @ApiResponse(
+            responseCode = "200",
+            content = @Content(mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = ConnectAgentMetricDTO.class))),
+            description = "List of metrics for a given instance and agent fetched successfully"
+    )
+    @Operation(
+            summary = "Get all agent metrics",
+            description = "Get Amazon Connect metrics by instanceARN and agentId."
+    )
+    @GetMapping("/instances/agent-metrics")
+    public ResponseEntity<ConnectAgentMetricDTO> getAgentMetrics(
+            @RequestParam(name = "instanceArn") String instanceArn,
+            @RequestParam(name = "agentId") String agentId) {
+        return ResponseEntity.ok(amazonConnectService.getAgentMetrics(instanceArn, agentId));
     }
 
 }

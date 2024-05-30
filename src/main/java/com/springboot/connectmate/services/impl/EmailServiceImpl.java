@@ -5,26 +5,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
-
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
-
-import java.util.Map;
 
 
 @Service
 public class EmailServiceImpl implements EmailService {
+
     private final JavaMailSender mailSender;
-    private final TemplateEngine templateEngine;
 
     @Autowired
-    public EmailServiceImpl(JavaMailSender mailSender, TemplateEngine templateEngine) {
+    public EmailServiceImpl(JavaMailSender mailSender) {
         this.mailSender = mailSender;
-        this.templateEngine = templateEngine;
     }
 
     @Override
@@ -38,6 +29,7 @@ public class EmailServiceImpl implements EmailService {
         mailSender.send(message);
     }
 
+    /*
     @Override
     public void sendAlertEmail(String toEmail, String subject, String template, Map<String, Object> variables) {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
@@ -59,4 +51,5 @@ public class EmailServiceImpl implements EmailService {
             System.out.println("nada se mando alv");
         }
     }
+    */
 }
