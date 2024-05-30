@@ -1,5 +1,6 @@
 package com.springboot.connectmate.services.impl;
 
+import com.springboot.connectmate.dtos.ThresholdBreachInsight.InsightAlertDTO;
 import com.springboot.connectmate.dtos.ThresholdBreachInsight.InsightDTO;
 import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachInsightDetailDTO;
 import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachInsightGenericDTO;
@@ -123,4 +124,12 @@ public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsight
         return "Status updated successfully";
     }
 
+    @Override
+    public List<InsightAlertDTO> getAlerts() {
+        List<ThresholdBreachInsight> insights = thresholdBreachInsightRepository.findAll();
+        return  insights.stream()
+                .map(insight -> mapper.map(insight, InsightAlertDTO.class))
+                .collect(Collectors.toList());
+    }
+    
 }
