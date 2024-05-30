@@ -4,7 +4,7 @@ import com.springboot.connectmate.dtos.ThresholdBreachInsight.InsightAlertDTO;
 import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachInsightGenericDTO;
 import com.springboot.connectmate.models.ThresholdBreachInsight;
 import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachInsightDetailDTO;
-import com.springboot.connectmate.dtos.ThresholdBreachInsight.InsightDTO;
+import com.springboot.connectmate.dtos.ThresholdBreachInsight.InsightFieldsDTO;
 import com.springboot.connectmate.enums.ConnectMetricType;
 import com.springboot.connectmate.enums.Status;
 import com.springboot.connectmate.models.Metric;
@@ -16,7 +16,7 @@ import java.util.Map;
 public interface ThresholdBreachInsightService {
 
     // Internal Use Only
-    ThresholdBreachInsight generateAndSaveInsight(ThresholdBreachInsightDetailDTO dto, InsightDTO insight);
+    ThresholdBreachInsight generateAndSaveInsight(ThresholdBreachInsightDetailDTO dto, InsightFieldsDTO insight);
     ThresholdBreachInsight getInsightByMetricCodeAndConnectItemId(Metric metric, String connectItemId);
 
     // Get Insights (filter also)
