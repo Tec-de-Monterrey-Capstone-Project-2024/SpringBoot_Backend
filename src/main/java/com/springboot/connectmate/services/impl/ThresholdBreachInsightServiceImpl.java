@@ -1,9 +1,6 @@
 package com.springboot.connectmate.services.impl;
 
-import com.springboot.connectmate.dtos.ThresholdBreachInsight.InsightAlertDTO;
-import com.springboot.connectmate.dtos.ThresholdBreachInsight.InsightFieldsDTO;
-import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachInsightDetailDTO;
-import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachInsightGenericDTO;
+import com.springboot.connectmate.dtos.ThresholdBreachInsight.*;
 import com.springboot.connectmate.enums.ConnectMetricType;
 import com.springboot.connectmate.enums.Status;
 import com.springboot.connectmate.exceptions.ResourceNotFoundException;
@@ -42,20 +39,19 @@ public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsight
     }
 
     @Override
-    @Transactional
-    public ThresholdBreachInsight generateAndSaveInsight(ThresholdBreachInsightDetailDTO dto, InsightFieldsDTO insight) {
-        Optional<Metric> metricOpt = metricRepository.findById(dto.getMetricCode());
-        if (!metricOpt.isPresent()) {
-            throw new ResourceNotFoundException("Metric not found with id: " + dto.getMetricCode());
-        }
-        Metric metric = metricOpt.get();
+    public ThresholdBreachInsight generateAndSaveInsight(
+            Metric metric,
+            ThresholdBreachFieldsDTO thresholdBreachData,
+            InsightFieldsDTO insightData) {
 
-        ThresholdBreachInsight thresholdBreachInsight = mapper.map(dto, ThresholdBreachInsight.class);
+        // Map the threshold breach data
+        ThresholdBreachInsight thresholdBreachInsight = mapper.map(thresholdBreachData, ThresholdBreachInsight.class);
+        // Map the insight data
+        mapper.map(insightData, thresholdBreachInsight);
+        // Link the insight to the metric (Foreign Key)
         thresholdBreachInsight.setMetricCode(metric);
-        thresholdBreachInsight.setOccurredAt(dto.getOccurredAt() != null ? LocalDateTime.parse(dto.getOccurredAt()) : LocalDateTime.now());
-        ThresholdBreachInsight savedInsight = thresholdBreachInsightRepository.save(thresholdBreachInsight);
 
-        return savedInsight;
+        return thresholdBreachInsightRepository.save(thresholdBreachInsight);
     }
 
     @Override
