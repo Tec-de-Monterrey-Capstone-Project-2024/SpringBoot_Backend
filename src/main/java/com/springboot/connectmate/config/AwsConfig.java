@@ -12,7 +12,7 @@ public class AwsConfig {
 
     @Bean
     public AmazonSNSClient snsClient() {
-        BasicAWSCredentials awsCreds = new BasicAWSCredentials();
+        BasicAWSCredentials awsCreds = new BasicAWSCredentials("lolazzoo", "lolaazoo");
         return (AmazonSNSClient) AmazonSNSClientBuilder.standard()
                 .withRegion("us-east-1")
                 .withCredentials(new AWSStaticCredentialsProvider(awsCreds))
