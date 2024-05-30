@@ -29,6 +29,7 @@ public class EmailServiceImpl implements EmailService {
         mailSender.send(message);
     }
 
+    /*
     @Override
     public void sendAlertEmail(String toEmail, String subject, String template, Map<String, Object> variables) {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
@@ -50,4 +51,5 @@ public class EmailServiceImpl implements EmailService {
             System.out.println("nada se mando alv");
         }
     }
+    */
 }
