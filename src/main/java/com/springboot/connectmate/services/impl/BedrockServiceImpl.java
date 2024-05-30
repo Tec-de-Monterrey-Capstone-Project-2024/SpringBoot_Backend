@@ -101,6 +101,11 @@ public class BedrockServiceImpl implements BedrockService {
                 .replaceAll("\\t", "")
                 .trim();
 
+        int colonIndex = cleanResponse.indexOf(":");
+        if (colonIndex != -1) {
+            cleanResponse = cleanResponse.substring(colonIndex + 1).trim();
+        }
+
         switch (responseField) {
             case NAME:
                 String name = findTitleName("is \\\"(.*?)\\\"", cleanResponse);
@@ -129,7 +134,7 @@ public class BedrockServiceImpl implements BedrockService {
                 }
                 break;
             case PERFORMANCE:
-                List<String> performance= Arrays.asList("CRITICAL", "UNSATISFACTORY", "BELOW_EXPECTATIONS", "EXCEEDS_EXPECTATIONS", "OUTSTANDING", "PIONEERING");
+                List<String> performance = Arrays.asList("CRITICAL", "UNSATISFACTORY", "BELOW_EXPECTATIONS", "EXCEEDS_EXPECTATIONS", "OUTSTANDING", "PIONEERING");
                 String foundPerformance = findInJson(cleanResponse, performance);
                 if (foundPerformance != null) {
                     insight.setInsightPerformance(foundPerformance);
@@ -148,5 +153,6 @@ public class BedrockServiceImpl implements BedrockService {
                 break;
         }
     }
+
 
 }
