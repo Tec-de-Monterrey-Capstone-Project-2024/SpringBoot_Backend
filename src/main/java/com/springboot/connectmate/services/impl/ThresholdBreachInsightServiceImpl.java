@@ -123,4 +123,19 @@ public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsight
         return "Status updated successfully";
     }
 
+    @Override
+    public List<ThresholdBreachInsightDetailDTO> getAlerts() {
+        List<ThresholdBreachInsight> insights = thresholdBreachInsightRepository.findAll();
+        return insights.stream()
+                .map(insight -> {
+                    ThresholdBreachInsightDetailDTO dto = new ThresholdBreachInsightDetailDTO();
+                    dto.setId(insight.getId());
+                    dto.setMetricCode(insight.getMetricCode().getCode());
+                    dto.setInsightCategory(insight.getInsightCategory());
+                    dto.setConnectItemType(insight.getConnectItemType());
+                    dto.setOccurredAt(insight.getOccurredAt().toString());
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }
 }

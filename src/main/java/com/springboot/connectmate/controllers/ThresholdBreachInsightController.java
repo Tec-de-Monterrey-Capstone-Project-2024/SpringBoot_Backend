@@ -159,4 +159,15 @@ public class ThresholdBreachInsightController {
         return ResponseEntity.ok(insight);
     }
 
+    @Operation(summary = "Get all alerts", description = "Retrieve all alerts with specific details.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Alerts retrieved successfully"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    @GetMapping("/alerts")
+    public ResponseEntity<List<ThresholdBreachInsightDetailDTO>> getAlerts() {
+        List<ThresholdBreachInsightDetailDTO> alerts = thresholdBreachInsightService.getAlerts();
+        return ResponseEntity.ok(alerts);
+    }
+
 }

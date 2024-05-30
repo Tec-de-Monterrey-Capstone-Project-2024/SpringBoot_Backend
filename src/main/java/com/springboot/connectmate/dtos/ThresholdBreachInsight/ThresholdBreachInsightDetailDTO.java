@@ -1,11 +1,13 @@
 package com.springboot.connectmate.dtos.ThresholdBreachInsight;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.springboot.connectmate.enums.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Schema(
         name = "ThresholdBreachInsightDetailDTO",
         description = "DTO for Threshold Breach Insight Detail"

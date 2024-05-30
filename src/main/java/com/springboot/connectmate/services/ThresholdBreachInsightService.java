@@ -30,4 +30,7 @@ public interface ThresholdBreachInsightService {
 
     // Update the status of the insight
     String updateStatus(Long id, Status status);
+
+    // Get All Alerts
+    List<ThresholdBreachInsightDetailDTO> getAlerts();
 }
