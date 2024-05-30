@@ -1,10 +1,7 @@
 package com.springboot.connectmate.controllers;
 
 
-import com.springboot.connectmate.dtos.ThresholdBreachInsight.InsightDTO;
-import com.springboot.connectmate.dtos.ThresholdBreachInsight.KpiDataDTO;
-import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachInsightDetailDTO;
-import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachInsightGenericDTO;
+import com.springboot.connectmate.dtos.ThresholdBreachInsight.*;
 import com.springboot.connectmate.enums.ConnectMetricType;
 import com.springboot.connectmate.enums.*;
 import com.springboot.connectmate.models.ThresholdBreachInsight;
@@ -165,8 +162,8 @@ public class ThresholdBreachInsightController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping("/alerts")
-    public ResponseEntity<List<ThresholdBreachInsightDetailDTO>> getAlerts() {
-        List<ThresholdBreachInsightDetailDTO> alerts = thresholdBreachInsightService.getAlerts();
+    public ResponseEntity<List<InsightAlertDTO>> getAlerts() {
+        List<InsightAlertDTO> alerts = thresholdBreachInsightService.getAlerts();
         return ResponseEntity.ok(alerts);
     }
 
