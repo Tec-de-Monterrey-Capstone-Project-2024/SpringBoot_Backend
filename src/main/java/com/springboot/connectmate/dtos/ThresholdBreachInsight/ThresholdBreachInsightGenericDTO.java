@@ -30,5 +30,16 @@ public class ThresholdBreachInsightGenericDTO {
     )
     private String insightSummary;
 
+    @Schema(
+            description = "Severity level of the insight",
+            examples = {"LOW", "MEDIUM", "HIGH",  "CRITICAL", "UNKNOWN"}
+    )
+    private InsightSeverity insightSeverity;
+
+    @Schema(
+            description = "Status of the insight",
+            examples = {"TO_DO", "IN_PROGRESS", "DONE"}
+    )
+    private Status status;
 
 }
