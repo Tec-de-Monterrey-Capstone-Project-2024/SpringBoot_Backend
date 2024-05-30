@@ -56,7 +56,7 @@ public class EmailServiceImpl implements EmailService {
             mailSender.send(mimeMessage);
         } catch (MessagingException e) {
             e.printStackTrace(); //handle exception, sí sí era default comment ok meper
-            System.out.println("nada se mando alv");
+            System.out.println("Error sending email");
         }
     }
 }
