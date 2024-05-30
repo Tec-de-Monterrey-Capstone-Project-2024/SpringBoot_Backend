@@ -18,6 +18,7 @@ public class EmailController {
 
     @GetMapping("/sendEmail")
     public void sendEmail() {
+        /*
         String toEmail = "Jose.aram.mendez@gmail.com";
         String subject = "Alert Notification";
         String template = "alert-template"; // This corresponds to alert-template.html
@@ -29,5 +30,7 @@ public class EmailController {
         variables.put("message", "This is an urgent alert message. (Falta mejorar el css)");
 
         emailService.sendAlertEmail(toEmail, subject, template, variables);
+
+        */
     }
 }
