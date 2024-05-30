@@ -46,14 +46,14 @@ public class ThresholdBreachInsightController {
 
     @PostMapping("/generateAndSaveInsight")
     public ResponseEntity<String> generateAndSaveInsight(
-            @RequestBody KpiDataDTO kpiDataDTO,
+            @RequestBody KPIDataContextDTO KPIDataContextDTO,
             @RequestParam Double metricValue,
             @RequestParam ConnectMetricType metricType,
             @RequestParam String typeId,
             @RequestParam ConnectMetricCode metricCode,
             @RequestParam Status status) {
 
-        InsightDTO insight = bedrockService.createInsight(kpiDataDTO);
+        InsightFieldsDTO insight = bedrockService.createInsight(KPIDataContextDTO);
 
 
         ThresholdBreachInsightDetailDTO dto = new ThresholdBreachInsightDetailDTO();

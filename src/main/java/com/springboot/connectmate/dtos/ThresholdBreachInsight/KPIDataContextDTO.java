@@ -5,10 +5,10 @@ import lombok.Data;
 
 @Data
 @Schema(
-        name = "KpiDataDTO",
+        name = "KPIDataContextDTO",
         description = "DTO for the kpi prompt"
 )
-public class KpiDataDTO {
+public class KPIDataContextDTO {
     @Schema(
             description = "ID for the metric",
             example = "1"

@@ -2,11 +2,11 @@ package com.springboot.connectmate.services.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.springboot.connectmate.dtos.ThresholdBreachInsight.InsightFieldsDTO;
+import com.springboot.connectmate.dtos.ThresholdBreachInsight.KPIDataContextDTO;
 import com.springboot.connectmate.enums.ConnectMetricType;
 import com.springboot.connectmate.enums.ResponseField;
 import com.springboot.connectmate.models.Metric;
-import com.springboot.connectmate.dtos.ThresholdBreachInsight.InsightDTO;
-import com.springboot.connectmate.dtos.ThresholdBreachInsight.KpiDataDTO;
 import com.springboot.connectmate.services.BedrockService;
 import org.springframework.ai.bedrock.titan.BedrockTitanChatClient;
 import org.springframework.ai.chat.ChatResponse;
@@ -24,9 +24,11 @@ import java.util.regex.Pattern;
 public class BedrockServiceImpl implements BedrockService {
 
     private final BedrockTitanChatClient bedrockTitanChatClient;
+    private final ObjectMapper objectMapper;
 
-    public BedrockServiceImpl(BedrockTitanChatClient bedrockTitanChatClient) {
+    public BedrockServiceImpl(BedrockTitanChatClient bedrockTitanChatClient, ObjectMapper objectMapper) {
         this.bedrockTitanChatClient = bedrockTitanChatClient;
+        this.objectMapper = objectMapper;
     }
 
 
@@ -47,32 +49,35 @@ public class BedrockServiceImpl implements BedrockService {
 
     }
 
+    /**
+     * Creates an Insight Fields Object by calling the Bedrock service with the KPI Data Context
+     */
     @Override
-    public InsightDTO createInsight(KpiDataDTO kpiDataDTO) {
-        String kpiDataJson = generateKpiDataJson(kpiDataDTO);
-        InsightDTO insight = new InsightDTO();
+    public InsightFieldsDTO createInsight(KPIDataContextDTO dataContext) {
+        // Map the KPI Data Context Object to a JSON string
+        String jsonDataContext;
+        try {
+            jsonDataContext = objectMapper.writeValueAsString(dataContext);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Error converting KPI Data to JSON", e);
+        }
 
+        // New InsightFieldsDTO object to store the response from the Bedrock service
+        InsightFieldsDTO insight = new InsightFieldsDTO();
+
+        // Iterate through the ResponseField enum to call the Bedrock service with each field and its corresponding prompt
         for (ResponseField responseField : ResponseField.values()) {
-            String response = callBedrockService(responseField.getPrompt(), kpiDataJson);
+            // Call the Bedrock service with the constructed message (prompt + KPI Data Context)
+            String response = generate(responseField.getPrompt() + " " + jsonDataContext);
+            // Populate the InsightFieldsDTO object with the response
             populateInsight(insight, responseField, response);
         }
         return insight;
     }
 
-    private String generateKpiDataJson(KpiDataDTO kpiDataDTO) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            return objectMapper.writeValueAsString(kpiDataDTO);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Error al convertir KPI Data a JSON", e);
-        }
-    }
-
-    private String callBedrockService(String prompt, String kpiDataJson) {
-        String message = prompt + " " + kpiDataJson;
-        return generate(message);
-    }
-
+    /**
+     * Finds the first word in the input string that matches the pattern
+     */
     private String findTitleName(String patternString, String input) {
         Pattern pattern = Pattern.compile(patternString);
         Matcher matcher = pattern.matcher(input);
@@ -84,6 +89,9 @@ public class BedrockServiceImpl implements BedrockService {
         }
     }
 
+    /**
+     * Finds the first word in the list that is contained in the JSON string
+     */
     private String findInJson(String json, List<String> words) {
         for (String word : words) {
             if (json.contains(word)) {
@@ -93,7 +101,8 @@ public class BedrockServiceImpl implements BedrockService {
         return null;
     }
 
-    private void populateInsight(InsightDTO insight, ResponseField responseField, String response) {
+    private void populateInsight(InsightFieldsDTO insight, ResponseField responseField, String response) {
+        // Clean the response string by removing unnecessary characters
         String cleanResponse = response.replaceAll("Generation\\{assistantMessage=AssistantMessage\\{content='", "")
                 .replaceAll("', properties=\\{\\}, messageType=ASSISTANT\\}, chatGenerationMetadata=null\\}", "")
                 .replaceAll("\\r", "")
@@ -101,6 +110,7 @@ public class BedrockServiceImpl implements BedrockService {
                 .replaceAll("\\t", "")
                 .trim();
 
+        // Remove the field name or any other introductory text from the response
         int colonIndex = cleanResponse.indexOf(":");
         if (colonIndex != -1) {
             cleanResponse = cleanResponse.substring(colonIndex + 1).trim();

@@ -1,7 +1,7 @@
 package com.springboot.connectmate.services.impl;
 import com.amazonaws.services.connect.model.Statistic;
 import com.amazonaws.services.connect.model.Unit;
-import com.springboot.connectmate.dtos.ThresholdBreachInsight.KpiDataDTO;
+import com.springboot.connectmate.dtos.ThresholdBreachInsight.KPIDataContextDTO;
 import com.springboot.connectmate.enums.ConnectMetricCode;
 import com.springboot.connectmate.enums.ConnectMetricType;
 import com.springboot.connectmate.enums.Status;
@@ -28,18 +28,18 @@ public class TestServiceImpl implements TestService {
         String baseUrl = "http://localhost:8080/api/threshold-breach-insights/generateAndSaveInsight";
 
         for (long i = 1; i <= 50; i++) {
-            KpiDataDTO kpiDataDTO = generateRandomKpiDataDTO(i);
+            KPIDataContextDTO KPIDataContextDTO = generateRandomKpiDataDTO(i);
 
             double metricValue = (double) random.nextInt(1000);
 
             sendRequest(baseUrl, metricValue, randomEnum(ConnectMetricType.class).name(),
                     String.valueOf(random.nextInt(1000)), randomEnum(ConnectMetricCode.class).name(),
-                    randomEnum(Status.class).name(), kpiDataDTO);
+                    randomEnum(Status.class).name(), KPIDataContextDTO);
         }
     }
 
-    private KpiDataDTO generateRandomKpiDataDTO(Long id) {
-        KpiDataDTO dto = new KpiDataDTO();
+    private KPIDataContextDTO generateRandomKpiDataDTO(Long id) {
+        KPIDataContextDTO dto = new KPIDataContextDTO();
         dto.setId(id);
         dto.setMetric(randomEnum(ConnectMetricCode.class).name());
         dto.setDescription("Randomly generated metric description.");
@@ -61,11 +61,11 @@ public class TestServiceImpl implements TestService {
         return enumClass.getEnumConstants()[x];
     }
 
-    private void sendRequest(String url, Double metricValue, String metricType, String typeId, String metricCode, String status, KpiDataDTO kpiDataDTO) {
+    private void sendRequest(String url, Double metricValue, String metricType, String typeId, String metricCode, String status, KPIDataContextDTO KPIDataContextDTO) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<KpiDataDTO> entity = new HttpEntity<>(kpiDataDTO, headers);
+        HttpEntity<KPIDataContextDTO> entity = new HttpEntity<>(KPIDataContextDTO, headers);
 
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(url)
                 .queryParam("metricValue", metricValue)

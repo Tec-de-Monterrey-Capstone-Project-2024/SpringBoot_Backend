@@ -1,7 +1,7 @@
 package com.springboot.connectmate.services.impl;
 
 import com.springboot.connectmate.dtos.ThresholdBreachInsight.InsightAlertDTO;
-import com.springboot.connectmate.dtos.ThresholdBreachInsight.InsightDTO;
+import com.springboot.connectmate.dtos.ThresholdBreachInsight.InsightFieldsDTO;
 import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachInsightDetailDTO;
 import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachInsightGenericDTO;
 import com.springboot.connectmate.enums.ConnectMetricType;
@@ -43,7 +43,7 @@ public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsight
 
     @Override
     @Transactional
-    public ThresholdBreachInsight generateAndSaveInsight(ThresholdBreachInsightDetailDTO dto, InsightDTO insight) {
+    public ThresholdBreachInsight generateAndSaveInsight(ThresholdBreachInsightDetailDTO dto, InsightFieldsDTO insight) {
         Optional<Metric> metricOpt = metricRepository.findById(dto.getMetricCode());
         if (!metricOpt.isPresent()) {
             throw new ResourceNotFoundException("Metric not found with id: " + dto.getMetricCode());
