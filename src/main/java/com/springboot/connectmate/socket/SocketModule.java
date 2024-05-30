@@ -5,7 +5,7 @@ import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
 import com.corundumstudio.socketio.listener.DisconnectListener;
 import com.springboot.connectmate.models.ThresholdBreachInsight;
-import com.springboot.connectmate.services.SocketService;
+import com.springboot.connectmate.services.impl.SocketServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -15,9 +15,9 @@ import java.util.stream.Collectors;
 @Component
 public class SocketModule {
     private final SocketIOServer server;
-    private final SocketService socketService;
+    private final SocketServiceImpl socketService;
 
-    public SocketModule(SocketIOServer server, SocketService socketService){
+    public SocketModule(SocketIOServer server, SocketServiceImpl socketService){
         this.server = server;
         this.socketService = socketService;
 

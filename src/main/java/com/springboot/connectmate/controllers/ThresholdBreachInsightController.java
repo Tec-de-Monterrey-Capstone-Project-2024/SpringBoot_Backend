@@ -9,7 +9,7 @@ import com.springboot.connectmate.enums.ConnectMetricType;
 import com.springboot.connectmate.enums.*;
 import com.springboot.connectmate.models.ThresholdBreachInsight;
 import com.springboot.connectmate.services.BedrockService;
-import com.springboot.connectmate.services.SocketService;
+import com.springboot.connectmate.services.impl.SocketServiceImpl;
 import com.springboot.connectmate.services.ThresholdBreachInsightService;
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -36,20 +36,21 @@ public class ThresholdBreachInsightController {
 
     private final ThresholdBreachInsightService thresholdBreachInsightService;
 
-    private final SocketService socketService;
+    private final SocketServiceImpl socketService;
 
     private final BedrockService bedrockService;
 
-    private final Socket socketClient = IO.socket(URI.create("ws://localhost:8085?connectItemType=INSTANCE&username=Server"));
+    private final Socket socketClient;
 
 
     @Autowired
     public ThresholdBreachInsightController(ThresholdBreachInsightService thresholdBreachInsightService,
-                                            SocketService socketService,
+                                            SocketServiceImpl socketService,
                                             BedrockService bedrockService) {
         this.thresholdBreachInsightService = thresholdBreachInsightService;
         this.socketService = socketService;
         this.bedrockService = bedrockService;
+        this.socketClient = IO.socket(URI.create("ws://localhost:8085?connectItemType=INSTANCE&username=Server"));
     }
     @Operation(
             summary = "Creates a ThresholdBreachInsight record",
@@ -70,7 +71,6 @@ public class ThresholdBreachInsightController {
             @RequestParam Status status) {
 
         InsightDTO insight = bedrockService.createInsight(kpiDataDTO);
-
 
         ThresholdBreachInsightDetailDTO dto = new ThresholdBreachInsightDetailDTO();
         dto.setValue(metricValue);
