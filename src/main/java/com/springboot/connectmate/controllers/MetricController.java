@@ -36,15 +36,17 @@ public class MetricController {
         return ResponseEntity.ok(metrics);
     }
 
+    @Operation(summary = "Get nne metric", description = "Retrieve one metrics")
+    @ApiResponse(responseCode = "200", description = "Successful operation")
     @GetMapping("/{code}")
     public ResponseEntity<MetricDTO> getMetric(@PathVariable ConnectMetricCode code) {
         return ResponseEntity.ok(metricService.getConnectMateMetricByCode(code));
     }
 
-
-
-    @PostMapping("/setThresholdsAndTarget")
-    public ResponseEntity<MetricDTO> setThresholdsAndTarget(@RequestParam ConnectMetricCode code,
+    @Operation(summary = "Set thresholds and target", description = "Set thresholds and target")
+    @ApiResponse(responseCode = "200", description = "Successful operation")
+    @PostMapping("/{code}/setThresholdsAndTarget")
+    public ResponseEntity<MetricDTO> setThresholdsAndTarget(@PathVariable(name = "code") ConnectMetricCode code,
                                                          @RequestParam(required = false) Double minThreshold,
                                                          @RequestParam(required = false) Double maxThreshold,
                                                          @RequestParam(required = false) Double targetValue) {

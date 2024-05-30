@@ -1,10 +1,7 @@
 package com.springboot.connectmate.controllers;
 
 import com.corundumstudio.socketio.SocketIOClient;
-import com.springboot.connectmate.dtos.ThresholdBreachInsight.InsightDTO;
-import com.springboot.connectmate.dtos.ThresholdBreachInsight.KpiDataDTO;
-import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachInsightDetailDTO;
-import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachInsightGenericDTO;
+import com.springboot.connectmate.dtos.ThresholdBreachInsight.*;
 import com.springboot.connectmate.enums.ConnectMetricType;
 import com.springboot.connectmate.enums.*;
 import com.springboot.connectmate.models.ThresholdBreachInsight;
@@ -179,6 +176,17 @@ public class ThresholdBreachInsightController {
     public ResponseEntity<ThresholdBreachInsightDetailDTO> getInsightById(@PathVariable Long id) {
         ThresholdBreachInsightDetailDTO insight = thresholdBreachInsightService.getInsightById(id);
         return ResponseEntity.ok(insight);
+    }
+
+    @Operation(summary = "Get all alerts", description = "Retrieve all alerts with specific details.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Alerts retrieved successfully"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    @GetMapping("/alerts")
+    public ResponseEntity<List<InsightAlertDTO>> getAlerts() {
+        List<InsightAlertDTO> alerts = thresholdBreachInsightService.getAlerts();
+        return ResponseEntity.ok(alerts);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.springboot.connectmate.services;
 
+import com.springboot.connectmate.dtos.ThresholdBreachInsight.InsightAlertDTO;
 import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachInsightGenericDTO;
 import com.springboot.connectmate.models.ThresholdBreachInsight;
 import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachInsightDetailDTO;
@@ -33,4 +34,7 @@ public interface ThresholdBreachInsightService {
 
     // Update the status of the insight
     String updateStatus(Long id, Status status);
+
+    // Get All Alerts
+    List<InsightAlertDTO> getAlerts();
 }
