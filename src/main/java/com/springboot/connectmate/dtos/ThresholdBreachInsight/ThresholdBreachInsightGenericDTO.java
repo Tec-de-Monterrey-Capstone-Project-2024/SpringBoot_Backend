@@ -1,5 +1,7 @@
 package com.springboot.connectmate.dtos.ThresholdBreachInsight;
 
+import com.springboot.connectmate.enums.InsightSeverity;
+import com.springboot.connectmate.enums.Status;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
