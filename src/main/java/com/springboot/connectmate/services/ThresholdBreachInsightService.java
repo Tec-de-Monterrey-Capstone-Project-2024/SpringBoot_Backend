@@ -1,5 +1,6 @@
 package com.springboot.connectmate.services;
 
+import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachInsightGenericDTO;
 import com.springboot.connectmate.models.ThresholdBreachInsight;
 import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachInsightDetailDTO;
 import com.springboot.connectmate.dtos.ThresholdBreachInsight.InsightDTO;
@@ -17,10 +18,10 @@ public interface ThresholdBreachInsightService {
     ThresholdBreachInsight getInsightByMetricCodeAndConnectItemId(Metric metric, String connectItemId);
 
     // Get all insights (filter also)
-    List<ThresholdBreachInsightDetailDTO> getAllInsights();
-    List<ThresholdBreachInsightDetailDTO> getInsightsByStatus(Status status);
-    List<ThresholdBreachInsightDetailDTO> getInsightsByConnectItemId(String connectItemId);
-    List<ThresholdBreachInsightDetailDTO> getInsightsByItemType(ConnectMetricType connectItemType);
+    List<ThresholdBreachInsightGenericDTO> getAllInsights();
+    List<ThresholdBreachInsightGenericDTO> getInsightsByStatus(Status status);
+    List<ThresholdBreachInsightGenericDTO> getInsightsByConnectItemId(String connectItemId);
+    List<ThresholdBreachInsightGenericDTO> getInsightsByItemType(ConnectMetricType connectItemType);
 
     // Update the status of the insight
     String updateStatus(Long id, Status status);

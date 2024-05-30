@@ -2,6 +2,7 @@ package com.springboot.connectmate.services.impl;
 
 import com.springboot.connectmate.dtos.ThresholdBreachInsight.InsightDTO;
 import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachInsightDetailDTO;
+import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachInsightGenericDTO;
 import com.springboot.connectmate.enums.ConnectMetricType;
 import com.springboot.connectmate.enums.Status;
 import com.springboot.connectmate.exceptions.ResourceNotFoundException;
@@ -64,34 +65,34 @@ public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsight
     }
 
     @Override
-    public List<ThresholdBreachInsightDetailDTO> getAllInsights() {
+    public List<ThresholdBreachInsightGenericDTO> getAllInsights() {
         List<ThresholdBreachInsight> insights = thresholdBreachInsightRepository.findAll();
         return insights.stream()
-                .map(insight -> mapper.map(insight, ThresholdBreachInsightDetailDTO.class))
+                .map(insight -> mapper.map(insight, ThresholdBreachInsightGenericDTO.class))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<ThresholdBreachInsightDetailDTO> getInsightsByStatus(Status status) {
+    public List<ThresholdBreachInsightGenericDTO> getInsightsByStatus(Status status) {
         List<ThresholdBreachInsight> insights = thresholdBreachInsightRepository.findByStatus(status);
         return insights.stream()
-                .map(insight -> mapper.map(insight, ThresholdBreachInsightDetailDTO.class))
+                .map(insight -> mapper.map(insight, ThresholdBreachInsightGenericDTO.class))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<ThresholdBreachInsightDetailDTO> getInsightsByConnectItemId(String connectItemId) {
+    public List<ThresholdBreachInsightGenericDTO> getInsightsByConnectItemId(String connectItemId) {
         List<ThresholdBreachInsight> insights = thresholdBreachInsightRepository.findByConnectItemId(connectItemId);
         return insights.stream()
-                .map(insight -> mapper.map(insight, ThresholdBreachInsightDetailDTO.class))
+                .map(insight -> mapper.map(insight, ThresholdBreachInsightGenericDTO.class))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<ThresholdBreachInsightDetailDTO> getInsightsByItemType(ConnectMetricType connectItemType) {
+    public List<ThresholdBreachInsightGenericDTO> getInsightsByItemType(ConnectMetricType connectItemType) {
         List<ThresholdBreachInsight> insights = thresholdBreachInsightRepository.findByConnectItemType(connectItemType);
         return insights.stream()
-                .map(insight -> mapper.map(insight, ThresholdBreachInsightDetailDTO.class))
+                .map(insight -> mapper.map(insight, ThresholdBreachInsightGenericDTO.class))
                 .collect(Collectors.toList());
     }
 

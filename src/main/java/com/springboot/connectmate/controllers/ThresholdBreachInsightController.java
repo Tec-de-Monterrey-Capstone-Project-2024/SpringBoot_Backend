@@ -4,6 +4,7 @@ package com.springboot.connectmate.controllers;
 import com.springboot.connectmate.dtos.ThresholdBreachInsight.InsightDTO;
 import com.springboot.connectmate.dtos.ThresholdBreachInsight.KpiDataDTO;
 import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachInsightDetailDTO;
+import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachInsightGenericDTO;
 import com.springboot.connectmate.enums.ConnectMetricType;
 import com.springboot.connectmate.enums.*;
 import com.springboot.connectmate.models.ThresholdBreachInsight;
@@ -87,7 +88,7 @@ public class ThresholdBreachInsightController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping
-    public ResponseEntity<List<ThresholdBreachInsightDetailDTO>> getInsights(
+    public ResponseEntity<List<ThresholdBreachInsightGenericDTO>> getInsights(
             @RequestParam(name = "status", required = false) Status status,
             @RequestParam(name = "connectItemId", required = false) String connectItemId,
             @RequestParam(name = "itemType", required = false) ConnectMetricType itemType) {
