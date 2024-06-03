@@ -89,6 +89,9 @@ public class BedrockServiceImpl implements BedrockService {
         // Save the ThresholdBreachInsight Record to the database
         thresholdBreachInsightService.saveInsight(metric, thresholdBreachFields, insightFields);
 
+        // Send a Message to the Frontend via WS
+        // TODO: Send a message to the frontend to display an alert (Richie)
+
         // Send an Alert Email
         // TODO: Get the email from the user's profile
         String toEmail = "jose.aram.mendez@gmail.com";
