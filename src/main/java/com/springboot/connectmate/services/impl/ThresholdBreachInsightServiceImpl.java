@@ -128,6 +128,7 @@ public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsight
         alert.setId(insight.getId());
         alert.setMetricName(insight.getMetricCode().getCode().getName());
         alert.setConnectItemType(insight.getConnectItemType());
+        alert.setInsightCategory(insight.getInsightCategory());
         alert.setOccurredAt(insight.getOccurredAt());
         return alert;
     }
