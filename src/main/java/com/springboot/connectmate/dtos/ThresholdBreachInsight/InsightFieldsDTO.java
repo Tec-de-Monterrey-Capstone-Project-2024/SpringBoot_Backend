@@ -5,10 +5,10 @@ import lombok.Data;
 
 @Data
 @Schema(
-        name = "InsightDTO",
+        name = "InsightFieldsDTO",
         description = "DTO for the Insight generation"
 )
-public class InsightDTO {
+public class InsightFieldsDTO {
     @Schema(
             description = "Name of the insight",
             example = "First Call Resolution Rate"

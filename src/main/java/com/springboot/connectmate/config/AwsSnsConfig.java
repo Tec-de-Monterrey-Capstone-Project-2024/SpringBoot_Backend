@@ -2,15 +2,15 @@ package com.springboot.connectmate.config;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.connect.AmazonConnect;
-import com.amazonaws.services.connect.AmazonConnectClientBuilder;
+import com.amazonaws.services.sns.AmazonSNSClient;
+import com.amazonaws.services.sns.AmazonSNSClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class AWSConnectConfig {
+public class AwsSnsConfig {
+
     @Value("${aws.accessKeyId}")
     private String accessKeyId;
 
@@ -21,12 +21,12 @@ public class AWSConnectConfig {
     private String region;
 
     @Bean
-    public AmazonConnect amazonConnectClient() {
+    public AmazonSNSClient snsClient() {
         BasicAWSCredentials awsCredentials = new BasicAWSCredentials(accessKeyId, secretKey);
-        return AmazonConnectClientBuilder.standard()
-                .withRegion(Regions.fromName(region))
+        return (AmazonSNSClient) AmazonSNSClientBuilder.standard()
+                .withRegion(region)
                 .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
                 .build();
     }
-
 }
+
