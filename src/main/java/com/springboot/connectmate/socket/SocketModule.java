@@ -53,7 +53,7 @@ public class SocketModule {
             String room = params.get("connectItemType").stream().collect(Collectors.joining());
             String username = params.get("username").stream().collect(Collectors.joining());
 
-            log.info("Socket ID[{}] - room[{}] - username [{}]  discnnected to chat module through",
+            log.info("Socket ID[{}] - room[{}] - username [{}]  disconnected to chat module through",
                     client.getSessionId().toString(),
                     room,
                     username);

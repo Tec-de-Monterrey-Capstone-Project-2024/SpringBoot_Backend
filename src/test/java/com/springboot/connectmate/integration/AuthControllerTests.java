@@ -1,6 +1,5 @@
 package com.springboot.connectmate.integration;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springboot.connectmate.dtos.User.RegisterUserFormDTO;
 import com.springboot.connectmate.repositories.UserRepository;
