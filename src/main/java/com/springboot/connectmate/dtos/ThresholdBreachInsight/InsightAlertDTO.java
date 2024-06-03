@@ -32,7 +32,7 @@ public class InsightAlertDTO {
             examples = {"CRITICAL", "UNSATISFACTORY", "BELOW_EXPECTATIONS",  "EXCEEDS_EXPECTATIONS",
                     "OUTSTANDING", "PIONEERING", "UNKNOWN"}
     )
-    private InsightPerformance insightCategory;
+    private InsightCategory insightCategory;
 
     @Schema(
             description = "Type of the Connect item",
