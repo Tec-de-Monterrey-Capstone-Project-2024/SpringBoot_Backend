@@ -16,5 +16,4 @@ public interface ThresholdBreachInsightRepository extends JpaRepository<Threshol
     List<ThresholdBreachInsight> findByStatus(Status status);
     List<ThresholdBreachInsight> findByConnectItemId(String connectItemId);
     List<ThresholdBreachInsight> findByConnectItemType(ConnectMetricType connectItemType);
-    List<ThresholdBreachInsight> findInsightById(Long id);
 }

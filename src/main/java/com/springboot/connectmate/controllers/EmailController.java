@@ -29,7 +29,7 @@ public class EmailController {
         //Depending on what variables are on the template, we pass it in the map
         //For testing im using sendEmail endpoint
         Map<String, Object> variables = new HashMap<>();
-        variables.put("title", "Urgent Alert TEST "); //Dummmy variables for testing
+        variables.put("title", "Urgent Alert"); //Dummmy variables for testing
         variables.put("message", "This is an urgent alert message. (Falta mejorar el css)");
 
         emailService.sendAlertEmail(toEmail, subject, template, variables);

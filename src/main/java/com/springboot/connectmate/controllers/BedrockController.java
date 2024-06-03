@@ -2,6 +2,9 @@ package com.springboot.connectmate.controllers;
 
 import com.springboot.connectmate.dtos.ThresholdBreachInsight.InsightFieldsDTO;
 import com.springboot.connectmate.dtos.ThresholdBreachInsight.KPIDataContextDTO;
+import com.springboot.connectmate.enums.ConnectMetricCode;
+import com.springboot.connectmate.enums.ConnectMetricType;
+import com.springboot.connectmate.enums.Status;
 import com.springboot.connectmate.services.BedrockService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -54,5 +57,27 @@ public class BedrockController {
 
         InsightFieldsDTO insight = bedrockService.createInsight(KPIDataContextDTO);
         return ResponseEntity.ok(insight);
+    }
+
+    @Operation(
+            summary = "Creates a ThresholdBreachInsight record",
+            description = "Create the thresholdbreachinsight record "
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Insight created successfully"
+    )
+    @PostMapping("/generateAndSaveInsight")
+    public ResponseEntity<String> generateAndSaveInsight(
+            @RequestBody KPIDataContextDTO KPIDataContextDTO,
+            @RequestParam Double metricValue,
+            @RequestParam ConnectMetricType metricType,
+            @RequestParam String typeId,
+            @RequestParam ConnectMetricCode metricCode,
+            @RequestParam Status status) {
+
+        InsightFieldsDTO insight = bedrockService.createInsight(KPIDataContextDTO);
+
+        return ResponseEntity.ok("Insight created successfully");
     }
 }

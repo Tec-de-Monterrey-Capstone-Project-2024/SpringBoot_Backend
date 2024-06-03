@@ -1,7 +1,7 @@
 package com.springboot.connectmate.models;
 
 import com.springboot.connectmate.enums.ConnectMetricType;
-import com.springboot.connectmate.enums.InsightPerformance;
+import com.springboot.connectmate.enums.InsightCategory;
 import com.springboot.connectmate.enums.InsightSeverity;
 import com.springboot.connectmate.enums.Status;
 import jakarta.persistence.*;
@@ -55,8 +55,8 @@ public class ThresholdBreachInsight {
     private LocalDateTime occurredAt;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false, columnDefinition = "ENUM('DONE', 'TO_DO', 'IN_PROGRESS') default 'TO_DO'")
-    private Status status;
+    @Column(name = "status", columnDefinition = "ENUM('DONE', 'TO_DO', 'IN_PROGRESS') default 'TO_DO'")
+    private Status status = Status.TO_DO;
 
     @Column(name = "insight_name", nullable = false, columnDefinition = "TEXT")
     private String insightName;
@@ -72,7 +72,7 @@ public class ThresholdBreachInsight {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "insight_category", nullable = false, columnDefinition = "ENUM('CRITICAL', 'UNSATISFACTORY', 'BELOW_EXPECTATIONS', 'EXCEEDS_EXPECTATIONS', 'OUTSTANDING', 'PIONEERING', 'UNKNOWN')")
-    private InsightPerformance insightCategory;
+    private InsightCategory insightCategory;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "insight_severity", nullable = false, columnDefinition = "ENUM('LOW', 'MEDIUM', 'HIGH', 'CRITICAL', 'UNKNOWN')")

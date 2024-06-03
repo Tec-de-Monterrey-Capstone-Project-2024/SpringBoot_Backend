@@ -1,9 +1,6 @@
 package com.springboot.connectmate.services.impl;
 
-import com.springboot.connectmate.dtos.ThresholdBreachInsight.InsightAlertDTO;
-import com.springboot.connectmate.dtos.ThresholdBreachInsight.InsightFieldsDTO;
-import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachInsightDetailDTO;
-import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachInsightGenericDTO;
+import com.springboot.connectmate.dtos.ThresholdBreachInsight.*;
 import com.springboot.connectmate.enums.ConnectMetricType;
 import com.springboot.connectmate.enums.Status;
 import com.springboot.connectmate.exceptions.ResourceNotFoundException;
@@ -16,7 +13,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.time.LocalDateTime;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -41,30 +38,31 @@ public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsight
         this.mapper = mapper;
     }
 
+
     @Override
-    @Transactional
-    public ThresholdBreachInsight generateAndSaveInsight(ThresholdBreachInsightDetailDTO dto, InsightFieldsDTO insight) {
-        Optional<Metric> metricOpt = metricRepository.findById(dto.getMetricCode());
-        if (!metricOpt.isPresent()) {
-            throw new ResourceNotFoundException("Metric not found with id: " + dto.getMetricCode());
-        }
-        Metric metric = metricOpt.get();
-
-        ThresholdBreachInsight thresholdBreachInsight = mapper.map(dto, ThresholdBreachInsight.class);
-        thresholdBreachInsight.setMetricCode(metric);
-        thresholdBreachInsight.setOccurredAt(dto.getOccurredAt() != null ? LocalDateTime.parse(dto.getOccurredAt()) : LocalDateTime.now());
-        ThresholdBreachInsight savedInsight = thresholdBreachInsightRepository.save(thresholdBreachInsight);
-
-        return savedInsight;
+    public Optional<ThresholdBreachInsight> getInsightByMetricCodeAndConnectItemId(Metric metric, String connectItemId) {
+        return thresholdBreachInsightRepository.findByMetricCodeAndConnectItemId(metric, connectItemId);
     }
 
     @Override
-    public ThresholdBreachInsight getInsightByMetricCodeAndConnectItemId(Metric metric, String connectItemId) {
-        return thresholdBreachInsightRepository.findByMetricCodeAndConnectItemId(metric, connectItemId)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "ThresholdBreachInsight",
-                        metric.getCode().toString(),
-                        connectItemId));
+    public void deleteInsight(ThresholdBreachInsight insight) {
+        thresholdBreachInsightRepository.delete(insight);
+    }
+
+    @Override
+    public void saveInsight(
+            Metric metric,
+            ThresholdBreachFieldsDTO thresholdBreachData,
+            InsightFieldsDTO insightData) {
+
+        // Map the threshold breach data
+        ThresholdBreachInsight thresholdBreachInsight = mapper.map(thresholdBreachData, ThresholdBreachInsight.class);
+        // Map the insight data
+        mapper.map(insightData, thresholdBreachInsight);
+        // Link the insight to the metric (Foreign Key)
+        thresholdBreachInsight.setMetricCode(metric);
+
+        thresholdBreachInsightRepository.save(thresholdBreachInsight);
     }
 
     @Override
