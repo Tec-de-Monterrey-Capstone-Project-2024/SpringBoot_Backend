@@ -2,7 +2,6 @@ package com.springboot.connectmate.services.impl;
 
 
 import com.springboot.connectmate.dtos.Metric.MetricDTO;
-import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachInsightDetailDTO;
 import com.springboot.connectmate.enums.ConnectMetricCode;
 import com.springboot.connectmate.exceptions.ResourceNotFoundException;
 import com.springboot.connectmate.models.Metric;
@@ -12,7 +11,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,8 +29,14 @@ public class MetricServiceImpl implements MetricService {
 
 
     @Override
-    public List<Metric> getAllAmazonConnectMetrics() {
+    public List<Metric> getAllMetrics() {
         return metricRepository.findAll();
+    }
+
+    @Override
+    public Metric getMetricByCode(ConnectMetricCode code) {
+        return metricRepository.findById(code)
+                .orElseThrow(() -> new ResourceNotFoundException("Metric", "code", code.toString()));
     }
 
     @Override
@@ -47,7 +51,7 @@ public class MetricServiceImpl implements MetricService {
     public MetricDTO getConnectMateMetricByCode(ConnectMetricCode code) {
         Metric metric = metricRepository.findById(code)
                 .orElseThrow(() -> new ResourceNotFoundException("Metric", "code", code.toString()));
-        return mapper.map(metricRepository.findById(code), MetricDTO.class);
+        return mapper.map(metric, MetricDTO.class);
     }
 
     @Override
@@ -55,7 +59,18 @@ public class MetricServiceImpl implements MetricService {
         Metric metric = metricRepository.findById(code)
                 .orElseThrow(() -> new ResourceNotFoundException("Metric", "code", code.toString()));
 
-        // TODO: Set upper and lower bounds of metrics
+        // Check if the thresholds are within the allowed bounds
+        double lowerBound = code.getLowerBound();
+        double upperBound = code.getUpperBound();
+        if (minThreshold != null && minThreshold < lowerBound) {
+            throw new IllegalArgumentException("Minimum threshold is below the allowed lower bound.");
+        }
+
+        if (maxThreshold != null && maxThreshold > upperBound) {
+            throw new IllegalArgumentException("Maximum threshold is above the allowed upper bound.");
+        }
+
+        // Update the metric
         metric.setMinimumThresholdValue(minThreshold);
         metric.setMaximumThresholdValue(maxThreshold);
         metric.setTargetValue(targetValue != null ? targetValue : code.getDefaultTargetValue());

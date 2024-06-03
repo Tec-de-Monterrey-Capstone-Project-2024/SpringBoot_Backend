@@ -9,7 +9,8 @@ import java.util.List;
 public interface MetricService {
 
     // For Internal Use Only
-    List<Metric> getAllAmazonConnectMetrics();
+    List<Metric> getAllMetrics();
+    Metric getMetricByCode(ConnectMetricCode code);
 
     // Exposed Services
     List<MetricDTO> getAllConnectMateMetrics();

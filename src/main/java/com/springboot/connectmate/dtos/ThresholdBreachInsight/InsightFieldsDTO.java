@@ -1,5 +1,7 @@
 package com.springboot.connectmate.dtos.ThresholdBreachInsight;
 
+import com.springboot.connectmate.enums.InsightCategory;
+import com.springboot.connectmate.enums.InsightSeverity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -35,15 +37,15 @@ public class InsightFieldsDTO {
 
     @Schema(
             description = "Category of the insight, indicating severity or impact",
-            example = "MEDIUM"
+            example = "BELOW_EXPECTATIONS"
     )
-    private String insightCategory;
+    private InsightCategory insightCategory;
 
     @Schema(
             description = "Performance level associated with the insight",
-            example = "BELOW_EXPECTATIONS"
+            example = "LOW"
     )
-    private String insightPerformance;
+    private InsightSeverity insightSeverity;
 
     @Schema(
             description = "Root cause of the issue highlighted by the insight",

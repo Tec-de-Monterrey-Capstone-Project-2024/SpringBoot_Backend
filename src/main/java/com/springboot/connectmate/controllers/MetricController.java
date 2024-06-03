@@ -36,7 +36,7 @@ public class MetricController {
         return ResponseEntity.ok(metrics);
     }
 
-    @Operation(summary = "Get nne metric", description = "Retrieve one metrics")
+    @Operation(summary = "Get one metric", description = "Retrieve one metrics")
     @ApiResponse(responseCode = "200", description = "Successful operation")
     @GetMapping("/{code}")
     public ResponseEntity<MetricDTO> getMetric(@PathVariable ConnectMetricCode code) {

@@ -14,11 +14,12 @@ import java.util.Optional;
 public interface ThresholdBreachInsightService {
 
     // Internal Use Only
-    ThresholdBreachInsight generateAndSaveInsight(Metric metric,
-                                                  ThresholdBreachFieldsDTO thresholdBreachData,
-                                                  InsightFieldsDTO insightData
-    );
     Optional<ThresholdBreachInsight> getInsightByMetricCodeAndConnectItemId(Metric metric, String connectItemId);
+    void deleteInsight(ThresholdBreachInsight insight);
+    void saveInsight(Metric metric,
+                     ThresholdBreachFieldsDTO thresholdBreachData,
+                     InsightFieldsDTO insightData
+    );
 
     // Get Insights (filter also)
     List<ThresholdBreachInsightGenericDTO> getAllInsights();

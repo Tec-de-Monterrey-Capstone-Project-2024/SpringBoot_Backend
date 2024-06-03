@@ -13,7 +13,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.time.LocalDateTime;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -38,8 +38,19 @@ public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsight
         this.mapper = mapper;
     }
 
+
     @Override
-    public ThresholdBreachInsight generateAndSaveInsight(
+    public Optional<ThresholdBreachInsight> getInsightByMetricCodeAndConnectItemId(Metric metric, String connectItemId) {
+        return thresholdBreachInsightRepository.findByMetricCodeAndConnectItemId(metric, connectItemId);
+    }
+
+    @Override
+    public void deleteInsight(ThresholdBreachInsight insight) {
+        thresholdBreachInsightRepository.delete(insight);
+    }
+
+    @Override
+    public void saveInsight(
             Metric metric,
             ThresholdBreachFieldsDTO thresholdBreachData,
             InsightFieldsDTO insightData) {
@@ -51,12 +62,7 @@ public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsight
         // Link the insight to the metric (Foreign Key)
         thresholdBreachInsight.setMetricCode(metric);
 
-        return thresholdBreachInsightRepository.save(thresholdBreachInsight);
-    }
-
-    @Override
-    public Optional<ThresholdBreachInsight> getInsightByMetricCodeAndConnectItemId(Metric metric, String connectItemId) {
-        return thresholdBreachInsightRepository.findByMetricCodeAndConnectItemId(metric, connectItemId);
+        thresholdBreachInsightRepository.save(thresholdBreachInsight);
     }
 
     @Override

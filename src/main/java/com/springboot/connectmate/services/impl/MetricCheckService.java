@@ -5,9 +5,10 @@ import com.springboot.connectmate.enums.ConnectMetricCode;
 import com.springboot.connectmate.enums.ConnectMetricType;
 import com.springboot.connectmate.models.Metric;
 import com.springboot.connectmate.models.ThresholdBreachInsight;
-import com.springboot.connectmate.repositories.MetricRepository;
-import com.springboot.connectmate.repositories.ThresholdBreachInsightRepository;
 import com.springboot.connectmate.services.BedrockService;
+import com.springboot.connectmate.services.MetricGeneratorService;
+import com.springboot.connectmate.services.MetricService;
+import com.springboot.connectmate.services.ThresholdBreachInsightService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -19,17 +20,20 @@ import java.util.Optional;
 @Service
 public class MetricCheckService {
 
-    private final MetricRepository metricRepository;
+    private final MetricService metricService;
+    private final ThresholdBreachInsightService thresholdBreachInsightService;
     private final BedrockService bedrockService;
-    private final ThresholdBreachInsightRepository thresholdBreachInsightRepository;
+    private final MetricGeneratorService metricGeneratorService;
 
     @Autowired
-    public MetricCheckService(MetricRepository metricRepository,
+    public MetricCheckService(MetricService metricService,
+                              ThresholdBreachInsightService thresholdBreachInsightService,
                               BedrockService bedrockService,
-                              ThresholdBreachInsightRepository thresholdBreachInsightRepository){
-        this.metricRepository = metricRepository;
+                              MetricGeneratorService metricGeneratorService) {
+        this.metricService = metricService;
+        this.thresholdBreachInsightService = thresholdBreachInsightService;
         this.bedrockService = bedrockService;
-        this.thresholdBreachInsightRepository = thresholdBreachInsightRepository;
+        this.metricGeneratorService = metricGeneratorService;
     }
 
 
@@ -53,12 +57,15 @@ public class MetricCheckService {
         System.out.println("Checking for threshold breaches...");
 
         // Get all metrics from the database
-        List<Metric> metrics = metricRepository.findAll();
+        List<Metric> metrics = metricService.getAllMetrics();
 
         // Iterate over each metric
         for (Metric metric : metrics) {
             // Get the code of the metric
             ConnectMetricCode metricCode = metric.getCode();
+            System.out.println("Metric" + metricCode.getName() +
+                    "Value:" +
+                    metricGeneratorService.generateRandomMetricValue(metricCode));
 
             // Determine the types for this metric
             boolean isInstanceMetric = metricCode.getMetricTypes().contains(ConnectMetricType.INSTANCE);
@@ -73,7 +80,7 @@ public class MetricCheckService {
                 // Fetch from an INSTANCE (General Metric)
                 String instanceName = "connectmate"; // Fetch the instance name from the metric
                 String instanceId = "7c78bd60-4a9f-40e5-b461-b7a0dfaad848"; // Fetch the instance ID from the metric
-                Double instanceMetricValue = null; // Fetch the actual value of the metric from the INSTANCE
+                Double instanceMetricValue = 75.0; // Fetch the actual value of the metric from the INSTANCE
 
                 /**
                  *  Check if the metric has breached or is on target on any of the three levels
@@ -85,8 +92,8 @@ public class MetricCheckService {
                  *  Delete the insight if the metric is no longer breached or on target
                  */
                 // Get the existing insight for the instance (if any)
-                Optional<ThresholdBreachInsight> existingInstanceInsight = thresholdBreachInsightRepository
-                        .findByMetricCodeAndConnectItemId(metric, instanceId);
+                Optional<ThresholdBreachInsight> existingInstanceInsight = thresholdBreachInsightService
+                        .getInsightByMetricCodeAndConnectItemId(metric, instanceId);
 
                 // ThresholdBreachFieldsDTO object to store the threshold breach data
                 ThresholdBreachFieldsDTO thresholdBreachFields = new ThresholdBreachFieldsDTO(
@@ -99,13 +106,11 @@ public class MetricCheckService {
                 if (instanceNeedsInsight) {
                     // If insight is needed and does not exist, generate the insight
                     if (existingInstanceInsight.isEmpty()) {
-                        System.out.println("Generating insight for INSTANCE: " + instanceName);
                         bedrockService.generateInsight(metric, thresholdBreachFields, instanceName);
                     }
                 } else {
                     // If insight is not needed and exists, delete the insight
-                    System.out.println("Deleting insight for INSTANCE: " + instanceName);
-                    existingInstanceInsight.ifPresent(thresholdBreachInsightRepository::delete);
+                    existingInstanceInsight.ifPresent(thresholdBreachInsightService::deleteInsight);
                 }
             }
 
@@ -130,8 +135,8 @@ public class MetricCheckService {
                  */
 
                 // Get the existing insight for the queue (if any)
-                Optional<ThresholdBreachInsight> existingQueueInsight = thresholdBreachInsightRepository
-                        .findByMetricCodeAndConnectItemId(metric, queueId);
+                Optional<ThresholdBreachInsight> existingQueueInsight = thresholdBreachInsightService
+                        .getInsightByMetricCodeAndConnectItemId(metric, queueId);
 
                 // ThresholdBreachFieldsDTO object to store the threshold breach data
                 ThresholdBreachFieldsDTO thresholdBreachFields = new ThresholdBreachFieldsDTO(
@@ -144,13 +149,11 @@ public class MetricCheckService {
                 if (queueNeedsInsight) {
                     // If insight is needed and does not exist, generate the insight
                     if (existingQueueInsight.isEmpty()) {
-                        System.out.println("Generating insight for QUEUE: " + queueName);
                         bedrockService.generateInsight(metric, thresholdBreachFields, queueName);
                     }
                 } else {
                     // If insight is not needed and exists, delete the insight
-                    System.out.println("Deleting insight for QUEUE: " + queueName);
-                    existingQueueInsight.ifPresent(thresholdBreachInsightRepository::delete);
+                    existingQueueInsight.ifPresent(thresholdBreachInsightService::deleteInsight);
                 }
             }
 
@@ -174,8 +177,8 @@ public class MetricCheckService {
                  *  Delete the insight if the metric is no longer breached or on target
                  */
                 // Get the existing insight for the agent (if any)
-                Optional<ThresholdBreachInsight> existingAgentInsight = thresholdBreachInsightRepository
-                        .findByMetricCodeAndConnectItemId(metric, agentId);
+                Optional<ThresholdBreachInsight> existingAgentInsight = thresholdBreachInsightService
+                        .getInsightByMetricCodeAndConnectItemId(metric, agentId);
 
                 // ThresholdBreachFieldsDTO object to store the threshold breach data
                 ThresholdBreachFieldsDTO thresholdBreachFields = new ThresholdBreachFieldsDTO(
@@ -188,13 +191,11 @@ public class MetricCheckService {
                 if (agentNeedsInsight) {
                     if (existingAgentInsight.isEmpty()) {
                         // If insight is needed and does not exist, generate the insight
-                        System.out.println("Generating insight for AGENT: " + agentName);
                         bedrockService.generateInsight(metric, thresholdBreachFields, agentName);
                     }
                 } else {
                     // If insight is not needed and exists, delete the insight
-                    System.out.println("Deleting insight for AGENT: " + agentName);
-                    existingAgentInsight.ifPresent(thresholdBreachInsightRepository::delete);
+                    existingAgentInsight.ifPresent(thresholdBreachInsightService::deleteInsight);
                 }
             }
         }
