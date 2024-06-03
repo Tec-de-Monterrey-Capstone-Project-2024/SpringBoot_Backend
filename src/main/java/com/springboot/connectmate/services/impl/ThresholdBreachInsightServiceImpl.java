@@ -50,7 +50,7 @@ public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsight
     }
 
     @Override
-    public void saveInsight(
+    public ThresholdBreachInsight saveInsight(
             Metric metric,
             ThresholdBreachFieldsDTO thresholdBreachData,
             InsightFieldsDTO insightData) {
@@ -62,7 +62,7 @@ public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsight
         // Link the insight to the metric (Foreign Key)
         thresholdBreachInsight.setMetricCode(metric);
 
-        thresholdBreachInsightRepository.save(thresholdBreachInsight);
+        return thresholdBreachInsightRepository.save(thresholdBreachInsight);
     }
 
     @Override

@@ -1,12 +1,9 @@
 package com.springboot.connectmate.controllers;
 
-import com.corundumstudio.socketio.SocketIOClient;
 import com.springboot.connectmate.dtos.ThresholdBreachInsight.*;
 import com.springboot.connectmate.enums.ConnectMetricType;
 import com.springboot.connectmate.enums.*;
 import com.springboot.connectmate.services.ThresholdBreachInsightService;
-import io.socket.client.IO;
-import io.socket.client.Socket;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
@@ -29,9 +25,6 @@ import java.util.Map;
 public class ThresholdBreachInsightController {
 
     private final ThresholdBreachInsightService thresholdBreachInsightService;
-
-    private final Socket socketClient;
-
 
     @Autowired
     public ThresholdBreachInsightController(ThresholdBreachInsightService thresholdBreachInsightService) {
@@ -72,8 +65,6 @@ public class ThresholdBreachInsightController {
 
         return ResponseEntity.ok(insights);
     }
-
-
 
     @Operation(summary = "Update the status of an insight", description = "Update the status of a ThresholdBreachInsight by its ID.")
     @ApiResponses(value = {
@@ -134,5 +125,4 @@ public class ThresholdBreachInsightController {
         List<InsightAlertDTO> alerts = thresholdBreachInsightService.getAlerts();
         return ResponseEntity.ok(alerts);
     }
-
 }

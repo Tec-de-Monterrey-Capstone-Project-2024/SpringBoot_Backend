@@ -4,7 +4,7 @@ import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
 import com.corundumstudio.socketio.listener.DisconnectListener;
-import com.springboot.connectmate.models.ThresholdBreachInsight;
+import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachInsightGenericDTO;
 import com.springboot.connectmate.services.impl.SocketServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -23,10 +23,10 @@ public class SocketModule {
 
         server.addConnectListener(this.onConnected());
         server.addDisconnectListener(this.onDisconnected());
-        server.addEventListener("add_insight", ThresholdBreachInsight.class, this.onChatReceived());
+        server.addEventListener("add_insight", ThresholdBreachInsightGenericDTO.class, this.onChatReceived());
     }
 
-    private DataListener<ThresholdBreachInsight> onChatReceived() {
+    private DataListener<ThresholdBreachInsightGenericDTO> onChatReceived() {
         return (senderClient, data, ackSender) -> {
             log.info(data.toString());
             senderClient.getNamespace().getBroadcastOperations().sendEvent("add_insight", data);

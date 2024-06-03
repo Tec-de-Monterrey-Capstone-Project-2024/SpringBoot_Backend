@@ -3,6 +3,7 @@ package com.springboot.connectmate.dtos.ThresholdBreachInsight;
 import com.springboot.connectmate.enums.InsightSeverity;
 import com.springboot.connectmate.enums.Status;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
@@ -41,5 +42,4 @@ public class ThresholdBreachInsightGenericDTO {
             examples = {"TO_DO", "IN_PROGRESS", "DONE"}
     )
     private Status status;
-
 }
