@@ -9,7 +9,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Builder
+@Builder // Lombok annotation to instantiate the object with build function
 @Getter
 @Setter
 @AllArgsConstructor // Lombok annotation to create a constructor with all the arguments
