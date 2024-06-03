@@ -1,14 +1,9 @@
 package com.springboot.connectmate.controllers;
 
 
-import com.springboot.connectmate.dtos.ThresholdBreachInsight.InsightDTO;
-import com.springboot.connectmate.dtos.ThresholdBreachInsight.KpiDataDTO;
-import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachInsightDetailDTO;
-import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachInsightGenericDTO;
+import com.springboot.connectmate.dtos.ThresholdBreachInsight.*;
 import com.springboot.connectmate.enums.ConnectMetricType;
 import com.springboot.connectmate.enums.*;
-import com.springboot.connectmate.models.ThresholdBreachInsight;
-import com.springboot.connectmate.services.BedrockService;
 import com.springboot.connectmate.services.ThresholdBreachInsightService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,55 +26,10 @@ import java.util.Map;
 public class ThresholdBreachInsightController {
 
     private final ThresholdBreachInsightService thresholdBreachInsightService;
-    private final BedrockService bedrockService;
 
     @Autowired
-    public ThresholdBreachInsightController(ThresholdBreachInsightService thresholdBreachInsightService, BedrockService bedrockService) {
+    public ThresholdBreachInsightController(ThresholdBreachInsightService thresholdBreachInsightService) {
         this.thresholdBreachInsightService = thresholdBreachInsightService;
-        this.bedrockService = bedrockService;
-    }
-    @Operation(
-            summary = "Creates a ThresholdBreachInsight record",
-            description = "Create the thresholdbreachinsight record "
-    )
-    @ApiResponse(
-            responseCode = "200",
-            description = "Insight created successfully"
-    )
-
-    @PostMapping("/generateAndSaveInsight")
-    public ResponseEntity<String> generateAndSaveInsight(
-            @RequestBody KpiDataDTO kpiDataDTO,
-            @RequestParam Double metricValue,
-            @RequestParam ConnectMetricType metricType,
-            @RequestParam String typeId,
-            @RequestParam ConnectMetricCode metricCode,
-            @RequestParam Status status) {
-
-        InsightDTO insight = bedrockService.createInsight(kpiDataDTO);
-
-
-        ThresholdBreachInsightDetailDTO dto = new ThresholdBreachInsightDetailDTO();
-        dto.setValue(metricValue);
-        dto.setConnectItemType(metricType);
-        dto.setConnectItemId(typeId);
-        dto.setMetricCode(metricCode);
-        dto.setStatus(status);
-
-        dto.setInsightName(insight.getInsightName());
-        dto.setInsightSummary(insight.getInsightSummary());
-        dto.setInsightDescription(insight.getInsightDescription());
-        dto.setInsightActions(insight.getInsightActions());
-        dto.setInsightSeverity(InsightSeverity.valueOf(insight.getInsightCategory()));
-        dto.setInsightCategory(InsightPerformance.valueOf(insight.getInsightPerformance()));
-        dto.setInsightRootCause(insight.getInsightRootCause());
-        dto.setInsightImpact(insight.getInsightImpact());
-        dto.setInsightPrevention(insight.getInsightPrevention());
-
-
-        ThresholdBreachInsight savedInsight = thresholdBreachInsightService.generateAndSaveInsight(dto, insight);
-
-        return ResponseEntity.ok("Insight created successfully");
     }
 
     @Operation(summary = "Get insights by type or type id", description = "Retrieve insights based on the provided parameters. If no parameters are provided, all insights are returned.")
@@ -157,6 +107,17 @@ public class ThresholdBreachInsightController {
     public ResponseEntity<ThresholdBreachInsightDetailDTO> getInsightById(@PathVariable Long id) {
         ThresholdBreachInsightDetailDTO insight = thresholdBreachInsightService.getInsightById(id);
         return ResponseEntity.ok(insight);
+    }
+
+    @Operation(summary = "Get all alerts", description = "Retrieve all alerts with specific details.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Alerts retrieved successfully"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    @GetMapping("/alerts")
+    public ResponseEntity<List<InsightAlertDTO>> getAlerts() {
+        List<InsightAlertDTO> alerts = thresholdBreachInsightService.getAlerts();
+        return ResponseEntity.ok(alerts);
     }
 
 }

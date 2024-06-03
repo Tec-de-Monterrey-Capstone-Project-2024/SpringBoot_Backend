@@ -1,7 +1,8 @@
 package com.springboot.connectmate.services;
 
-import com.springboot.connectmate.dtos.ThresholdBreachInsight.InsightDTO;
-import com.springboot.connectmate.dtos.ThresholdBreachInsight.KpiDataDTO;
+import com.springboot.connectmate.dtos.ThresholdBreachInsight.InsightFieldsDTO;
+import com.springboot.connectmate.dtos.ThresholdBreachInsight.KPIDataContextDTO;
+import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachFieldsDTO;
 import com.springboot.connectmate.enums.ConnectMetricType;
 import com.springboot.connectmate.models.Metric;
 import org.springframework.ai.chat.ChatResponse;
@@ -11,14 +12,11 @@ public interface BedrockService {
 
     void generateInsight(
             Metric metric,
-            Double metricValue,
-            ConnectMetricType metricType,
-            String typeId
+            ThresholdBreachFieldsDTO thresholdBreachFields,
+            String typeName
     );
     String generate(String message);
     Flux<ChatResponse> generateStream(String message);
-    InsightDTO createInsight(
-            KpiDataDTO kpiDataDTO
-    );
+    InsightFieldsDTO createInsight(KPIDataContextDTO dataContext);
 
 }
