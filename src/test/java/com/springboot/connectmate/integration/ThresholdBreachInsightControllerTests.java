@@ -93,14 +93,14 @@ public class ThresholdBreachInsightControllerTests {
         InsightAlertDTO alert1 = new InsightAlertDTO();
         alert1.setId(1L);
         alert1.setMetricCode(ConnectMetricCode.SERVICE_LEVEL);
-        alert1.setInsightCategory(InsightCategory.CRITICAL);
+        alert1.setInsightCategory(InsightCategory.CRITICAL);  // Cambio de InsightPerformance a InsightCategory
         alert1.setConnectItemType(ConnectMetricType.AGENT);
         alert1.setOccurredAt("Fri May 03 17:29:27 CST 2024");
 
         InsightAlertDTO alert2 = new InsightAlertDTO();
         alert2.setId(2L);
         alert2.setMetricCode(ConnectMetricCode.ABANDONMENT_RATE);
-        alert2.setInsightCategory(InsightCategory.UNSATISFACTORY);
+        alert2.setInsightCategory(InsightCategory.UNSATISFACTORY);  // Cambio de InsightPerformance a InsightCategory
         alert2.setConnectItemType(ConnectMetricType.QUEUE);
         alert2.setOccurredAt("Sat May 04 10:15:30 CST 2024");
 
@@ -113,17 +113,17 @@ public class ThresholdBreachInsightControllerTests {
         // Perform the GET request and verify the response
         mockMvc.perform(get("/api/threshold-breach-insights/alerts")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(mockAlerts.size()))
-                .andExpect(jsonPath("$[0].id").value(alert1.getId()))
-                .andExpect(jsonPath("$[0].metricCode").value(alert1.getMetricCode().name()))
-                .andExpect(jsonPath("$[0].insightCategory").value(alert1.getInsightCategory().name()))
-                .andExpect(jsonPath("$[0].connectItemType").value(alert1.getConnectItemType().name()))
-                .andExpect(jsonPath("$[0].occurredAt").value(alert1.getOccurredAt()))
-                .andExpect(jsonPath("$[1].id").value(alert2.getId()))
-                .andExpect(jsonPath("$[1].metricCode").value(alert2.getMetricCode().name()))
-                .andExpect(jsonPath("$[1].insightCategory").value(alert2.getInsightCategory().name()))
-                .andExpect(jsonPath("$[1].connectItemType").value(alert2.getConnectItemType().name()))
-                .andExpect(jsonPath("$[1].occurredAt").value(alert2.getOccurredAt()));
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(mockAlerts.size()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(alert1.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].metricCode").value(alert1.getMetricCode().name()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].insightCategory").value(alert1.getInsightCategory().name()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].connectItemType").value(alert1.getConnectItemType().name()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].occurredAt").value(alert1.getOccurredAt()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].id").value(alert2.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].metricCode").value(alert2.getMetricCode().name()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].insightCategory").value(alert2.getInsightCategory().name()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].connectItemType").value(alert2.getConnectItemType().name()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].occurredAt").value(alert2.getOccurredAt()));
     }
 }

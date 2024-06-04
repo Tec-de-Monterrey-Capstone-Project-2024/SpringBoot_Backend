@@ -45,4 +45,4 @@ ENV AWS_REGION=$AWS_REGION
 EXPOSE 8080
 
 # Command to run the application when the container starts.
-CMD [ "java", "-jar", "/app/springboot-connectmate-rest-api.jar"]
+CMD ["java", "-jar", "/app/springboot-connectmate-rest-api.jar", "--debug"]
