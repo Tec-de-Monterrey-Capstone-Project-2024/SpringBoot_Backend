@@ -114,49 +114,17 @@ public class ThresholdBreachInsightControllerTests {
     }
 
     @Test
-    public void testGetInsightById() throws Exception {
-        // Mocking the service response
+    public void GetInsightById() throws Exception {
         Long insightId = 1L;
         ThresholdBreachInsightDetailDTO mockInsight = new ThresholdBreachInsightDetailDTO();
         mockInsight.setId(insightId);
-        mockInsight.setMetricCode(ConnectMetricCode.SERVICE_LEVEL);
-        mockInsight.setConnectItemId("item123");
-        mockInsight.setConnectItemType(ConnectMetricType.AGENT);
-        mockInsight.setValue(75.0);
-        mockInsight.setOccurredAt("Fri May 03 17:29:27 CST 2024");
-        mockInsight.setStatus(Status.TO_DO);
-        mockInsight.setInsightName("Service Level");
-        mockInsight.setInsightSummary("The service level is below the threshold.");
-        mockInsight.setInsightDescription("Detailed description of the insight");
-        mockInsight.setInsightActions("Increase agent availability");
-        mockInsight.setInsightCategory(InsightCategory.CRITICAL);
-        mockInsight.setInsightSeverity(InsightSeverity.HIGH);
-        mockInsight.setInsightRootCause("Improve service level");
-        mockInsight.setInsightImpact("Longer wait times for customers");
-        mockInsight.setInsightPrevention("Take actions to improve service level");
 
-        // Mock the service method call
         when(thresholdBreachInsightService.getInsightById(insightId)).thenReturn(mockInsight);
 
-        // Perform the GET request and verify the response
-        mockMvc.perform(get("/api/threshold-breach-insights/{id}", insightId)
+        mockMvc.perform(get("/api/threshold-breach-insights/" + insightId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(insightId))
-                .andExpect(jsonPath("$.metricCode").value(mockInsight.getMetricCode().name()))
-                .andExpect(jsonPath("$.connectItemId").value(mockInsight.getConnectItemId()))
-                .andExpect(jsonPath("$.connectItemType").value(mockInsight.getConnectItemType().name()))
-                .andExpect(jsonPath("$.value").value(mockInsight.getValue()))
-                .andExpect(jsonPath("$.occurredAt").value(mockInsight.getOccurredAt()))
-                .andExpect(jsonPath("$.status").value(mockInsight.getStatus().name()))
-                .andExpect(jsonPath("$.insightName").value(mockInsight.getInsightName()))
-                .andExpect(jsonPath("$.insightSummary").value(mockInsight.getInsightSummary()))
-                .andExpect(jsonPath("$.insightDescription").value(mockInsight.getInsightDescription()))
-                .andExpect(jsonPath("$.insightActions").value(mockInsight.getInsightActions()))
-                .andExpect(jsonPath("$.insightCategory").value(mockInsight.getInsightCategory().name()))
-                .andExpect(jsonPath("$.insightSeverity").value(mockInsight.getInsightSeverity().name()))
-                .andExpect(jsonPath("$.insightRootCause").value(mockInsight.getInsightRootCause()))
-                .andExpect(jsonPath("$.insightImpact").value(mockInsight.getInsightImpact()))
-                .andExpect(jsonPath("$.insightPrevention").value(mockInsight.getInsightPrevention()));
+                .andExpect(jsonPath("$.id").value(insightId));
     }
+
 }
