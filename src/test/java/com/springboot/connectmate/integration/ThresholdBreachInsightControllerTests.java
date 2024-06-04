@@ -10,10 +10,6 @@ import com.springboot.connectmate.enums.InsightCategory;
 import com.springboot.connectmate.enums.InsightSeverity;
 import com.springboot.connectmate.enums.Status;
 import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachInsightGenericDTO;
-import com.springboot.connectmate.enums.*;
-import com.springboot.connectmate.models.Metric;
-import com.springboot.connectmate.models.ThresholdBreachInsight;
-import com.springboot.connectmate.repositories.ThresholdBreachInsightRepository;
 import com.springboot.connectmate.repositories.UserRepository;
 import com.springboot.connectmate.services.ThresholdBreachInsightService;
 import org.junit.jupiter.api.AfterEach;
@@ -33,11 +29,11 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
