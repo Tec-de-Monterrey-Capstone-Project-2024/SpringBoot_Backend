@@ -31,7 +31,7 @@ public class ConnectMetricController {
     @ApiResponse(
             responseCode = "200",
             content = @Content(mediaType = "application/json",
-                    array = @ArraySchema(schema = @Schema(implementation = ConnectQueueMetricDTO.class))),
+                               schema = @Schema(implementation = ConnectQueueMetricDTO.class)),
             description = "List of metrics for a given queue and instance fetched successfully."
     )
     @Operation(
@@ -49,7 +49,7 @@ public class ConnectMetricController {
     @ApiResponse(
             responseCode = "200",
             content = @Content(mediaType = "application/json",
-                    array = @ArraySchema(schema = @Schema(implementation = ConnectAgentMetricDTO.class))),
+                               schema = @Schema(implementation = ConnectAgentMetricDTO.class)),
             description = "List of metrics for a given instance and agent fetched successfully"
     )
     @Operation(
