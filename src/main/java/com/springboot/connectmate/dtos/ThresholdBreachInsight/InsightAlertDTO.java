@@ -6,6 +6,8 @@ import com.springboot.connectmate.enums.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Schema(
@@ -25,7 +27,7 @@ public class InsightAlertDTO {
                     "OCCUPANCY", "FIRST_CONTACT_RESOLUTION", "AGENTS_AFTER_CONTACT_WORK", "SLOTS_ACTIVE",
                     "AVERAGE_RESOLUTION_TIME", "SCHEDULE_ADHERENCE", "VIRTUAL_FLOOR_RECONFIGURATION"}
     )
-    private ConnectMetricCode metricCode;
+    private String metricName;
 
     @Schema(
             description = "Category of the insight's performance",
@@ -46,7 +48,6 @@ public class InsightAlertDTO {
             pattern = "EEE MMM dd HH:mm:ss zzz yyyy",
             example = "Fri May 03 17:29:27 CST 2024"
     )
-    @JsonFormat(pattern = "EEE MMM dd HH:mm:ss zzz yyyy")
-    private String occurredAt;
+    private LocalDateTime occurredAt;
 
 }
