@@ -2,12 +2,18 @@ package com.springboot.connectmate.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springboot.connectmate.dtos.ThresholdBreachInsight.InsightAlertDTO;
+
 import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachInsightDetailDTO;
 import com.springboot.connectmate.enums.ConnectMetricCode;
 import com.springboot.connectmate.enums.ConnectMetricType;
 import com.springboot.connectmate.enums.InsightCategory;
 import com.springboot.connectmate.enums.InsightSeverity;
 import com.springboot.connectmate.enums.Status;
+import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachInsightGenericDTO;
+import com.springboot.connectmate.enums.*;
+import com.springboot.connectmate.models.Metric;
+import com.springboot.connectmate.models.ThresholdBreachInsight;
+import com.springboot.connectmate.repositories.ThresholdBreachInsightRepository;
 import com.springboot.connectmate.repositories.UserRepository;
 import com.springboot.connectmate.services.ThresholdBreachInsightService;
 import org.junit.jupiter.api.AfterEach;
@@ -27,6 +33,8 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDateTime;
+import java.util.*;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -65,12 +73,24 @@ public class ThresholdBreachInsightControllerTests {
     @MockBean
     private ThresholdBreachInsightService thresholdBreachInsightService;
 
+
+
     @BeforeEach
     @AfterEach
     void setup() {
         userRepository.deleteAll();
     }
 
+    @Test
+    void updateInsightStatusTest() throws Exception {
+
+        Long thresholdId = 1L;
+        Status newStatus = Status.IN_PROGRESS;
+
+        mockMvc.perform(patch("/api/threshold-breach-insights/{thresholdId}/status", thresholdId)
+                        .param("newStatus", newStatus.toString()))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
 
     @Test
     public void testGetAlerts() throws Exception {
@@ -158,5 +178,47 @@ public class ThresholdBreachInsightControllerTests {
                 .andExpect(jsonPath("$.insightRootCause").value(mockInsight.getInsightRootCause()))
                 .andExpect(jsonPath("$.insightImpact").value(mockInsight.getInsightImpact()))
                 .andExpect(jsonPath("$.insightPrevention").value(mockInsight.getInsightPrevention()));
+    }
+    @Test
+    public void getQueuesByStatusTest() throws Exception {
+        List<ThresholdBreachInsightGenericDTO> toDoInsights = new ArrayList<>();
+        ThresholdBreachInsightGenericDTO queue1 = new ThresholdBreachInsightGenericDTO();
+        queue1.setId(1L);
+        queue1.setInsightName("Average answer speed");
+        queue1.setInsightSummary("The average answer speed the threshold.");
+        queue1.setInsightSeverity(InsightSeverity.LOW);
+        queue1.setStatus(Status.TO_DO);
+        toDoInsights.add(queue1);
+
+        List<ThresholdBreachInsightGenericDTO> doneInsights = new ArrayList<>();
+        ThresholdBreachInsightGenericDTO queue2 = new ThresholdBreachInsightGenericDTO();
+        queue2.setId(2L);
+        queue2.setInsightName("Reimbursement rate");
+        queue2.setInsightSummary("The reimbursement rate is below the threshold.");
+        queue2.setInsightSeverity(InsightSeverity.HIGH);
+        queue2.setStatus(Status.DONE);
+        doneInsights.add(queue2);
+
+        Map<Status, List<ThresholdBreachInsightGenericDTO>> mockInsights = new HashMap<>();
+        mockInsights.put(Status.TO_DO, toDoInsights);
+        mockInsights.put(Status.DONE, doneInsights);
+
+        when(thresholdBreachInsightService.getInsightsByStatus()).thenReturn(mockInsights);
+
+        mockMvc.perform(get("/api/threshold-breach-insights/by-status")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.TO_DO.length()").value(toDoInsights.size()))
+                .andExpect(jsonPath("$.TO_DO[0].id").value(queue1.getId()))
+                .andExpect(jsonPath("$.TO_DO[0].insightName").value(queue1.getInsightName()))
+                .andExpect(jsonPath("$.TO_DO[0].insightSummary").value(queue1.getInsightSummary()))
+                .andExpect(jsonPath("$.TO_DO[0].insightSeverity").value(queue1.getInsightSeverity().name()))
+                .andExpect(jsonPath("$.TO_DO[0].status").value(queue1.getStatus().name()))
+                .andExpect(jsonPath("$.DONE.length()").value(doneInsights.size()))
+                .andExpect(jsonPath("$.DONE[0].id").value(queue2.getId()))
+                .andExpect(jsonPath("$.DONE[0].insightName").value(queue2.getInsightName()))
+                .andExpect(jsonPath("$.DONE[0].insightSummary").value(queue2.getInsightSummary()))
+                .andExpect(jsonPath("$.DONE[0].insightSeverity").value(queue2.getInsightSeverity().name()))
+                .andExpect(jsonPath("$.DONE[0].status").value(queue2.getStatus().name()));
     }
 }
