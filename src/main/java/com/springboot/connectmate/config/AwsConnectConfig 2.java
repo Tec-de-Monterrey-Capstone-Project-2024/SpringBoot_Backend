@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class AWSConnectConfig {
+class AwsConnectConfig {
     @Value("${aws.accessKeyId}")
     private String accessKeyId;
 
@@ -30,4 +30,3 @@ public class AWSConnectConfig {
     }
 
 }
-
