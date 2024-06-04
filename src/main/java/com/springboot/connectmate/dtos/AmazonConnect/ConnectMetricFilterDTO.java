@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class ConnectMetricFilterDTO {
-    String instanceId;
     String instanceArn;
+    String queueId;
 }

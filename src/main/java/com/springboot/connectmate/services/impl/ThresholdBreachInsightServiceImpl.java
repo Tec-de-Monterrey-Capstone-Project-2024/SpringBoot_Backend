@@ -128,16 +128,18 @@ public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsight
         return thresholdBreachInsightRepository.save(insight);
     }
 
-    public ThresholdBreachInsight saveInsight(ThresholdBreachInsight insight){
+    public ThresholdBreachInsight saveInsight(ThresholdBreachInsight insight) {
         return thresholdBreachInsightRepository.save(insight);
+    }
 
-    private InsightAlertDTO mapToInsightAlertDTO(ThresholdBreachInsight insight) {
+    public InsightAlertDTO mapToInsightAlertDTO(ThresholdBreachInsight insight) {
         InsightAlertDTO alert = new InsightAlertDTO();
         alert.setId(insight.getId());
         alert.setMetricName(insight.getMetricCode().getCode().getName());
         alert.setConnectItemType(insight.getConnectItemType());
         alert.setInsightCategory(insight.getInsightCategory());
         alert.setOccurredAt(insight.getOccurredAt());
+
         return alert;
     }
       
@@ -145,9 +147,8 @@ public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsight
     public List<InsightAlertDTO> getAlerts() {
         List<ThresholdBreachInsight> insights = thresholdBreachInsightRepository.findAll();
 
-        return  insights.stream()
+        return insights.stream()
                 .map(this::mapToInsightAlertDTO)
                 .collect(Collectors.toList());
     }
-    
 }

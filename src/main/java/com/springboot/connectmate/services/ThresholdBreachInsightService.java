@@ -14,6 +14,7 @@ import java.util.Optional;
 public interface ThresholdBreachInsightService {
 
     // Internal Use Only
+    InsightAlertDTO mapToInsightAlertDTO(ThresholdBreachInsight insight);
     Optional<ThresholdBreachInsight> getInsightByMetricCodeAndConnectItemId(Metric metric, String connectItemId);
     void deleteInsight(ThresholdBreachInsight insight);
     ThresholdBreachInsight saveInsight(Metric metric,
