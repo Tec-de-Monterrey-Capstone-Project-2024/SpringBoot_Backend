@@ -45,6 +45,7 @@ public class AuthControllerTests {
         System.setProperty("DB_USER", "test_user");
         System.setProperty("DB_PASSWORD", "test_password");
     }
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -83,4 +84,42 @@ public class AuthControllerTests {
                 .andExpect(jsonPath("$.instanceId",
                         is(registerUserFormDTO.getInstanceId())));
     }
+
+    @Test
+    public void givenFirebaseIdAndRegistration_whenLoginUser_thenReturnUserDetails() throws Exception {
+        // given - precondition or setup
+        RegisterUserFormDTO registerUserFormDTO = new RegisterUserFormDTO();
+        registerUserFormDTO.setInstanceId("7c78bd60-4a9f-40e5-b461-b7a0dfaad848");
+        registerUserFormDTO.setFirebaseId("BYFV06ZkYDTE4rWliVMgZWe2Egm1");
+        registerUserFormDTO.setEmail("a01657142@tec.mx");
+        // Register the user
+        mockMvc.perform(
+                        post("/api/auth/users/register")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(registerUserFormDTO))
+                ).andExpect(status().isCreated())
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON));
+
+        // when - action or behaviour tested
+        ResultActions response = mockMvc.perform(
+                        get("/api/auth/users/login/{firebaseId}", registerUserFormDTO.getFirebaseId())
+                                .contentType(MediaType.APPLICATION_JSON)
+                ).andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON));
+
+        // then - verify the result or output using assert statements
+        response.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.connectId", is("ed1ad50d-2ffc-44ad-a565-71f13ad991a5")))
+                .andExpect(jsonPath("$.instanceId", is(registerUserFormDTO.getInstanceId())))
+                .andExpect(jsonPath("$.username", is("aram_connectmate")))
+                .andExpect(jsonPath("$.firstName", is("José Aram")))
+                .andExpect(jsonPath("$.lastName", is("Méndez Gómez")))
+                .andExpect(jsonPath("$.email", is(registerUserFormDTO.getEmail())))
+                .andExpect(jsonPath("$.secondaryEmail", is("jose.aram.mendez@gmail.com")))
+                .andExpect(jsonPath("$.mobile", is("+523525231067")))
+                .andDo(print());
+
+    }
+
 }
