@@ -36,7 +36,7 @@ public class ConnectMetricController {
     )
     @Operation(
             summary = "Get all queue metrics of a particular queue.",
-            description = "Get Amazon Connect queue metrics by instance ID and queue ID."
+            description = "Get Amazon Connect queue metrics by instance Arn and queue ID."
     )
     @GetMapping("/instances/queue-metrics")
     public ResponseEntity<ConnectQueueMetricDTO> getQueueMetrics(

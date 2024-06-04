@@ -1,8 +1,6 @@
 package com.springboot.connectmate.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.springboot.connectmate.dtos.AmazonConnect.ConnectMetricFilterDTO;
-import com.springboot.connectmate.enums.ConnectMetricType;
 import com.springboot.connectmate.repositories.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -63,14 +61,11 @@ public class ConnectMetricControllerTests {
     @Test
     public void givenInstanceArnAndQueueId_whenGetQueueMetrics_thenReturnQueueMetrics() throws Exception {
         // given - precondition or setup
-        ConnectMetricFilterDTO filters = new ConnectMetricFilterDTO();
-        filters.setInstanceArn("7c78bd60-4a9f-40e5-b461-b7a0dfaad848");
-        filters.setQueueId("arn:aws:connect:us-east-1:674530197385:instance/7c78bd60-4a9f-40e5-b461-b7a0dfaad848/queue/f0813607-af92-4a36-91e6-630ababb643c");
+        String instanceArn = "arn:aws:connect:us-east-1:674530197385:instance/7c78bd60-4a9f-40e5-b461-b7a0dfaad848"; // Connectmate
+        String queueId = "f0813607-af92-4a36-91e6-630ababb643c"; // BasicQueue
 
         // when - action or behaviour tested
-        ResultActions response = mockMvc.perform(get("/api/amazon-connect/instances/queue-metrics")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(filters)))
+        ResultActions response = mockMvc.perform(get("/api/amazon-connect/instances/queue-metrics?instanceArn=" + instanceArn + "&queueId=" + queueId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
@@ -80,13 +75,13 @@ public class ConnectMetricControllerTests {
 
     // AGENT METRICS
     @Test
-    public void givenInstanceArnAndQueueId_whenGetAgentMetrics_thenReturnAgentMetrics() throws Exception {
+    public void givenInstanceArnAndAgentId_whenGetAgentMetrics_thenReturnAgentMetrics() throws Exception {
         // given - precondition or setup
-        String instanceId = "7c78bd60-4a9f-40e5-b461-b7a0dfaad848";
-        String queueArn = "arn:aws:connect:us-east-1:674530197385:instance/7c78bd60-4a9f-40e5-b461-b7a0dfaad848/queue/f0813607-af92-4a36-91e6-630ababb643c";
+        String instanceArn = "arn:aws:connect:us-east-1:674530197385:instance/7c78bd60-4a9f-40e5-b461-b7a0dfaad848"; // Connectmate
+        String agentId = "ed7c391c-8e65-415f-950c-7347dcc9f067"; // antonio_connectmate
 
         // when - action or behaviour tested
-        ResultActions response = mockMvc.perform(get("/api/amazon-connect/instances/agent-metrics?instanceId=" + instanceId + "&queueArn=" + queueArn))
+        ResultActions response = mockMvc.perform(get("/api/amazon-connect/instances/agent-metrics?instanceArn=" + instanceArn + "&agentId=" + agentId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
