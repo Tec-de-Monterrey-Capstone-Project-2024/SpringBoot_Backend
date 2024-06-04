@@ -101,7 +101,6 @@ public class BedrockServiceImpl implements BedrockService {
         ThresholdBreachInsight savedInsight = thresholdBreachInsightService.saveInsight(metric, thresholdBreachFields, insightFields);
 
         // Send a Message to the Frontend via WS
-        // TODO: Send a message to the frontend to display an alert (Richie)
         socketService.sendInsight((SocketIOClient) socketClient, mapper.map(savedInsight, ThresholdBreachInsightGenericDTO.class));
 
         // Send an Alert Email

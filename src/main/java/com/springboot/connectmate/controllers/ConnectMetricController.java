@@ -13,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/amazon-connect")
 @Tag(
@@ -51,35 +49,6 @@ public class ConnectMetricController {
     @ApiResponse(
             responseCode = "200",
             content = @Content(mediaType = "application/json",
-                    array = @ArraySchema(schema = @Schema(implementation = String.class))),
-            description = "List of historical metrics for a given instance fetched successfully"
-    )
-    @GetMapping("/instances/{instanceId}/queues/{queueId}/historial-metrics")
-    public ResponseEntity<List<String>> getHistoricalMetrics(
-            @PathVariable(name = "instanceId") String instanceId,
-            @PathVariable(name = "queueId") String queueId) {
-        return ResponseEntity.ok(amazonConnectService.getHistoricalMetrics(instanceId, queueId));
-    }
-
-    @ApiResponse(
-            responseCode = "200",
-            content = @Content(mediaType = "application/json",
-                    array = @ArraySchema(schema = @Schema(implementation = String.class))),
-            description = "List of current metrics for a given instance fetched successfully"
-    )
-    @Operation(
-            summary = "Get all current metrics",
-            description = "Get Amazon Connect current metrics by instanceARN."
-    )
-    @GetMapping("/instances/current-metrics")
-    public ResponseEntity<List<String>> getCurrentMetrics(
-            @RequestParam(name = "instanceArn") String instanceArn){
-        return ResponseEntity.ok(amazonConnectService.getCurrentMetrics(instanceArn));
-    }
-
-    @ApiResponse(
-            responseCode = "200",
-            content = @Content(mediaType = "application/json",
                     array = @ArraySchema(schema = @Schema(implementation = ConnectAgentMetricDTO.class))),
             description = "List of metrics for a given instance and agent fetched successfully"
     )
@@ -93,5 +62,4 @@ public class ConnectMetricController {
             @RequestParam(name = "agentId") String agentId) {
         return ResponseEntity.ok(amazonConnectService.getAgentMetrics(instanceArn, agentId));
     }
-
 }
