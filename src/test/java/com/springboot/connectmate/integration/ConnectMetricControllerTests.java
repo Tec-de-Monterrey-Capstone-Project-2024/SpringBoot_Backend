@@ -1,6 +1,5 @@
 package com.springboot.connectmate.integration;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -11,17 +10,13 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 public class ConnectMetricControllerTests {
     @Autowired
     private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     // QUEUE METRICS
     @Test
@@ -36,7 +31,13 @@ public class ConnectMetricControllerTests {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
         // then - verify the result or output using assert statements
-        response.andDo(print());
+        response.andDo(print())
+                .andExpect(jsonPath("$.abandonmentRate").hasJsonPath())
+                .andExpect(jsonPath("$.avgHandleTime").hasJsonPath())
+                .andExpect(jsonPath("$.avgAfterContactWorkTime").hasJsonPath())
+                .andExpect(jsonPath("$.avgResolutionTime").hasJsonPath())
+                .andExpect(jsonPath("$.avgQueueAnswerTime").hasJsonPath())
+                .andExpect(jsonPath("$.serviceLevel").hasJsonPath());
     }
 
     // AGENT METRICS
@@ -52,6 +53,10 @@ public class ConnectMetricControllerTests {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
         // then - verify the result or output using assert statements
-        response.andDo(print());
+        response.andDo(print())
+                .andExpect(jsonPath("$.abandonmentRate").hasJsonPath())
+                .andExpect(jsonPath("$.avgHandleTime").hasJsonPath())
+                .andExpect(jsonPath("$.avgAfterContactWorkTime").hasJsonPath())
+                .andExpect(jsonPath("$.agentOccupancy").hasJsonPath());
     }
 }
