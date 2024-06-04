@@ -1,15 +1,13 @@
 package com.springboot.connectmate.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.springboot.connectmate.dtos.ThresholdBreachInsight.InsightAlertDTO;
 
-import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachInsightGenericDTO;
-import com.springboot.connectmate.services.ThresholdBreachInsightService;
-import com.springboot.connectmate.enums.InsightSeverity;
-import com.springboot.connectmate.enums.Status;
 import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachInsightDetailDTO;
 import com.springboot.connectmate.enums.*;
-
+import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachInsightGenericDTO;
 import com.springboot.connectmate.repositories.UserRepository;
+import com.springboot.connectmate.services.ThresholdBreachInsightService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,21 +18,24 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @Testcontainers
@@ -65,6 +66,7 @@ public class ThresholdBreachInsightControllerTests {
 
     @MockBean
     private ThresholdBreachInsightService thresholdBreachInsightService;
+
 
 
     @BeforeEach
@@ -173,5 +175,41 @@ public class ThresholdBreachInsightControllerTests {
                 .andExpect(jsonPath("$.insightRootCause").value(mockInsight.getInsightRootCause()))
                 .andExpect(jsonPath("$.insightImpact").value(mockInsight.getInsightImpact()))
                 .andExpect(jsonPath("$.insightPrevention").value(mockInsight.getInsightPrevention()));
+    }
+    @Test
+    public void testGetAlerts() throws Exception {
+        // Mocking the service response
+        List<InsightAlertDTO> mockAlerts = new ArrayList<>();
+        InsightAlertDTO alert1 = new InsightAlertDTO();
+        alert1.setId(1L);
+        alert1.setInsightCategory(InsightCategory.CRITICAL);
+        alert1.setConnectItemType(ConnectMetricType.AGENT);
+        alert1.setOccurredAt(LocalDateTime.of(2024, 5, 3, 17, 29, 27));
+
+        InsightAlertDTO alert2 = new InsightAlertDTO();
+        alert2.setId(2L);
+        alert2.setInsightCategory(InsightCategory.UNSATISFACTORY);
+        alert2.setConnectItemType(ConnectMetricType.QUEUE);
+        alert2.setOccurredAt(LocalDateTime.of(2024, 5, 4, 10, 15, 30));
+
+        mockAlerts.add(alert1);
+        mockAlerts.add(alert2);
+
+        // Mock the service method call
+        when(thresholdBreachInsightService.getAlerts()).thenReturn(mockAlerts);
+
+        // Perform the GET request and verify the response
+        mockMvc.perform(get("/api/threshold-breach-insights/alerts")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(mockAlerts.size()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(alert1.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].insightCategory").value(alert1.getInsightCategory().name()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].connectItemType").value(alert1.getConnectItemType().name()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].occurredAt").value(alert1.getOccurredAt().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].id").value(alert2.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].insightCategory").value(alert2.getInsightCategory().name()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].connectItemType").value(alert2.getConnectItemType().name()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].occurredAt").value(alert2.getOccurredAt().toString()));
     }
 }
