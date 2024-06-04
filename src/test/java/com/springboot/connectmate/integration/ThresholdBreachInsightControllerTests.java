@@ -2,9 +2,10 @@ package com.springboot.connectmate.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springboot.connectmate.dtos.ThresholdBreachInsight.InsightAlertDTO;
-import com.springboot.connectmate.enums.ConnectMetricCode;
-import com.springboot.connectmate.enums.ConnectMetricType;
-import com.springboot.connectmate.enums.InsightCategory;
+import com.springboot.connectmate.enums.*;
+import com.springboot.connectmate.models.Metric;
+import com.springboot.connectmate.models.ThresholdBreachInsight;
+import com.springboot.connectmate.repositories.ThresholdBreachInsightRepository;
 import com.springboot.connectmate.repositories.UserRepository;
 import com.springboot.connectmate.services.ThresholdBreachInsightService;
 import org.junit.jupiter.api.AfterEach;
@@ -18,15 +19,19 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -62,11 +67,24 @@ public class ThresholdBreachInsightControllerTests {
     @MockBean
     private ThresholdBreachInsightService thresholdBreachInsightService;
 
+
     @BeforeEach
     @AfterEach
     void setup() {
         userRepository.deleteAll();
     }
+
+    @Test
+    void updateInsightStatusTest() throws Exception {
+
+        Long thresholdId = 1L;
+        Status newStatus = Status.IN_PROGRESS;
+
+        mockMvc.perform(patch("/api/threshold-breach-insights/{thresholdId}/status", thresholdId)
+                        .param("newStatus", newStatus.toString()))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
 
     @Test
     public void testGetAlerts() throws Exception {
