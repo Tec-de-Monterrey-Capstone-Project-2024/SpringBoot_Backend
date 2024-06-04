@@ -9,11 +9,11 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
+@Builder // Lombok annotation to instantiate the object with build function
 @Getter
 @Setter
 @AllArgsConstructor // Lombok annotation to create a constructor with all the arguments
 @NoArgsConstructor // Lombok annotation to create a constructor with no arguments
-
 @Entity
 @Table(
         name = "threshold_breach_insight",
