@@ -178,7 +178,7 @@ public class ThresholdBreachInsightControllerTests {
                 .andExpect(jsonPath("$.insightPrevention").value(mockInsight.getInsightPrevention()));
     }
     @Test
-    public void getQueuesByStatusTest() throws Exception {
+    public void getInsightsByStatusTest() throws Exception {
         List<ThresholdBreachInsightGenericDTO> toDoInsights = new ArrayList<>();
         ThresholdBreachInsightGenericDTO queue1 = new ThresholdBreachInsightGenericDTO();
         queue1.setId(1L);
