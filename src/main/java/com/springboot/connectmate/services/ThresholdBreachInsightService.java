@@ -14,9 +14,10 @@ import java.util.Optional;
 public interface ThresholdBreachInsightService {
 
     // Internal Use Only
+    InsightAlertDTO mapToInsightAlertDTO(ThresholdBreachInsight insight);
     Optional<ThresholdBreachInsight> getInsightByMetricCodeAndConnectItemId(Metric metric, String connectItemId);
     void deleteInsight(ThresholdBreachInsight insight);
-    void saveInsight(Metric metric,
+    ThresholdBreachInsight saveInsight(Metric metric,
                      ThresholdBreachFieldsDTO thresholdBreachData,
                      InsightFieldsDTO insightData
     );
@@ -27,6 +28,9 @@ public interface ThresholdBreachInsightService {
     List<ThresholdBreachInsightGenericDTO> getInsightsByStatus(Status status);
     List<ThresholdBreachInsightGenericDTO> getInsightsByConnectItemId(String connectItemId);
     List<ThresholdBreachInsightGenericDTO> getInsightsByItemType(ConnectMetricType connectItemType);
+
+    ThresholdBreachInsight saveInsight(ThresholdBreachInsightDetailDTO insight);
+    ThresholdBreachInsight saveInsight(ThresholdBreachInsight insight);
 
     // Get All Insights by Status
     Map<Status, List<ThresholdBreachInsightGenericDTO>> getInsightsByStatus();

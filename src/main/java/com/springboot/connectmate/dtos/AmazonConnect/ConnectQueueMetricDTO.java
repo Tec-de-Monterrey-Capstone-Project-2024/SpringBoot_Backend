@@ -14,6 +14,7 @@ public class ConnectQueueMetricDTO {
             example = "90"
     )
     private Double abandonmentRate;
+    
     @Schema(
             description = "Average Handle Time of the queue.",
             example = "20"
@@ -30,7 +31,7 @@ public class ConnectQueueMetricDTO {
             description = "Average Resolution Time of the queue.",
             example = "120"
     )
-    private double avgResolutionTime;
+    private Double avgResolutionTime;
 
     @Schema(
             description = "Average Queue Answer Time of the queue.",

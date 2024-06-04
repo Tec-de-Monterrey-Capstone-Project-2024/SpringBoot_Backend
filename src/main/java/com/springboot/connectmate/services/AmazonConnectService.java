@@ -25,8 +25,6 @@ public interface AmazonConnectService {
     Queue describeQueue(String instanceId, String queueId);
 
     // Metric Services
-    List<String> getHistoricalMetrics(String instanceId, String queueId);
-    List<String> getCurrentMetrics(String instanceId);
     ConnectQueueMetricDTO getQueueMetrics(String instanceId, String queueId);
     ConnectAgentMetricDTO getAgentMetrics(String instanceArn, String agentId);
     public Map<String, ConnectQueueInfoDTO> getQueueUserCounts(String instanceId);
