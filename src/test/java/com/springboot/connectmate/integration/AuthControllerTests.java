@@ -45,6 +45,7 @@ public class AuthControllerTests {
         System.setProperty("DB_USER", "test_user");
         System.setProperty("DB_PASSWORD", "test_password");
     }
+
     @Autowired
     private MockMvc mockMvc;
 

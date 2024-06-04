@@ -31,6 +31,7 @@ public class ThresholdBreachInsightControllerTests {
         System.setProperty("DB_USER", "test_user");
         System.setProperty("DB_PASSWORD", "test_password");
     }
+
     @Autowired
     private MockMvc mockMvc;
 
