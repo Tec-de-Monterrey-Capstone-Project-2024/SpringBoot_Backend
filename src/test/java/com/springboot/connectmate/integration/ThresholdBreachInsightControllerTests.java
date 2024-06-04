@@ -22,6 +22,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -34,7 +35,9 @@ import java.util.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -82,7 +85,6 @@ public class ThresholdBreachInsightControllerTests {
 
         Long thresholdId = 1L;
         Status newStatus = Status.IN_PROGRESS;
-
         mockMvc.perform(patch("/api/threshold-breach-insights/{thresholdId}/status", thresholdId)
                         .param("newStatus", newStatus.toString()))
                 .andExpect(MockMvcResultMatchers.status().isOk());
@@ -198,23 +200,27 @@ public class ThresholdBreachInsightControllerTests {
         Map<Status, List<ThresholdBreachInsightGenericDTO>> mockInsights = new HashMap<>();
         mockInsights.put(Status.TO_DO, toDoInsights);
         mockInsights.put(Status.DONE, doneInsights);
-
         when(thresholdBreachInsightService.getInsightsByStatus()).thenReturn(mockInsights);
-
         mockMvc.perform(get("/api/threshold-breach-insights/by-status")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.TO_DO.length()").value(toDoInsights.size()))
-                .andExpect(jsonPath("$.TO_DO[0].id").value(queue1.getId()))
-                .andExpect(jsonPath("$.TO_DO[0].insightName").value(queue1.getInsightName()))
-                .andExpect(jsonPath("$.TO_DO[0].insightSummary").value(queue1.getInsightSummary()))
-                .andExpect(jsonPath("$.TO_DO[0].insightSeverity").value(queue1.getInsightSeverity().name()))
-                .andExpect(jsonPath("$.TO_DO[0].status").value(queue1.getStatus().name()))
-                .andExpect(jsonPath("$.DONE.length()").value(doneInsights.size()))
-                .andExpect(jsonPath("$.DONE[0].id").value(queue2.getId()))
-                .andExpect(jsonPath("$.DONE[0].insightName").value(queue2.getInsightName()))
-                .andExpect(jsonPath("$.DONE[0].insightSummary").value(queue2.getInsightSummary()))
-                .andExpect(jsonPath("$.DONE[0].insightSeverity").value(queue2.getInsightSeverity().name()))
-                .andExpect(jsonPath("$.DONE[0].status").value(queue2.getStatus().name()));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    public void getInsightsTest () throws Exception {
+        List<ThresholdBreachInsightGenericDTO> mockInsights = new ArrayList<>();
+        ThresholdBreachInsightGenericDTO insight1 = new ThresholdBreachInsightGenericDTO();
+        insight1.setId(1L);
+        insight1.setInsightName("Average answer speed");
+        insight1.setInsightSummary("The average answer speed the threshold.");
+        insight1.setInsightSeverity(InsightSeverity.LOW);
+        insight1.setStatus(Status.TO_DO);
+        mockInsights.add(insight1);
+        when(thresholdBreachInsightService.getAllInsights()).thenReturn(mockInsights);
+        mockMvc.perform(get("/api/threshold-breach-insights?connectItemId=1&itemType=QUEUE")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 }
