@@ -193,12 +193,16 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
         System.out.println(getMetricDataResult.toString());
 
         ConnectQueueMetricDTO metricsDTO = new ConnectQueueMetricDTO();
-        metricsDTO.setAbandonmentRate(getMetricDataResult.getMetricResults().get(0).getCollections().get(0).getValue());
-        metricsDTO.setAvgHandleTime(getMetricDataResult.getMetricResults().get(0).getCollections().get(1).getValue());
-        metricsDTO.setAvgAfterContactWorkTime(getMetricDataResult.getMetricResults().get(0).getCollections().get(2).getValue());
-        metricsDTO.setAvgResolutionTime(getMetricDataResult.getMetricResults().get(0).getCollections().get(3).getValue());
-        metricsDTO.setAvgQueueAnswerTime(getMetricDataResult.getMetricResults().get(0).getCollections().get(4).getValue());
-        metricsDTO.setServiceLevel(getMetricDataResult.getMetricResults().get(0).getCollections().get(5).getValue());
+
+        if(!getMetricDataResult.getMetricResults().isEmpty()) {
+            metricsDTO.setAbandonmentRate(getMetricDataResult.getMetricResults().get(0).getCollections().get(0).getValue());
+            metricsDTO.setAvgHandleTime(getMetricDataResult.getMetricResults().get(0).getCollections().get(1).getValue());
+            metricsDTO.setAvgAfterContactWorkTime(getMetricDataResult.getMetricResults().get(0).getCollections().get(2).getValue());
+            metricsDTO.setAvgResolutionTime(getMetricDataResult.getMetricResults().get(0).getCollections().get(3).getValue());
+            metricsDTO.setAvgQueueAnswerTime(getMetricDataResult.getMetricResults().get(0).getCollections().get(4).getValue());
+            metricsDTO.setServiceLevel(getMetricDataResult.getMetricResults().get(0).getCollections().get(5).getValue());
+        }
+
         return metricsDTO;
     }
 
@@ -230,6 +234,7 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
                 .withFilterValues(Collections.singletonList(agentId))
         );
 
+        // 24 hours of scope for historical metrics
         ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
         ZonedDateTime endTime = now.withSecond(0).withNano(0).minusMinutes(now.getMinute() % 5);
         ZonedDateTime startTime = endTime.minusHours(23);
@@ -245,10 +250,14 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
         System.out.println(getMetricDataResult.toString());
 
         ConnectAgentMetricDTO metricsDTO = new ConnectAgentMetricDTO();
-        metricsDTO.setAbandonmentRate(getMetricDataResult.getMetricResults().get(0).getCollections().get(0).getValue());
-        metricsDTO.setAvgHandleTime(getMetricDataResult.getMetricResults().get(0).getCollections().get(1).getValue());
-        metricsDTO.setAvgAfterContactWorkTime(getMetricDataResult.getMetricResults().get(0).getCollections().get(2).getValue());
-        metricsDTO.setAgentOccupancy(getMetricDataResult.getMetricResults().get(0).getCollections().get(3).getValue());
+
+        if(!getMetricDataResult.getMetricResults().isEmpty()){
+            metricsDTO.setAbandonmentRate(getMetricDataResult.getMetricResults().get(0).getCollections().get(0).getValue());
+            metricsDTO.setAvgHandleTime(getMetricDataResult.getMetricResults().get(0).getCollections().get(1).getValue());
+            metricsDTO.setAvgAfterContactWorkTime(getMetricDataResult.getMetricResults().get(0).getCollections().get(2).getValue());
+            metricsDTO.setAgentOccupancy(getMetricDataResult.getMetricResults().get(0).getCollections().get(3).getValue());
+        }
+
         return metricsDTO;
     }
 

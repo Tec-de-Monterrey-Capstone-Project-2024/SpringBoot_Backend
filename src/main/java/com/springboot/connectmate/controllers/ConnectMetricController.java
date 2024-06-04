@@ -31,12 +31,12 @@ public class ConnectMetricController {
     @ApiResponse(
             responseCode = "200",
             content = @Content(mediaType = "application/json",
-                    array = @ArraySchema(schema = @Schema(implementation = ConnectQueueMetricDTO.class))),
+                               schema = @Schema(implementation = ConnectQueueMetricDTO.class)),
             description = "List of metrics for a given queue and instance fetched successfully."
     )
     @Operation(
             summary = "Get all queue metrics of a particular queue.",
-            description = "Get Amazon Connect queue metrics by instance ID and queue ID."
+            description = "Get Amazon Connect queue metrics by instance Arn and queue ID."
     )
     @GetMapping("/instances/queue-metrics")
     public ResponseEntity<ConnectQueueMetricDTO> getQueueMetrics(
@@ -49,7 +49,7 @@ public class ConnectMetricController {
     @ApiResponse(
             responseCode = "200",
             content = @Content(mediaType = "application/json",
-                    array = @ArraySchema(schema = @Schema(implementation = ConnectAgentMetricDTO.class))),
+                               schema = @Schema(implementation = ConnectAgentMetricDTO.class)),
             description = "List of metrics for a given instance and agent fetched successfully"
     )
     @Operation(
