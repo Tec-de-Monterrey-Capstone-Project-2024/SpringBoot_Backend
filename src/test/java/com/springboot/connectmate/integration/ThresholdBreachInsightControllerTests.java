@@ -5,8 +5,6 @@ import com.springboot.connectmate.enums.*;
 import com.springboot.connectmate.models.Metric;
 import com.springboot.connectmate.models.ThresholdBreachInsight;
 import com.springboot.connectmate.repositories.MetricRepository;
-import com.springboot.connectmate.repositories.UserRepository;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +21,6 @@ import com.springboot.connectmate.repositories.ThresholdBreachInsightRepository;
 
 import java.time.LocalDateTime;
 
-import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -107,8 +104,4 @@ public class ThresholdBreachInsightControllerTests {
                 .andExpect(jsonPath("$[0].connectItemType").exists())
                 .andExpect(jsonPath("$[0].occurredAt").exists());
     }
-
 }
-
-
-
