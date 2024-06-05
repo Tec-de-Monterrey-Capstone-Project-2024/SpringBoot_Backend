@@ -1,14 +1,17 @@
 package com.springboot.connectmate.integration;
 
+import com.springboot.connectmate.dtos.Metric.MetricDTO;
 import com.springboot.connectmate.enums.ConnectMetricCode;
 import com.springboot.connectmate.models.Metric;
 import com.springboot.connectmate.repositories.MetricRepository;
+import com.springboot.connectmate.services.MetricService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
@@ -17,7 +20,11 @@ import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -53,9 +60,12 @@ public class MetricControllerTests {
     @Autowired
     private MetricRepository metricRepository;
 
+    @MockBean
+    private MetricService metricService;
+
     @BeforeEach
     @AfterEach
-    void setup(){
+    void setup() {
         metricRepository.deleteAll();
     }
 
@@ -107,5 +117,31 @@ public class MetricControllerTests {
                 .andExpect(jsonPath("$.maximumThresholdValue", is(maxThreshold)))
                 .andExpect(jsonPath("$.targetValue", is(targetValue)));
     }
-}
 
+    @Test
+    void givenMetrics_whenGetAllMetrics_thenReturnMetricList() throws Exception {
+        List<MetricDTO> mockMetrics = new ArrayList<>();
+        MetricDTO metric1 = new MetricDTO(ConnectMetricCode.SERVICE_LEVEL, 0.0, 100.0, 80.0);
+        MetricDTO metric2 = new MetricDTO(ConnectMetricCode.ABANDONMENT_RATE, 0.0, 100.0, 5.0);
+
+        mockMetrics.add(metric1);
+        mockMetrics.add(metric2);
+
+        when(metricService.getAllConnectMateMetrics()).thenReturn(mockMetrics);
+
+        mockMvc.perform(get("/api/metrics")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print()) // This will print the result to the console
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(mockMetrics.size()))
+                .andExpect(jsonPath("$[0].code").value(metric1.getCode().name()))
+                .andExpect(jsonPath("$[0].minimumThresholdValue").value(metric1.getMinimumThresholdValue()))
+                .andExpect(jsonPath("$[0].maximumThresholdValue").value(metric1.getMaximumThresholdValue()))
+                .andExpect(jsonPath("$[0].targetValue").value(metric1.getTargetValue()))
+                .andExpect(jsonPath("$[1].code").value(metric2.getCode().name()))
+                .andExpect(jsonPath("$[1].minimumThresholdValue").value(metric2.getMinimumThresholdValue()))
+                .andExpect(jsonPath("$[1].maximumThresholdValue").value(metric2.getMaximumThresholdValue()))
+                .andExpect(jsonPath("$[1].targetValue").value(metric2.getTargetValue()));
+    }
+
+}
