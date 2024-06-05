@@ -120,6 +120,7 @@ public class MetricControllerTests {
 
     @Test
     public void testGetAllMetrics() throws Exception {
+        // given - precondition or setup
         List<MetricDTO> mockMetrics = new ArrayList<>();
         MetricDTO metric1 = new MetricDTO(ConnectMetricCode.SERVICE_LEVEL, 0.0, 100.0, 80.0);
         MetricDTO metric2 = new MetricDTO(ConnectMetricCode.ABANDONMENT_RATE, 0.0, 100.0, 5.0);
@@ -129,8 +130,10 @@ public class MetricControllerTests {
 
         when(metricService.getAllConnectMateMetrics()).thenReturn(mockMetrics);
 
+        // when - action or behavior that we are testing
         mockMvc.perform(get("/api/metrics")
                         .contentType(MediaType.APPLICATION_JSON))
+                // then - verify the output
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(mockMetrics.size()))
                 .andExpect(jsonPath("$[0].code").value(metric1.getCode().name()))
@@ -142,4 +145,5 @@ public class MetricControllerTests {
                 .andExpect(jsonPath("$[1].maximumThresholdValue").value(metric2.getMaximumThresholdValue()))
                 .andExpect(jsonPath("$[1].targetValue").value(metric2.getTargetValue()));
     }
+
 }
