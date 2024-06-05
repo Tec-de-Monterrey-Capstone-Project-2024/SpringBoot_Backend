@@ -52,7 +52,6 @@ public class AmazonConnectInstancesTests {
         System.setProperty("DB_PASSWORD", "test_password");
     }
 
-
     @Autowired
     private MockMvc mockMvc;
 
@@ -106,7 +105,7 @@ public class AmazonConnectInstancesTests {
     }
 
     @Test
-    public void listInstances() throws Exception {
+    public void givenInstances_whenListInstances_thenReturnInstanceSummaries() throws Exception {
         Mockito.when(amazonConnectService.listConnectInstances()).thenReturn(instanceSummaries);
 
         ResultActions response = mockMvc.perform(get("/api/amazon-connect/instances")
@@ -119,7 +118,7 @@ public class AmazonConnectInstancesTests {
     }
 
     @Test
-    public void getInstance() throws Exception {
+    public void givenInstanceId_whenGetInstance_thenReturnInstance() throws Exception {
         String instanceId = "2f899f72-4021-4b35-b490-07bcc2cc27bb";
         Mockito.when(amazonConnectService.getConnectInstance(instanceId)).thenReturn(instance);
 
