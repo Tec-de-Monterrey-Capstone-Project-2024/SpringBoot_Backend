@@ -1,9 +1,6 @@
 package com.springboot.connectmate.models;
 
-import com.springboot.connectmate.enums.ConnectMetricType;
-import com.springboot.connectmate.enums.InsightCategory;
-import com.springboot.connectmate.enums.InsightSeverity;
-import com.springboot.connectmate.enums.Status;
+import com.springboot.connectmate.enums.*;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -86,5 +83,6 @@ public class ThresholdBreachInsight {
 
     @Column(name = "insight_prevention", nullable = false, columnDefinition = "TEXT")
     private String insightPrevention;
+
 
 }
