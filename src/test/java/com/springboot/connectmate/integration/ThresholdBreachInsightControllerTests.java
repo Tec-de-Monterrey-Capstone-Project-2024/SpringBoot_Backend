@@ -67,7 +67,6 @@ public class ThresholdBreachInsightControllerTests {
     @MockBean
     private ThresholdBreachInsightService thresholdBreachInsightService;
 
-
     @BeforeEach
     @AfterEach
     void setup(){
@@ -175,9 +174,9 @@ public class ThresholdBreachInsightControllerTests {
                 .andExpect(jsonPath("$.insightImpact").value(mockInsight.getInsightImpact()))
                 .andExpect(jsonPath("$.insightPrevention").value(mockInsight.getInsightPrevention()));
     }
+
     @Test
     public void testGetAlerts() throws Exception {
-        // Mocking the service response
         List<InsightAlertDTO> mockAlerts = new ArrayList<>();
         InsightAlertDTO alert1 = new InsightAlertDTO();
         alert1.setId(1L);
@@ -194,13 +193,11 @@ public class ThresholdBreachInsightControllerTests {
         mockAlerts.add(alert1);
         mockAlerts.add(alert2);
 
-        // Mock the service method call
         when(thresholdBreachInsightService.getAlerts()).thenReturn(mockAlerts);
 
-        // Perform the GET request and verify the response
         mockMvc.perform(get("/api/threshold-breach-insights/alerts")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print()) // This will print the result to the console
+                .andDo(print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(mockAlerts.size()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(alert1.getId()))
