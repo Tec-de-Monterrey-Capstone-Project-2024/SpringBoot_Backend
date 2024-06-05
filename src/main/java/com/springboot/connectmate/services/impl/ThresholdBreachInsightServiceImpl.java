@@ -50,7 +50,7 @@ public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsight
     }
 
     @Override
-    public ThresholdBreachInsight saveInsight(
+    public void saveInsight(
             Metric metric,
             ThresholdBreachFieldsDTO thresholdBreachData,
             InsightFieldsDTO insightData) {
@@ -62,7 +62,7 @@ public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsight
         // Link the insight to the metric (Foreign Key)
         thresholdBreachInsight.setMetricCode(metric);
 
-        return thresholdBreachInsightRepository.save(thresholdBreachInsight);
+        thresholdBreachInsightRepository.save(thresholdBreachInsight);
     }
 
     @Override
@@ -122,33 +122,23 @@ public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsight
         return "Status updated successfully";
     }
 
-    public ThresholdBreachInsight saveInsight(ThresholdBreachInsightDetailDTO insightDTO){
-        ThresholdBreachInsight insight = mapper.map(insightDTO, ThresholdBreachInsight.class);
 
-        return thresholdBreachInsightRepository.save(insight);
-    }
-
-    public ThresholdBreachInsight saveInsight(ThresholdBreachInsight insight) {
-        return thresholdBreachInsightRepository.save(insight);
-    }
-
-    public InsightAlertDTO mapToInsightAlertDTO(ThresholdBreachInsight insight) {
+    private InsightAlertDTO mapToInsightAlertDTO(ThresholdBreachInsight insight) {
         InsightAlertDTO alert = new InsightAlertDTO();
         alert.setId(insight.getId());
         alert.setMetricName(insight.getMetricCode().getCode().getName());
         alert.setConnectItemType(insight.getConnectItemType());
         alert.setInsightCategory(insight.getInsightCategory());
         alert.setOccurredAt(insight.getOccurredAt());
-
         return alert;
     }
-      
     @Override
     public List<InsightAlertDTO> getAlerts() {
         List<ThresholdBreachInsight> insights = thresholdBreachInsightRepository.findAll();
 
-        return insights.stream()
+        return  insights.stream()
                 .map(this::mapToInsightAlertDTO)
                 .collect(Collectors.toList());
     }
+    
 }

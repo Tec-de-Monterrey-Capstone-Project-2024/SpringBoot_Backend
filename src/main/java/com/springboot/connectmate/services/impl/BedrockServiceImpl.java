@@ -1,21 +1,18 @@
 package com.springboot.connectmate.services.impl;
 
-import com.corundumstudio.socketio.SocketIOClient;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springboot.connectmate.dtos.ThresholdBreachInsight.InsightFieldsDTO;
 import com.springboot.connectmate.dtos.ThresholdBreachInsight.KPIDataContextDTO;
 import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachFieldsDTO;
-import com.springboot.connectmate.dtos.ThresholdBreachInsight.ThresholdBreachInsightGenericDTO;
 import com.springboot.connectmate.enums.InsightCategory;
 import com.springboot.connectmate.enums.InsightResponseField;
 import com.springboot.connectmate.enums.InsightSeverity;
 import com.springboot.connectmate.models.Metric;
-import com.springboot.connectmate.models.ThresholdBreachInsight;
-import com.springboot.connectmate.services.*;
-import io.socket.client.IO;
-import io.socket.client.Socket;
-import org.modelmapper.ModelMapper;
+import com.springboot.connectmate.services.BedrockService;
+import com.springboot.connectmate.services.EmailService;
+import com.springboot.connectmate.services.SnsService;
+import com.springboot.connectmate.services.ThresholdBreachInsightService;
 import org.springframework.ai.bedrock.titan.BedrockTitanChatClient;
 import org.springframework.ai.chat.ChatResponse;
 import org.springframework.ai.chat.messages.UserMessage;
@@ -23,7 +20,6 @@ import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
-import java.net.URI;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -38,9 +34,6 @@ public class BedrockServiceImpl implements BedrockService {
     private final ThresholdBreachInsightService thresholdBreachInsightService;
     private final EmailService emailService;
     private final SnsService snsService;
-    private final SocketService socketService;
-    private final Socket socketClient;
-    private final ModelMapper mapper;
     private final ObjectMapper objectMapper;
 
     public BedrockServiceImpl(
@@ -48,18 +41,14 @@ public class BedrockServiceImpl implements BedrockService {
             ThresholdBreachInsightService thresholdBreachInsightService,
             EmailService emailService,
             SnsService snsService,
-            SocketService socketService,
-            ModelMapper modelMapper,
             ObjectMapper objectMapper) {
         this.bedrockTitanChatClient = bedrockTitanChatClient;
         this.thresholdBreachInsightService = thresholdBreachInsightService;
         this.emailService = emailService;
         this.snsService = snsService;
-        this.socketService = socketService;
-        this.socketClient = IO.socket(URI.create("ws://localhost:8085?connectItemType=INSTANCE&username=Server"));
-        this.mapper = modelMapper;
         this.objectMapper = objectMapper;
     }
+
 
     @Override
     public String generate(String message) {
@@ -98,10 +87,10 @@ public class BedrockServiceImpl implements BedrockService {
         InsightFieldsDTO insightFields = createInsight(kpiDataContext);
 
         // Save the ThresholdBreachInsight Record to the database
-        ThresholdBreachInsight savedInsight = thresholdBreachInsightService.saveInsight(metric, thresholdBreachFields, insightFields);
+        thresholdBreachInsightService.saveInsight(metric, thresholdBreachFields, insightFields);
 
         // Send a Message to the Frontend via WS
-        socketService.sendInsight((SocketIOClient) socketClient, mapper.map(savedInsight, ThresholdBreachInsightGenericDTO.class));
+        // TODO: Send a message to the frontend to display an alert (Richie)
 
         // Send an Alert Email
         // TODO: Get the email from the user's profile

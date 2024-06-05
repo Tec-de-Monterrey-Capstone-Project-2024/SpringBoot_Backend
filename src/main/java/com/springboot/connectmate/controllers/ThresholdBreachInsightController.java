@@ -1,5 +1,6 @@
 package com.springboot.connectmate.controllers;
 
+
 import com.springboot.connectmate.dtos.ThresholdBreachInsight.*;
 import com.springboot.connectmate.enums.ConnectMetricType;
 import com.springboot.connectmate.enums.*;
@@ -66,6 +67,8 @@ public class ThresholdBreachInsightController {
         return ResponseEntity.ok(insights);
     }
 
+
+
     @Operation(summary = "Update the status of an insight", description = "Update the status of a ThresholdBreachInsight by its ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Status updated successfully"),
@@ -94,15 +97,6 @@ public class ThresholdBreachInsightController {
         return ResponseEntity.ok(updatedInsight);
     }
 
-    @CrossOrigin
-    @GetMapping("/status/{metricType}")
-    public ResponseEntity<List<ThresholdBreachInsightGenericDTO>> getInsights(
-            @PathVariable(name = "metricType") ConnectMetricType metricType
-    ){
-
-        return ResponseEntity.ok(thresholdBreachInsightService.getInsightsByItemType(metricType));
-    }
-    
     @Operation(summary = "Get insight by ID", description = "Retrieve a specific ThresholdBreachInsight by its ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Insight retrieved successfully"),
@@ -125,4 +119,5 @@ public class ThresholdBreachInsightController {
         List<InsightAlertDTO> alerts = thresholdBreachInsightService.getAlerts();
         return ResponseEntity.ok(alerts);
     }
+
 }

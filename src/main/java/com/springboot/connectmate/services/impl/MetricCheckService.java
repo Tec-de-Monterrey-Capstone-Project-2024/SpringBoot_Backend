@@ -52,7 +52,7 @@ public class MetricCheckService {
     /**
     * Check for threshold breaches
     */
-    // @Scheduled(fixedRate = 10000, initialDelay = 10000) // Run every 10 seconds with an initial delay of 10 seconds
+    @Scheduled(fixedRate = 10000, initialDelay = 10000) // Run every 10 seconds with an initial delay of 10 seconds
     public void checkThresholdBreaches() {
         System.out.println("Checking for threshold breaches...");
 
