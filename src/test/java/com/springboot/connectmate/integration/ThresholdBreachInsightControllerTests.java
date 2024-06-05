@@ -68,7 +68,6 @@ public class ThresholdBreachInsightControllerTests {
     private ThresholdBreachInsightService thresholdBreachInsightService;
 
 
-
     @BeforeEach
     @AfterEach
     void setup(){
@@ -201,6 +200,7 @@ public class ThresholdBreachInsightControllerTests {
         // Perform the GET request and verify the response
         mockMvc.perform(get("/api/threshold-breach-insights/alerts")
                         .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print()) // This will print the result to the console
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(mockAlerts.size()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(alert1.getId()))

@@ -119,8 +119,7 @@ public class MetricControllerTests {
     }
 
     @Test
-    public void testGetAllMetrics() throws Exception {
-        // given - precondition or setup
+    void givenMetrics_whenGetAllMetrics_thenReturnMetricList() throws Exception {
         List<MetricDTO> mockMetrics = new ArrayList<>();
         MetricDTO metric1 = new MetricDTO(ConnectMetricCode.SERVICE_LEVEL, 0.0, 100.0, 80.0);
         MetricDTO metric2 = new MetricDTO(ConnectMetricCode.ABANDONMENT_RATE, 0.0, 100.0, 5.0);
@@ -130,10 +129,9 @@ public class MetricControllerTests {
 
         when(metricService.getAllConnectMateMetrics()).thenReturn(mockMetrics);
 
-        // when - action or behavior that we are testing
         mockMvc.perform(get("/api/metrics")
                         .contentType(MediaType.APPLICATION_JSON))
-                // then - verify the output
+                .andDo(print()) // This will print the result to the console
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(mockMetrics.size()))
                 .andExpect(jsonPath("$[0].code").value(metric1.getCode().name()))
