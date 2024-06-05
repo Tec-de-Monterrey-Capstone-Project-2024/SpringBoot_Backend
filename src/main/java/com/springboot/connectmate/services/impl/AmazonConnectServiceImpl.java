@@ -178,16 +178,15 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
                 .withFilterValues(Collections.singletonList(queueId))
         );
 
-        ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
-        ZonedDateTime endTime = now.withSecond(0).withNano(0).minusMinutes(now.getMinute() % 5);
-        ZonedDateTime startTime = endTime.minusHours(23);
+        ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC).minusHours(1);
+        ZonedDateTime endTime = now.minusMonths(1);
 
         GetMetricDataV2Request getMetricDataV2Request = new GetMetricDataV2Request()
                 .withResourceArn(instanceArn)
                 .withMetrics(metrics)
                 .withFilters(filters)
-                .withStartTime(Date.from(startTime.toInstant()))
-                .withEndTime(Date.from(endTime.toInstant()));
+                .withEndTime(Date.from(now.toInstant()))
+                .withStartTime(Date.from(endTime.toInstant()));
 
         GetMetricDataV2Result getMetricDataResult = amazonConnectClient.getMetricDataV2(getMetricDataV2Request);
         System.out.println(getMetricDataResult.toString());
@@ -233,18 +232,16 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
                 .withFilterKey("AGENT")
                 .withFilterValues(Collections.singletonList(agentId))
         );
-
-        // 24 hours of scope for historical metrics
-        ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
-        ZonedDateTime endTime = now.withSecond(0).withNano(0).minusMinutes(now.getMinute() % 5);
-        ZonedDateTime startTime = endTime.minusHours(23);
+        
+        ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC).minusHours(1);
+        ZonedDateTime endTime = now.minusMonths(1);
 
         GetMetricDataV2Request getMetricDataV2Request = new GetMetricDataV2Request()
                 .withResourceArn(instanceArn)
                 .withMetrics(metrics)
                 .withFilters(filters)
-                .withEndTime(Date.from(endTime.toInstant()))
-                .withStartTime(Date.from(startTime.toInstant()));
+                .withEndTime(Date.from(now.toInstant()))
+                .withStartTime(Date.from(endTime.toInstant()));
 
         GetMetricDataV2Result getMetricDataResult = amazonConnectClient.getMetricDataV2(getMetricDataV2Request);
         System.out.println(getMetricDataResult.toString());
