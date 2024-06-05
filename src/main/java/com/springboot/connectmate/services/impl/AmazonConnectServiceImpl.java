@@ -134,54 +134,6 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
         return describeQueueResult.getQueue();
     }
 
-    // Metric Service Implementations
-    // Not Yet Functional
-    @Override
-    public List<String> getHistoricalMetrics(String instanceId, String queueId) {
-
-        Threshold threshold = new Threshold()
-                .withComparison(Comparison.LT)
-                .withThresholdValue(20.00);
-
-        List<HistoricalMetric> metrics = new ArrayList<>();
-        metrics.add(new HistoricalMetric()
-                .withName(HistoricalMetricName.SERVICE_LEVEL)
-                .withStatistic(Statistic.AVG)
-                .withUnit(Unit.PERCENT)
-                .withThreshold(threshold)
-        );
-        metrics.add(new HistoricalMetric()
-                .withName(HistoricalMetricName.HANDLE_TIME)
-                .withStatistic(Statistic.AVG)
-                .withUnit(Unit.SECONDS)
-        );
-        metrics.add(new HistoricalMetric()
-                .withName(HistoricalMetricName.CONTACTS_HANDLED)
-                .withStatistic(Statistic.SUM)
-                .withUnit(Unit.COUNT)
-        );
-        Filters filters = new Filters()
-                .withChannels(Channel.VOICE)
-                .withQueues(queueId);
-
-        ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
-        ZonedDateTime endTime = now.withSecond(0).withNano(0).minusMinutes(now.getMinute() % 5);
-        ZonedDateTime startTime = endTime.minusHours(23);
-
-        GetMetricDataRequest getMetricDataRequest = new GetMetricDataRequest()
-                .withInstanceId(instanceId)
-                .withHistoricalMetrics(metrics)
-                .withFilters(filters)
-                .withStartTime(Date.from(startTime.toInstant()))
-                .withEndTime(Date.from(endTime.toInstant()));
-
-        GetMetricDataResult getMetricDataResult = amazonConnectClient.getMetricData(getMetricDataRequest);
-        System.out.println(getMetricDataResult.toString());
-        return getMetricDataResult.getMetricResults().stream()
-                .map(metricResult -> metricResult.toString())
-                .collect(Collectors.toList());
-    }
-
     @Override
     public ConnectQueueMetricDTO getQueueMetrics(String instanceArn, String queueId) {
 
@@ -226,27 +178,30 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
                 .withFilterValues(Collections.singletonList(queueId))
         );
 
-        ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
-        ZonedDateTime endTime = now.withSecond(0).withNano(0).minusMinutes(now.getMinute() % 5);
-        ZonedDateTime startTime = endTime.minusHours(23);
+        ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC).minusHours(1);
+        ZonedDateTime endTime = now.minusMonths(1);
 
         GetMetricDataV2Request getMetricDataV2Request = new GetMetricDataV2Request()
                 .withResourceArn(instanceArn)
                 .withMetrics(metrics)
                 .withFilters(filters)
-                .withStartTime(Date.from(startTime.toInstant()))
-                .withEndTime(Date.from(endTime.toInstant()));
+                .withEndTime(Date.from(now.toInstant()))
+                .withStartTime(Date.from(endTime.toInstant()));
 
         GetMetricDataV2Result getMetricDataResult = amazonConnectClient.getMetricDataV2(getMetricDataV2Request);
         System.out.println(getMetricDataResult.toString());
 
         ConnectQueueMetricDTO metricsDTO = new ConnectQueueMetricDTO();
-        metricsDTO.setAbandonmentRate(getMetricDataResult.getMetricResults().get(0).getCollections().get(0).getValue());
-        metricsDTO.setAvgHandleTime(getMetricDataResult.getMetricResults().get(0).getCollections().get(1).getValue());
-        metricsDTO.setAvgAfterContactWorkTime(getMetricDataResult.getMetricResults().get(0).getCollections().get(2).getValue());
-        metricsDTO.setAvgResolutionTime(getMetricDataResult.getMetricResults().get(0).getCollections().get(3).getValue());
-        metricsDTO.setAvgQueueAnswerTime(getMetricDataResult.getMetricResults().get(0).getCollections().get(4).getValue());
-        metricsDTO.setServiceLevel(getMetricDataResult.getMetricResults().get(0).getCollections().get(5).getValue());
+
+        if(!getMetricDataResult.getMetricResults().isEmpty()) {
+            metricsDTO.setAbandonmentRate(getMetricDataResult.getMetricResults().get(0).getCollections().get(0).getValue());
+            metricsDTO.setAvgHandleTime(getMetricDataResult.getMetricResults().get(0).getCollections().get(1).getValue());
+            metricsDTO.setAvgAfterContactWorkTime(getMetricDataResult.getMetricResults().get(0).getCollections().get(2).getValue());
+            metricsDTO.setAvgResolutionTime(getMetricDataResult.getMetricResults().get(0).getCollections().get(3).getValue());
+            metricsDTO.setAvgQueueAnswerTime(getMetricDataResult.getMetricResults().get(0).getCollections().get(4).getValue());
+            metricsDTO.setServiceLevel(getMetricDataResult.getMetricResults().get(0).getCollections().get(5).getValue());
+        }
+
         return metricsDTO;
     }
 
@@ -277,45 +232,30 @@ public class AmazonConnectServiceImpl implements AmazonConnectService {
                 .withFilterKey("AGENT")
                 .withFilterValues(Collections.singletonList(agentId))
         );
-
-        ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
-        ZonedDateTime endTime = now.withSecond(0).withNano(0).minusMinutes(now.getMinute() % 5);
-        ZonedDateTime startTime = endTime.minusHours(23);
+        
+        ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC).minusHours(1);
+        ZonedDateTime endTime = now.minusMonths(1);
 
         GetMetricDataV2Request getMetricDataV2Request = new GetMetricDataV2Request()
                 .withResourceArn(instanceArn)
                 .withMetrics(metrics)
                 .withFilters(filters)
-                .withEndTime(Date.from(endTime.toInstant()))
-                .withStartTime(Date.from(startTime.toInstant()));
+                .withEndTime(Date.from(now.toInstant()))
+                .withStartTime(Date.from(endTime.toInstant()));
 
         GetMetricDataV2Result getMetricDataResult = amazonConnectClient.getMetricDataV2(getMetricDataV2Request);
         System.out.println(getMetricDataResult.toString());
 
         ConnectAgentMetricDTO metricsDTO = new ConnectAgentMetricDTO();
-        metricsDTO.setAbandonmentRate(getMetricDataResult.getMetricResults().get(0).getCollections().get(0).getValue());
-        metricsDTO.setAvgHandleTime(getMetricDataResult.getMetricResults().get(0).getCollections().get(1).getValue());
-        metricsDTO.setAvgAfterContactWorkTime(getMetricDataResult.getMetricResults().get(0).getCollections().get(2).getValue());
-        metricsDTO.setAgentOccupancy(getMetricDataResult.getMetricResults().get(0).getCollections().get(3).getValue());
+
+        if(!getMetricDataResult.getMetricResults().isEmpty()){
+            metricsDTO.setAbandonmentRate(getMetricDataResult.getMetricResults().get(0).getCollections().get(0).getValue());
+            metricsDTO.setAvgHandleTime(getMetricDataResult.getMetricResults().get(0).getCollections().get(1).getValue());
+            metricsDTO.setAvgAfterContactWorkTime(getMetricDataResult.getMetricResults().get(0).getCollections().get(2).getValue());
+            metricsDTO.setAgentOccupancy(getMetricDataResult.getMetricResults().get(0).getCollections().get(3).getValue());
+        }
+
         return metricsDTO;
-    }
-
-    @Override
-    public List<String> getCurrentMetrics(String instanceId) {
-
-        List<CurrentMetric> currentMetrics = new ArrayList<>();
-        currentMetrics.add(new CurrentMetric()
-                .withName(CurrentMetricName.AGENTS_AVAILABLE)
-        );
-
-        GetCurrentMetricDataRequest getCurrentMetricDataRequest = new GetCurrentMetricDataRequest()
-                .withInstanceId(instanceId)
-                .withCurrentMetrics();
-
-        GetCurrentMetricDataResult getCurrentMetricDataResult = amazonConnectClient.getCurrentMetricData(getCurrentMetricDataRequest);
-        return getCurrentMetricDataResult.getMetricResults().stream()
-                .map(metric-> metric.toString())
-                .collect(Collectors.toList());
     }
 
     @Override
