@@ -103,5 +103,13 @@ public class ThresholdBreachInsightControllerTests {
                 .andExpect(jsonPath("$[0].insightCategory").exists())
                 .andExpect(jsonPath("$[0].connectItemType").exists())
                 .andExpect(jsonPath("$[0].occurredAt").exists());
+
+
+
+
+
+
+
+
     }
 }
