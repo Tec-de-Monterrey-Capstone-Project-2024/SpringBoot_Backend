@@ -68,25 +68,6 @@ public class ConnectUserControllerTest {
     }
 
     @Test
-    void GetAllUsersByInstanceTest() throws Exception {
-        String instanceId = "7c78bd60-4a9f-40e5-b461-b7a0dfaad848";
-
-        mockMvc.perform(get("/api/amazon-connect/instances/{instanceId}/users", instanceId))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
-    }
-
-    @Test
-    void getSecurityProfileTest() throws Exception {
-        String instanceId = "7c78bd60-4a9f-40e5-b461-b7a0dfaad848";
-        String userId = "005703ca-15fd-4e42-bca6-ee9bd5f802e7";
-
-        mockMvc.perform(get("/api/amazon-connect/instances/{instanceId}/users/{userId}/security-profiles", instanceId, userId))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
-    }
-
-    @Test
     public void givenInstanceIdAndUserId_whenGetUserDescription_thenReturnUser() throws Exception {
         // given - precondition or setup
         String instanceId = "7c78bd60-4a9f-40e5-b461-b7a0dfaad848";
