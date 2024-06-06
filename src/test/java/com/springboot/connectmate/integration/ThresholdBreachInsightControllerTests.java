@@ -102,5 +102,5 @@ public class ThresholdBreachInsightControllerTests {
                 .andExpect(jsonPath("$[0].occurredAt").exists());
     }
 
-    
+
 }
