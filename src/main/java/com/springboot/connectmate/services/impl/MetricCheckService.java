@@ -110,7 +110,7 @@ public class MetricCheckService {
                     }
                 } else {
                     // If insight is not needed and exists, delete the insight
-                    existingInstanceInsight.ifPresent(thresholdBreachInsightService::deleteInsight);
+                    existingInstanceInsight.ifPresent(thresholdBreachInsight -> thresholdBreachInsightService.deleteInsightById(thresholdBreachInsight.getId()));
                 }
             }
 
@@ -153,7 +153,7 @@ public class MetricCheckService {
                     }
                 } else {
                     // If insight is not needed and exists, delete the insight
-                    existingQueueInsight.ifPresent(thresholdBreachInsightService::deleteInsight);
+                    existingQueueInsight.ifPresent(thresholdBreachInsight -> thresholdBreachInsightService.deleteInsightById(thresholdBreachInsight.getId()));
                 }
             }
 
@@ -195,7 +195,7 @@ public class MetricCheckService {
                     }
                 } else {
                     // If insight is not needed and exists, delete the insight
-                    existingAgentInsight.ifPresent(thresholdBreachInsightService::deleteInsight);
+                    existingAgentInsight.ifPresent(thresholdBreachInsight -> thresholdBreachInsightService.deleteInsightById(thresholdBreachInsight.getId()));
                 }
             }
         }
