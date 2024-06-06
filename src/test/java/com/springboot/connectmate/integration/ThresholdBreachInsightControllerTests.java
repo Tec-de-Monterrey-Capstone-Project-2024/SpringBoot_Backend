@@ -131,7 +131,7 @@ public class ThresholdBreachInsightControllerTests {
 
     @Test
     public void givenConnectItemId_whenGetInsights_thenReturnFilteredInsights() throws Exception {
-        // given - test data configuration
+        // given - precondition or setup
         String connectItemId = "sample-connect-item-id";
 
         // when - action or behavior that we are going to test
@@ -155,7 +155,7 @@ public class ThresholdBreachInsightControllerTests {
 
     @Test
     public void givenItemType_whenGetInsights_thenReturnFilteredInsights() throws Exception {
-        // given - test data configuration
+        // given - precondition or setup
         ConnectMetricType itemType = ConnectMetricType.INSTANCE;
 
         // when - action or behavior that we are going to test
@@ -213,16 +213,16 @@ public class ThresholdBreachInsightControllerTests {
 
     @Test
     public void givenMetricType_whenGetInsightsByMetricType_thenReturnInsightList() throws Exception {
-        // Given - MetricType for the test
+        // given - MetricType for the test
         ConnectMetricType metricType = ConnectMetricType.INSTANCE;
 
-        // When - action or behaviour that we are going to test
+        // when - action or behaviour that we are going to test
         ResultActions response = mockMvc.perform(
                 get("/api/threshold-breach-insights/status/" + metricType)
                         .contentType(MediaType.APPLICATION_JSON)
         );
 
-        // Then - verify the result or output using assert statements
+        // then - verify the result or output using assert statements
         response.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -236,17 +236,17 @@ public class ThresholdBreachInsightControllerTests {
 
     @Test
     public void givenInsightId_whenGetInsightById_thenReturnInsightDetail() throws Exception {
-        // Given - Fetch the ID of the insight we just saved in setUp
+        // given - Fetch the ID of the insight we just saved in setUp
         ThresholdBreachInsight savedInsight = thresholdBreachInsightRepository.findAll().get(0);
         Long insightId = savedInsight.getId();
 
-        // When - action or behaviour that we are going to test
+        // when - action or behaviour that we are going to test
         ResultActions response = mockMvc.perform(
                 get("/api/threshold-breach-insights/{id}", insightId)  // URL must match exactly
                         .contentType(MediaType.APPLICATION_JSON)
         );
 
-        // Then - verify the result or output using assert statements
+        // then - verify the result or output using assert statements
         response.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -269,24 +269,24 @@ public class ThresholdBreachInsightControllerTests {
 
     @Test
     public void givenValidIdAndStatus_whenUpdateInsightStatus_thenReturnUpdatedStatus() throws Exception {
-        // Given - setup or precondition
+        // given - precondition or setup
         ThresholdBreachInsight savedInsight = thresholdBreachInsightRepository.findAll().get(0);
         Long insightId = savedInsight.getId();
         Status newStatus = Status.DONE;
 
-        // When - action or behaviour that we are going to test
+        // when - action or behaviour that we are going to test
         ResultActions response = mockMvc.perform(
                 patch("/api/threshold-breach-insights/{thresholdId}/status", insightId)
                         .param("newStatus", newStatus.name())
                         .contentType(MediaType.APPLICATION_JSON)
         );
 
-        // Then - verify the result or output using assert statements
+        // then - verify the result or output using assert statements
         response.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string("Status updated successfully"));
 
-        // Verify the status was updated in the database
+        // verify the status was updated in the database
         Optional<ThresholdBreachInsight> updatedInsight = thresholdBreachInsightRepository.findById(insightId);
         assertTrue(updatedInsight.isPresent());
         assertEquals(newStatus, updatedInsight.get().getStatus());
@@ -294,18 +294,18 @@ public class ThresholdBreachInsightControllerTests {
 
     @Test
     public void givenInvalidStatus_whenUpdateInsightStatus_thenReturn400() throws Exception {
-        // Given - precondition or setup
+        // given - precondition or setup
         Long id = existingInsight.getId();
         String invalidStatus = "INVALID_STATUS";
 
-        // When - action or the behaviour that we are going to test
+        // when - action or the behaviour that we are going to test
         ResultActions response = mockMvc.perform(
                 patch("/api/threshold-breach-insights/{thresholdId}/status", id)
                         .param("newStatus", invalidStatus)
                         .contentType(MediaType.APPLICATION_JSON)
         );
 
-        // Then - verify the output
+        // then - verify the output
         response.andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.type").value("about:blank"))
@@ -318,18 +318,18 @@ public class ThresholdBreachInsightControllerTests {
 
     @Test
     public void givenInvalidId_whenUpdateInsightStatus_thenReturnNotFound() throws Exception {
-        // Given - setup or precondition
+        // given - precondition or setup
         Long invalidId = Long.MAX_VALUE;
         Status newStatus = Status.DONE;
 
-        // When - action or behaviour that we are going to test
+        // when - action or behaviour that we are going to test
         ResultActions response = mockMvc.perform(
                 patch("/api/threshold-breach-insights/{thresholdId}/status", invalidId)
                         .param("newStatus", newStatus.name())
                         .contentType(MediaType.APPLICATION_JSON)
         );
 
-        // Then - verify the result or output using assert statements
+        // then - verify the result or output using assert statements
         response.andDo(print())
                 .andExpect(status().isNotFound());
     }
