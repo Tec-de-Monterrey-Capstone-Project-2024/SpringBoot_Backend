@@ -25,9 +25,6 @@ public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsight
 
     private final ThresholdBreachInsightRepository thresholdBreachInsightRepository;
 
-    @Autowired
-    private MetricRepository metricRepository;
-
     private final ModelMapper mapper;
 
     @Autowired
@@ -45,8 +42,8 @@ public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsight
     }
 
     @Override
-    public void deleteInsight(ThresholdBreachInsight insight) {
-        thresholdBreachInsightRepository.delete(insight);
+    public void deleteInsightById(Long id) {
+        thresholdBreachInsightRepository.deleteById(id);
     }
 
     @Override

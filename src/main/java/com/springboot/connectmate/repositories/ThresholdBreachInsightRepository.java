@@ -15,10 +15,10 @@ import java.util.Optional;
 @Repository
 public interface ThresholdBreachInsightRepository extends JpaRepository<ThresholdBreachInsight, Long> {
     Optional<ThresholdBreachInsight> findByMetricCodeAndConnectItemId(Metric metricCode, String connectItemId);
-    List<ThresholdBreachInsight> findByStatus(Status status);
-    List<ThresholdBreachInsight> findByConnectItemId(String connectItemId);
-    List<ThresholdBreachInsight> findByConnectItemType(ConnectMetricType connectItemType);
     @Modifying
     @Query("delete from ThresholdBreachInsight t where t.id = :id")
     void deleteById(Long id);
+    List<ThresholdBreachInsight> findByStatus(Status status);
+    List<ThresholdBreachInsight> findByConnectItemId(String connectItemId);
+    List<ThresholdBreachInsight> findByConnectItemType(ConnectMetricType connectItemType);
 }

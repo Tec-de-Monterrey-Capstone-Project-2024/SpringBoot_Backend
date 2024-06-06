@@ -16,7 +16,7 @@ public interface ThresholdBreachInsightService {
     // Internal Use Only
     InsightAlertDTO mapToInsightAlertDTO(ThresholdBreachInsight insight);
     Optional<ThresholdBreachInsight> getInsightByMetricCodeAndConnectItemId(Metric metric, String connectItemId);
-    void deleteInsight(ThresholdBreachInsight insight);
+    void deleteInsightById(Long id);
     ThresholdBreachInsight saveInsight(Metric metric,
                      ThresholdBreachFieldsDTO thresholdBreachData,
                      InsightFieldsDTO insightData
