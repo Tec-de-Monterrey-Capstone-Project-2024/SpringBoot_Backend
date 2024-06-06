@@ -73,7 +73,7 @@ public class MetricServiceImpl implements MetricService {
         // Update the metric
         metric.setMinimumThresholdValue(minThreshold);
         metric.setMaximumThresholdValue(maxThreshold);
-        metric.setTargetValue(targetValue != null ? targetValue : code.getDefaultTargetValue());
+        metric.setTargetValue(targetValue);
         metricRepository.save(metric);
         return mapper.map(metric, MetricDTO.class);
     }
