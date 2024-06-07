@@ -51,10 +51,10 @@ jobs:
 
     - name: Deploy to Cloud Run
       env:
-        DB_HOST: "34.71.134.63"
-        DB_NAME: "connectmate_db"
-        DB_USER: "root"
-        AWS_REGION: "us-east-1"
+        DB_HOST: ${{vars.DB_HOST}}
+        DB_NAME: ${{vars.DB_NAME}}
+        DB_USER: ${{vars.DB_USER}}
+        AWS_REGION: ${{vars.AWS_REGION}}
       run: |
         # Create a JSON file for gcloud
         echo '{
