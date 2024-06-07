@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.util.Set;
 
+@Builder
 @Getter
 @Setter
 @AllArgsConstructor // Lombok annotation to create a constructor with all the arguments

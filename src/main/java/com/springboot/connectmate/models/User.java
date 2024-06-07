@@ -3,11 +3,11 @@ package com.springboot.connectmate.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+@Builder
 @Getter
 @Setter
 @AllArgsConstructor // Lombok annotation to create a constructor with all the arguments
 @NoArgsConstructor // Lombok annotation to create a constructor with no arguments
-
 @Entity
 @Table(
         name = "user",

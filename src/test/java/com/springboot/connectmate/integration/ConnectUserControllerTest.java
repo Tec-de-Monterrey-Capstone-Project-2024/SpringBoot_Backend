@@ -37,7 +37,6 @@ import static org.hamcrest.CoreMatchers.is;
         "classpath:application-db-test.properties",
         "classpath:application-aws-test.properties"
 })
-
 public class ConnectUserControllerTest {
 
     @Container
