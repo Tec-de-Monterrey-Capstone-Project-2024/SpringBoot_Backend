@@ -6,6 +6,7 @@ import com.springboot.connectmate.enums.ConnectMetricCode;
 import com.springboot.connectmate.enums.ConnectMetricType;
 import com.springboot.connectmate.enums.Status;
 import com.springboot.connectmate.services.BedrockService;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.ai.bedrock.titan.BedrockTitanChatClient;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+@Hidden
 @RestController
 public class BedrockController {
 
