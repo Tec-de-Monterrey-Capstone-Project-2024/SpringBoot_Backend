@@ -40,4 +40,7 @@ public interface ThresholdBreachInsightService {
 
     // Get All Alerts
     List<InsightAlertDTO> getAlerts();
+
+    // Get All Insights just By Insight Name
+    List<ThresholdBreachInsightForNotificationsDTO> getAllNotificationAlerts();
 }

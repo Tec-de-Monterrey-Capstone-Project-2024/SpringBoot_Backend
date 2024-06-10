@@ -148,4 +148,12 @@ public class ThresholdBreachInsightServiceImpl implements ThresholdBreachInsight
                 .map(this::mapToInsightAlertDTO)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<ThresholdBreachInsightForNotificationsDTO> getAllNotificationAlerts() {
+        List<ThresholdBreachInsight> insights = thresholdBreachInsightRepository.findAll();
+        return insights.stream()
+                .map(insight -> mapper.map(insight, ThresholdBreachInsightForNotificationsDTO.class))
+                .collect(Collectors.toList());
+    }
 }
